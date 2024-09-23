@@ -32,8 +32,16 @@ public class Bot {
                     break;
                 case "Добавить пользователя":
                     setmyname();
+                    break;
+                case "exit":
+                    System.out.print("Finish bot");
+                    break;
                 default:
                     System.out.println("Извини, но я тебя не понял. Для выбора действия введите название действия.");
+            }
+            if (userRequest.equals("exit")) {
+                break;
+
             }
         }
     }
