@@ -18,7 +18,10 @@ public class Bot {
         while (true) {
             Scanner in = new Scanner(System.in);
             String userRequest = in.nextLine();
-            switch (userRequest) {
+            String[] arguments = userRequest.split(" ");
+            String command = (arguments[0].equals("информация")) ? arguments[0] : userRequest;
+            String param = (arguments.length>1) ? arguments[1] : "";
+            switch (command) {
                 case "/help":
                     help.GetHelp();
                     break;
@@ -32,6 +35,16 @@ public class Bot {
                     break;
                 case "Добавить пользователя":
                     setmyname();
+                    break;
+                case "информация":
+                    if(!param.isEmpty())
+                    {
+                        getuser(param);
+                    }
+                    else
+                    {
+                        System.out.println("Введи имя пользователя для команды 'информация'");
+                    }
                     break;
                 case "exit":
                     System.out.print("Finish bot");
