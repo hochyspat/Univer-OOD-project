@@ -1,4 +1,5 @@
 package org.example;
+
 public class Help
 {
     private static String helpText = "Привет! Меня зовут *название бота*. Я буду помогать тебе при похудении и не только. С моей помощью ты сможешь:\n" +
