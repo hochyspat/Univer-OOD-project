@@ -3,7 +3,6 @@ package org.example;
 import java.util.Scanner;
 
 public class CPFCCount {
-    private static boolean flag = false;
     private static double calories;
     private static int proteins;
     private static int fats;
@@ -34,7 +33,6 @@ public class CPFCCount {
         age = useChecker(a, age, 90, 12);
         counting(height, weight, age);
         System.out.println("Ваша норма калорий в день:" + " " + calories);
-        flag = true;
     }
     private interface Checker {
         boolean checkData(int data, int less, int more);

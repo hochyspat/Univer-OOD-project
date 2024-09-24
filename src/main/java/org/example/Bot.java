@@ -33,15 +33,14 @@ public class Bot {
                 case "Добавить пользователя":
                     setmyname();
                     break;
-                case "exit":
+                case "/exit":
                     System.out.print("Finish bot");
                     break;
                 default:
                     System.out.println("Извини, но я тебя не понял. Для выбора действия введите название действия.");
             }
-            if (userRequest.equals("exit")) {
+            if (userRequest.equals("/exit")) {
                 break;
-
             }
         }
     }
@@ -67,11 +66,5 @@ public class Bot {
         else {
             System.out.println("ERROR user not found");
         }
-
-
     }
-
-
-
-
 }
