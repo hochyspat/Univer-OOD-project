@@ -17,6 +17,6 @@ public class Help
     public static void GetHelp()
     {
 
-        System.out.println(helpText);
+        System.out.print(helpText);
     }
 }

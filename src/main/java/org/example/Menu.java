@@ -11,6 +11,6 @@ public class Menu {
             "Для выбора действия введите название действия.";
     public static void GetMenu()
     {
-        System.out.println(menuText);
+        System.out.print(menuText);
     }
 }

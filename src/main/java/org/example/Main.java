@@ -6,6 +6,5 @@ public class Main {
         Bot bot = new Bot(System.in, System.out);
         bot.start();
 
-
     }
 }
