@@ -1,8 +1,19 @@
-package org.example;
+import org.example.Menu;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.io.*;
 
-public class Menu {
-    public String getMenu() {
-        return  "Выберите действие:\n" +
+public class MenuTest {
+
+    @Test
+    public void testGetMenu() {
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        Menu test = new Menu();
+
+        test.getMenu();
+
+        String expectedOutput = "Выберите действие:\n" +
                 "    Рассчитать КБЖУ;\n" +
                 "    Дневник питания \n" +
                 "    Составить меню на день;\n" +
@@ -11,9 +22,7 @@ public class Menu {
                 "    Записать свои параметры;\n" +
                 "Добавить пользователя.\n" +
                 "Для выбора действия введите название действия.";
-    }
-    public void showMenu()
-    {
-        System.out.print(getMenu());
+
+        assertEquals(expectedOutput, outContent.toString());
     }
 }

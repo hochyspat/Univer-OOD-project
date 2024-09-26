@@ -1,9 +1,17 @@
-package org.example;
+import org.example.Help;
+import org.example.Menu;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.io.*;
 
-public class Help
-{
-    public String getHelp(){
-        return "Привет! Меня зовут *название бота*. Я буду помогать тебе при похудении и не только. С моей помощью ты сможешь:\n" +
+
+public class HelpTest {
+    @Test
+    public void testGetHelp() {
+
+        Help test = new Help();
+        String output = test.getHelp();
+        String expectedOutput = "Привет! Меня зовут *название бота*. Я буду помогать тебе при похудении и не только. С моей помощью ты сможешь:\n" +
                 "    •рассчитать свои нормы КБЖУ и создать собственный дневник питания;\n" +
                 "    •составить меню на день;\n" +
                 "    •найти интересующие тебя тренировки;\n" +
@@ -15,9 +23,6 @@ public class Help
                 "Чтобы выйти в меню введите \"/menu\"" +
                 "\n" +
                 "Для справки введите \"/help\"";
-    }
-    public void showHelp()
-    {
-        System.out.print(getHelp());
+        assertEquals(expectedOutput, output);
     }
 }
