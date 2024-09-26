@@ -11,7 +11,7 @@ public class MenuTest {
         System.setOut(new PrintStream(outContent));
         Menu test = new Menu();
 
-        test.GetMenu();
+        test.getMenu();
 
         String expectedOutput = "Выберите действие:\n" +
                 "    Рассчитать КБЖУ;\n" +

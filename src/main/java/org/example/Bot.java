@@ -14,24 +14,25 @@ public class Bot {
     }
     public void start() {
         Help help = new Help();
-        help.GetHelp();
+        help.getHelp();
         while (true) {
             Scanner in = new Scanner(System.in);
             String userRequest = in.nextLine();
             switch (userRequest) {
                 case "/help":
-                    help.GetHelp();
+                    help.getHelp();
                     break;
                 case "/menu":
                     Menu menu = new Menu();
-                    menu.GetMenu();
+                    menu.getMenu();
                     break;
                 case "Рассчитать КБЖУ":
-                    CPFCCount count = new CPFCCount();
-                    count.start();
+                    CalorieCountingService countedCalories = new CalorieCountingService();
+                    countedCalories.startCalculate();
+                    System.out.println("Твоя норма калорий на день:" + " " + countedCalories.getCalories());
                     break;
                 case "Добавить пользователя":
-                    setmyname();
+                    setMyName();
                     break;
                 case "/exit":
                     System.out.print("Finish bot");
@@ -44,7 +45,7 @@ public class Bot {
             }
         }
     }
-    private void setmyname(){
+    private void setMyName(){
         System.out.print("как тебя звать?");
         String name = scanner.nextLine();
         System.out.print("рост пожалуйста в см");

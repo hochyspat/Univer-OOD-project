@@ -1,7 +1,7 @@
 package org.example;
 
 public class Menu {
-    private static String menuText = "Выберите действие:\n" +
+    private String menuText = "Выберите действие:\n" +
             "    Рассчитать КБЖУ;\n" +
             "    Дневник питания \n" +
             "    Составить меню на день;\n" +
@@ -10,7 +10,7 @@ public class Menu {
             "    Записать свои параметры;\n" +
             "Добавить пользователя.\n" +
             "Для выбора действия введите название действия.";
-    public static void GetMenu()
+    public void getMenu()
     {
         System.out.print(menuText);
     }
