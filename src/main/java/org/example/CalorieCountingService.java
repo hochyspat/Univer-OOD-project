@@ -9,16 +9,9 @@ public class CalorieCountingService {
     private int fats;
     private int carbohydrates;
 
-    public void startCalculate() {
-        Scanner in = new Scanner(System.in);
-        System.out.println("Твой рост в см:");
-        String inputHeight = in.nextLine();
+    public void startCalculate(String inputHeight, String inputWeight,String inputAge) {
         int height = validInputParameter(inputHeight, 220, 140);
-        System.out.println("Твой вес в кг:");
-        String inputWeight = in.nextLine();
         int weight = validInputParameter(inputWeight, 200, 35);
-        System.out.println("Твой возраст:");
-        String inputAge = in.nextLine();
         int age = validInputParameter(inputAge, 100, 12);
         calculateCalories(height, weight, age);
     }

@@ -5,34 +5,44 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 public class Bot {
-    private Scanner scanner;
-    private PrintStream out;
     private HashMap<String,User> users = new HashMap<>();
-    public Bot(InputStream input, PrintStream out) {
-        this.scanner = new Scanner(input);
-        this.out = out;
-    }
     public void start() {
         Help help = new Help();
-        help.getHelp();
+        Menu menu = new Menu();
+        help.showHelp();
+        Scanner in = new Scanner(System.in);
         while (true) {
-            Scanner in = new Scanner(System.in);
+
             String userRequest = in.nextLine();
             switch (userRequest) {
                 case "/help":
-                    help.getHelp();
+                    help.showHelp();
                     break;
                 case "/menu":
-                    Menu menu = new Menu();
-                    menu.getMenu();
+                    menu.showMenu();
                     break;
                 case "Рассчитать КБЖУ":
                     CalorieCountingService countedCalories = new CalorieCountingService();
-                    countedCalories.startCalculate();
+                    System.out.println("Твой рост в см:");
+                    String inputHeight = in.nextLine();
+                    System.out.println("Твой вес в кг:");
+                    String inputWeight = in.nextLine();
+                    System.out.println("Твой возраст:");
+                    String inputAge = in.nextLine();
+                    countedCalories.startCalculate(inputHeight, inputWeight, inputAge);
                     System.out.println("Твоя норма калорий на день:" + " " + countedCalories.getCalories());
                     break;
                 case "Добавить пользователя":
-                    setMyName();
+                    System.out.print("как тебя звать?");
+                    String name = in.nextLine();
+                    System.out.print("рост пожалуйста в см");
+                    String height = in.nextLine();
+                    System.out.print("теперь что весы говорят в кг ");
+                    String weight = in.nextLine();
+                    System.out.print("сколько годиков");
+                    String age = in.nextLine();
+                    setMyName(name, height, weight, age);
+                    System.out.println("Пользователь " + name + " успешно добавлен!");
                     break;
                 case "/exit":
                     System.out.print("Finish bot");
@@ -45,21 +55,11 @@ public class Bot {
             }
         }
     }
-    private void setMyName(){
-        System.out.print("как тебя звать?");
-        String name = scanner.nextLine();
-        System.out.print("рост пожалуйста в см");
-        String height = scanner.nextLine();
-        System.out.print("теперь что весы говорят в кг ");
-        String weight = scanner.nextLine();
-        System.out.print("сколько годиков");
-        String age = scanner.nextLine();
+    private void setMyName(String name, String height, String weight, String age){
         User user = new User(name, height, weight, age);
         users.put(name, user);
-
-        System.out.println("Пользователь " + name + " успешно добавлен!");
     }
-    private void getuser(String name){
+    private void getUserByName(String name){
         User user = users.get(name);
         if (user != null) {
             System.out.println(user.getInfo());
