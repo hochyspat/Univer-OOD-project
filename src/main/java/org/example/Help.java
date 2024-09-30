@@ -14,7 +14,7 @@ public class Help
                 "\n" +
                 "Чтобы выйти в меню введите \"/menu\"" +
                 "\n" +
-                "Для справки введите \"/help\"";
+                "Для справки введите \"/help\n";
     }
     public void showHelp()
     {

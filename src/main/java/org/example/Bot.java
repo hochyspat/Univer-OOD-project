@@ -1,7 +1,5 @@
 package org.example;
 import java.util.HashMap;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.Scanner;
 
 public class Bot {
@@ -14,10 +12,12 @@ public class Bot {
         while (true) {
             System.out.print("Введите команду: ");
             String userRequest = in.nextLine();
+
+
             Command command = new Command(userRequest);
-            if (command.isValidCommand()) {
-                command.executeCommand(this, help, menu);
-                if (userRequest.equals("/exit")) {
+            if (command.isValid()) {
+                executeCommand(command, help, menu);
+                if (command.isExit()) {
                     break;
                 }
             }
@@ -27,43 +27,77 @@ public class Bot {
         }
 
         }
-    private void setMyName(String name, String height, String weight, String age){
+    private void setUser(String name, String height, String weight, String age){
         User user = new User(name, height, weight, age);
         users.put(name, user);
+
+    }
+    public void executeCommand(Command commandData,Help help,Menu menu) {
+
+       String command = commandData.command();
+       String[] args = commandData.args();
+        switch (command) {
+            case "/help":
+                help.showHelp();
+                break;
+            case "/menu":
+                menu.showMenu();
+                break;
+            case "Добавить пользователя":
+                addUser();
+
+                break;
+            case "Рассчитать КБЖУ"://можно будет запрашивать данные о тек пользователе а не запрашивать каждый раз,доделать
+                String height = readData("Твой рост в см:");
+                String weight = readData("Твой вес в кг:");
+                String age = readData("Твой возраст:");
+                calculateCalories(height, weight, age);
+                break;
+            case "информация":
+                if (args.length > 0) {
+                    showUserByName(args[0]);
+                }
+                else
+                {
+                    System.out.println("Введи имя пользователя для команды 'информация'");
+                }
+                break;
+            case "/exit":
+                System.out.print("Finish bot");
+                break;
+            default:
+                System.out.println("Неверная команда.");
+        }
     }
 
-    public void readDataForCalculateCPRF(){
-        CalorieCountingService countedCalories = new CalorieCountingService();
-        System.out.println("Твой рост в см:");
-        String inputHeight = in.nextLine();
-        System.out.println("Твой вес в кг:");
-        String inputWeight = in.nextLine();
-        System.out.println("Твой возраст:");
-        String inputAge = in.nextLine();
-        countedCalories.startCalculate(inputHeight, inputWeight, inputAge);
-        System.out.println("Твоя норма калорий на день:" + " " + countedCalories.getCalories());
-    }
-    public void readInfoAboutUser(){
-        System.out.print("как тебя звать?");
-        String name = in.nextLine();
-        System.out.print("рост пожалуйста в см");
-        String height = in.nextLine();
-        System.out.print("теперь что весы говорят в кг ");
-        String weight = in.nextLine();
-        System.out.print("сколько годиков");
-        String age = in.nextLine();
-        setMyName(name, height, weight, age);
+    private void addUser(){
+        String name = readData("как тебя звать?");
+        String height = readData("рост в см:");
+        String weight = readData("вес в кг:");
+        String age = readData("возраст:");
+
+        setUser(name, height, weight, age);
         System.out.println("Пользователь " + name + " успешно добавлен!");
+    }
+    private void calculateCalories(String height, String weight, String age) {
+        CalorieCountingService countedCalories = new CalorieCountingService();
+        countedCalories.startCalculate(height, weight, age);
+        System.out.println("Твоя норма калорий на день: " + countedCalories.getCalories());
     }
     public void showUserByName(String name) {
         User user = getUserByName(name);
         if (user != null) {
-            user.showInfoUser();
+            user.showUserInfo();
         }
         else {
             System.out.println("ERROR user not found");
         }
 
+    }
+
+    private String readData(String prompt) {
+        System.out.println(prompt);
+        return in.nextLine();
     }
     private User getUserByName(String name){
         User user = users.get(name);

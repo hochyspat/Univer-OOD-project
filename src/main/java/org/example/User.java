@@ -2,7 +2,7 @@ package org.example;
 
 public record User(String name, String age, String height, String weight) {
 
-    public void showInfoUser(){
+    public void showUserInfo(){
         System.out.println(getInfo());
     }
 

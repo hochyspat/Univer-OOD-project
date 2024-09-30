@@ -1,48 +1,29 @@
 package org.example;
 
-public record Command(String commandData) {
-    
+import java.util.Set;
 
-    public boolean isValidCommand() {
-        return commandData.equals("/help") || commandData.equals("/menu") ||
-                commandData.equals("Рассчитать КБЖУ") || commandData.split(" ")[0].equals("информация") || commandData.equals("Добавить пользователя") ||
-                commandData.equals("/exit");
-    }
-    public void executeCommand(Bot bot,Help help,Menu menu) {
+public record Command(String command, String[] args) {
 
-        String[] argumentsCommand = commandData.split(" ");
-        String command = (argumentsCommand[0].equals("информация")) ? argumentsCommand[0] : commandData;
-        String param =(argumentsCommand.length > 1) ? argumentsCommand[1].trim() : "";
-                switch (command) {
-                    case "/help":
-                        help.showHelp();
-                        break;
-                    case "/menu":
-                        menu.showMenu();
-                        break;
-                    case "Добавить пользователя":
-                        bot.readInfoAboutUser();
-                        break;
-                    case "Рассчитать КБЖУ":
-                        bot.readDataForCalculateCPRF();
-                        break;
-                    case "информация":
-                        if (!param.equals(""))
-                        {
-                            bot.showUserByName(param);
-                        }
-                        else
-                        {
-                            System.out.println("Введи имя пользователя для команды 'информация'");
-                        }
-                        break;
-                    case "/exit":
-                        System.out.print("Finish bot");
-                        break;
-                    default:
-                        System.out.println("Неверная команда.");
-                }
+    private static Set<String> validCommands = Set.of(
+            "/help",
+            "/menu",
+            "Рассчитать КБЖУ",
+            "Добавить пользователя",
+            "информация",
+            "/exit"
+    );
+    public boolean isValid() {
+        return validCommands.contains(command);
     }
+    public Command(String commandData) {
+        this(commandData.split(" ")[0],
+                (commandData.contains(" ") ? commandData.substring(commandData.indexOf(' ') + 1).split(" ") : new String[0]));
+    }
+    public boolean isExit() {
+        return "/exit".equals(command);
+    }
+
+
 
 
 }
