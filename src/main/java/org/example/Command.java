@@ -7,8 +7,8 @@ public record Command(String command, String[] args) {
     private static Set<String> validCommands = Set.of(
             "/help",
             "/menu",
-            "Рассчитать КБЖУ",
-            "Добавить пользователя",
+            "КБЖУ",
+            "addПользователь",
             "информация",
             "/exit"
     );
@@ -17,13 +17,9 @@ public record Command(String command, String[] args) {
     }
     public Command(String commandData) {
         this(commandData.split(" ")[0],
-                (commandData.contains(" ") ? commandData.substring(commandData.indexOf(' ') + 1).split(" ") : new String[0]));
+                (commandData.contains(" ") ? commandData.substring(commandData.indexOf(' ') + 1).trim().split(" ") : new String[0]));
     }
     public boolean isExit() {
         return "/exit".equals(command);
     }
-
-
-
-
 }

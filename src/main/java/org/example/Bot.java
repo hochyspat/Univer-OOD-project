@@ -43,11 +43,11 @@ public class Bot {
             case "/menu":
                 menu.showMenu();
                 break;
-            case "Добавить пользователя":
+            case "addПользователь":
                 addUser();
 
                 break;
-            case "Рассчитать КБЖУ"://можно будет запрашивать данные о тек пользователе а не запрашивать каждый раз,доделать
+            case "КБЖУ"://можно будет запрашивать данные о тек пользователе а не запрашивать каждый раз,доделать
                 String height = readData("Твой рост в см:");
                 String weight = readData("Твой вес в кг:");
                 String age = readData("Твой возраст:");
@@ -55,6 +55,7 @@ public class Bot {
                 break;
             case "информация":
                 if (args.length > 0) {
+                    System.out.println(args[0]);
                     showUserByName(args[0]);
                 }
                 else
