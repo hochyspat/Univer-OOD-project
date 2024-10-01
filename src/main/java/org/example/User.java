@@ -1,6 +1,6 @@
 package org.example;
 
-public record User(String name, String age, String height, String weight) {
+public record User(String name, int height, int weight, int age) {
 
     public void showUserInfo(){
         System.out.println(getInfo());
