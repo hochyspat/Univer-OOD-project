@@ -12,8 +12,4 @@ public class Menu {
                 "    addПользователь.\n" +
                 "    Для выбора действия введите название действия.";
     }
-    public void showMenu()
-    {
-        System.out.print(getMenu());
-    }
 }

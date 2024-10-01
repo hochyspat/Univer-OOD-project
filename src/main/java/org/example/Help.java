@@ -16,8 +16,5 @@ public class Help
                 "\n" +
                 "Для справки введите \"/help\n";
     }
-    public void showHelp()
-    {
-        System.out.print(getHelp());
-    }
+
 }

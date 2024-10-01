@@ -5,10 +5,11 @@ import java.util.Scanner;
 public class Bot {
     private HashMap<String,User> users = new HashMap<>();
     Scanner in = new Scanner(System.in);
+    Help help = new Help();
+    Menu menu = new Menu();
     public void start() {
-        Help help = new Help();
-        Menu menu = new Menu();
-        help.showHelp();
+
+        showHelp();
         while (true) {
             System.out.print("Введите команду: ");
             String userRequest = in.nextLine();
@@ -38,14 +39,13 @@ public class Bot {
        String[] args = commandData.args();
         switch (command) {
             case "/help":
-                help.showHelp();
+                showHelp();
                 break;
             case "/menu":
-                menu.showMenu();
+                showMenu();
                 break;
             case "addПользователь":
                 addUser();
-
                 break;
             case "КБЖУ"://можно будет запрашивать данные о тек пользователе а не запрашивать каждый раз,доделать
                 String height = readData("Твой рост в см:");
@@ -88,12 +88,20 @@ public class Bot {
     public void showUserByName(String name) {
         User user = getUserByName(name);
         if (user != null) {
-            user.showUserInfo();
+            System.out.println(user.getInfo());
         }
         else {
             System.out.println("ERROR user not found");
         }
 
+    }
+    public void showMenu()
+    {
+        System.out.print(menu.getMenu());
+    }
+    public void showHelp()
+    {
+        System.out.print(help.getHelp());
     }
 
     private String readData(String prompt) {
