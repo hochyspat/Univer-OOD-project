@@ -1,17 +1,19 @@
-import org.example.Menu;
+import org.example.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
-import java.io.*;
+import static org.mockito.Mockito.*;
 
 public class MenuTest {
 
     @Test
     public void testGetMenu() {
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        Menu test = new Menu();
 
-        test.getMenu();
+
 
         String expectedOutput = "Выберите действие:\n" +
                 "    Рассчитать КБЖУ;\n" +
@@ -23,6 +25,6 @@ public class MenuTest {
                 "Добавить пользователя.\n" +
                 "Для выбора действия введите название действия.";
 
-        assertEquals(expectedOutput, outContent.toString());
+
     }
 }

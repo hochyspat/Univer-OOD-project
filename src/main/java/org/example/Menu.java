@@ -3,7 +3,7 @@ package org.example;
 public class Menu {
     public String getMenu() {
         return  "Выберите действие:\n" +
-                "    КБЖУ;\n" +
+                "    КБЖУ [имя];\n" +
                 "    Дневник питания \n" +
                 "    Составить меню на день;\n" +
                 "    Найти тренировки;\n" +

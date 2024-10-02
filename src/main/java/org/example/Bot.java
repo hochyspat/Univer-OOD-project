@@ -32,7 +32,7 @@ public class Bot {
         addUser();
     }
 
-    private void setUser(String name, int height, int weight, int age){
+    public void setUser(String name, int height, int weight, int age){
         User user = new User(name, height, weight, age);
         users.put(name, user);
     }
@@ -51,17 +51,21 @@ public class Bot {
                 addUser();
                 break;
             case "КБЖУ"://можно будет запрашивать данные о тек пользователе а не запрашивать каждый раз,доделать
-                String userName = readData("Введите имя ползователя, для которого нужно расчитать КБЖУ");
-                User user = getUserByName(userName);
-                if (user == null) {
-                    System.out.println("Пользователя не существует");
-                    break;
-                }
-                calculateCalories(user);
+             if (args.length>0) {
+                 User user = getUserByName(args[0]);
+                 if (user == null) {
+                     System.out.println("Пользователя не существует");
+                     break;
+                 }
+                 calculateCalories(user);
+
+             }
+             else {
+                 System.out.println("Введите команду КБЖУ [имя]");
+             }
                 break;
             case "информация":
                 if (args.length > 0) {
-                    System.out.println(args[0]);
                     showUserByName(args[0]);
                 }
                 else
@@ -159,7 +163,7 @@ public class Bot {
         System.out.println(prompt);
         return in.nextLine();
     }
-    private User getUserByName(String name){
+    public User getUserByName(String name){
         User user = users.get(name);
         if (user != null) {
            return user;
