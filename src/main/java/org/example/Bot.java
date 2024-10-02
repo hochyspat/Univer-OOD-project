@@ -57,7 +57,7 @@ public class Bot {
                     System.out.println("Пользователя не существует");
                     break;
                 }
-                calculateCalories(user.height(), user.weight(), user.age());
+                calculateCalories(user);
                 break;
             case "информация":
                 if (args.length > 0) {
@@ -125,11 +125,14 @@ public class Bot {
     private boolean isNumber(String value) {
         return value.matches("-?\\d+");
     }
-    private void calculateCalories(int height, int weight, int age) {
-        CalorieCountingService countedCalories = new CalorieCountingService();
 
-        countedCalories.startCalculate(height, weight, age);
-        System.out.println("Твоя норма калорий на день: " + countedCalories.getCalories());
+    private void calculateCalories(User user) {
+        CalorieCountingService countedCalories = new CalorieCountingService();
+        double calories = countedCalories.calculate(user.getHeight(), user.getWeight(), user.getAge());
+
+        user.updateCalories(calories);
+
+        System.out.println("Твоя норма калорий на день: " + user.getCalories());
     }
 
 
