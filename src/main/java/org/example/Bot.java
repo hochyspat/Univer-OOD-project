@@ -100,13 +100,13 @@ public class Bot {
         final int LOWER_AGE_LIMIT = 12;
 
         String inputName = readData("Как тебя зовут?");
-        String name = reEnterNewName(inputName);
+        String name = getValidName(inputName);
         String inputHeight = readData("Твой рост в см:");
-        int height = reEnterNewParameter(inputHeight, UPPER_HEIGHT_LIMIT, LOWER_HEIGHT_LIMIT);
+        int height = getValidParameter(inputHeight, UPPER_HEIGHT_LIMIT, LOWER_HEIGHT_LIMIT);
         String inputWeight = readData("Твой вес в кг:");
-        int weight = reEnterNewParameter(inputWeight, UPPER_WEIGHT_LIMIT, LOWER_WEIGHT_LIMIT);
+        int weight = getValidParameter(inputWeight, UPPER_WEIGHT_LIMIT, LOWER_WEIGHT_LIMIT);
         String inputAge = readData("Твой возраст:");
-        int age = reEnterNewParameter(inputAge, UPPER_AGE_LIMIT, LOWER_AGE_LIMIT);
+        int age = getValidParameter(inputAge, UPPER_AGE_LIMIT, LOWER_AGE_LIMIT);
 
         setUser(name, height, weight, age);
         System.out.println("Пользователь " + inputName + " успешно добавлен!");
@@ -114,7 +114,7 @@ public class Bot {
 
     private boolean isValidName(String inputName) {return inputName != null && !inputName.trim().isEmpty();}
 
-    private String reEnterNewName(String inputName)
+    private String getValidName(String inputName)
     {
         while (!(isValidName(inputName)))
         {
@@ -133,7 +133,7 @@ public class Bot {
         return false;
     }
 
-    private int reEnterNewParameter(String inputParameter, int lowerBound, int upperBound)
+    private int getValidParameter(String inputParameter, int lowerBound, int upperBound)
     {
         while (!(isValidInputParameter(inputParameter, lowerBound, upperBound)))
         {
