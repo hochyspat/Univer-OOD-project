@@ -3,7 +3,9 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Bot bot = new Bot();
+        Help help = new Help();
+        Menu menu = new Menu();
+        Bot bot = new Bot(help,menu);
         bot.start();
     }
 }

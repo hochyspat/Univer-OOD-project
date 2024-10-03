@@ -3,9 +3,9 @@ package org.example;
 public enum Errors {
     INPUT("Введены неверные данные. Попробуй ещё раз");
 
-    private String errorMassage;
+    private String errorMessage;
     Errors(String code){
-        this.errorMassage = code;
+        this.errorMessage = code;
     }
-    public String getErrorMassage(){ return errorMassage;}
+    public String getErrorMessage(){ return errorMessage;}
 }

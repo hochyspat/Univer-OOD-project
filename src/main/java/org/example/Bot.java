@@ -1,13 +1,22 @@
 
 package org.example;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Bot {
-    private HashMap<String,User> users = new HashMap<>();
+    private Map<String,User> users = new HashMap<>();
     Scanner in = new Scanner(System.in);
-    Help help = new Help();
-    Menu menu = new Menu();
+    Help help;
+    Menu menu;
+
+
+    public Bot(Help help,Menu menu){
+        this.help = help;
+        this.menu = menu;
+    }
+
+
     public void start() {
 
         showHelp();
@@ -17,7 +26,7 @@ public class Bot {
             String userRequest = in.nextLine();
             Command command = new Command(userRequest);
             if (command.isValid()) {
-                executeCommand(command, help, menu);
+                executeCommand(command);
                 if (command.isExit()) {
                     break;
                 }
@@ -38,7 +47,7 @@ public class Bot {
         users.put(name, user);
     }
 
-    public void executeCommand(Command commandData,Help help,Menu menu) {
+    public void executeCommand(Command commandData) {
         String command = commandData.command();
         String[] args = commandData.args();
         switch (command) {
@@ -51,7 +60,7 @@ public class Bot {
             case "addПользователь":
                 addUser();
                 break;
-            case "КБЖУ"://можно будет запрашивать данные о тек пользователе а не запрашивать каждый раз,доделать
+            case "КБЖУ":
                 if (args.length>0) {
                     User user = getUserByName(args[0]);
                     if (user == null) {
@@ -83,43 +92,58 @@ public class Bot {
     }
 
     private void addUser(){
-        final int upperHeightLimit = 220;
-        final int lowerHeightLimit = 140;
-        final int upperWeightLimit = 200;
-        final int lowerWeightLimit = 35;
-        final int upperAgeLimit = 100;
-        final int lowerAgeLimit = 12;
+        final int UPPER_HEIGHT_LIMIT = 220;
+        final int LOWER_HEIGHT_LIMIT = 140;
+        final int UPPER_WEIGHT_LIMIT = 200;
+        final int LOWER_WEIGHT_LIMIT = 35;
+        final int UPPER_AGE_LIMIT = 100;
+        final int LOWER_AGE_LIMIT = 12;
 
-        String name = readData("Как тебя зовут?");
+        String inputName = readData("Как тебя зовут?");
+        String name = reEnterNewName(inputName);
         String inputHeight = readData("Твой рост в см:");
-        int height = validInputParameter(inputHeight, upperHeightLimit, lowerHeightLimit);
+        int height = reEnterNewParameter(inputHeight, UPPER_HEIGHT_LIMIT, LOWER_HEIGHT_LIMIT);
         String inputWeight = readData("Твой вес в кг:");
-        int weight = validInputParameter(inputWeight, upperWeightLimit, lowerWeightLimit);
+        int weight = reEnterNewParameter(inputWeight, UPPER_WEIGHT_LIMIT, LOWER_WEIGHT_LIMIT);
         String inputAge = readData("Твой возраст:");
-        int age = validInputParameter(inputAge, upperAgeLimit, lowerAgeLimit);
+        int age = reEnterNewParameter(inputAge, UPPER_AGE_LIMIT, LOWER_AGE_LIMIT);
 
         setUser(name, height, weight, age);
-        System.out.println("Пользователь " + name + " успешно добавлен!");
+        System.out.println("Пользователь " + inputName + " успешно добавлен!");
     }
-    private int validInputParameter(String inputData, int lowerBound, int upperBound) {
-        if (isNumber(inputData))
+
+    private boolean isValidName(String inputName) {return inputName != null && !inputName.trim().isEmpty();}
+
+    private String reEnterNewName(String inputName)
+    {
+        while (!(isValidName(inputName)))
         {
-            int result = Integer.parseInt(inputData);
+            inputName = reEnter();
+        }
+        return inputName;
+    }
+
+    private boolean isValidInputParameter(String inputParameter, int lowerBound, int upperBound) {
+        if (isNumber(inputParameter))
+        {
+            int result = Integer.parseInt(inputParameter);
             if (isInCorrectBounds(result, lowerBound, upperBound))
-                return result;
-            else {
-                String inputNewData = reEnter();
-                return validInputParameter(inputNewData, lowerBound, upperBound);
-            }
+                return true;
         }
-        else {
-            String inputNewData = reEnter();
-            return validInputParameter(inputNewData, lowerBound, upperBound);
+        return false;
+    }
+
+    private int reEnterNewParameter(String inputParameter, int lowerBound, int upperBound)
+    {
+        while (!(isValidInputParameter(inputParameter, lowerBound, upperBound)))
+        {
+            inputParameter = reEnter();
         }
+        return Integer.parseInt(inputParameter);
     }
 
     private String reEnter() {
-        System.out.println(Errors.INPUT.getErrorMassage());
+        System.out.println(Errors.INPUT.getErrorMessage());
         return in.nextLine();
     }
 

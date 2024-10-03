@@ -22,9 +22,10 @@ public class BotTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        bot = new Bot();
+
         Menu menu = mockMenu;
         Help help = mockHelp;
+        bot = new Bot(help,menu);
         CalorieCountingService caloriesService = mockCaloriesService;
     }
 
@@ -42,7 +43,7 @@ public class BotTest {
     void testCalculateCalories() {
         bot.setUser("Alice", 171, 58, 19);
         when(mockCaloriesService.calculate(171,58,19)).thenReturn(1476.5);
-        bot.executeCommand(new Command("КБЖУ Alice"),mockHelp,mockMenu);
+        bot.executeCommand(new Command("КБЖУ Alice"));
         User alice = bot.getUserByName("Alice");
         assertNotNull(alice);
         assertEquals(1392.75,alice.getCalories(),0.01);
