@@ -1,15 +1,21 @@
-import org.example.*;
+
+import fitnesbot.bot.*;
+import fitnesbot.services.*;
+import fitnesbot.InOut.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class BotTest {
+
+    @InjectMocks
     private Bot bot;
+
     @Mock
     private Help mockHelp;
 
@@ -19,13 +25,19 @@ public class BotTest {
     @Mock
     private CalorieCountingService mockCaloriesService;
 
+    @Mock
+    private InputService mockInputService;
+
+    @Mock
+    private OutputService mockOutputService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
         Menu menu = mockMenu;
         Help help = mockHelp;
-        bot = new Bot(help,menu);
+
         CalorieCountingService caloriesService = mockCaloriesService;
     }
 
@@ -42,9 +54,10 @@ public class BotTest {
     @Test
     void testCalculateCalories() {
         bot.setUser("Alice", 171, 58, 19);
-        when(mockCaloriesService.calculate(171,58,19)).thenReturn(1476.5);
+        when(mockCaloriesService.calculate(171,58,19)).thenReturn(1392.75);
         bot.executeCommand(new Command("КБЖУ Alice"));
         User alice = bot.getUserByName("Alice");
+        System.out.println("Calories returned by mock: " + alice.getCalories());
         assertNotNull(alice);
         assertEquals(1392.75,alice.getCalories(),0.01);
     }

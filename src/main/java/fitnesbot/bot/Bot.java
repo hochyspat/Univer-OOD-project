@@ -1,29 +1,39 @@
+package fitnesbot.bot;
+import fitnesbot.*;
+import fitnesbot.InOut.InputService;
+import fitnesbot.InOut.OutputService;
+import fitnesbot.services.CalorieCountingService;
+import fitnesbot.services.Help;
+import fitnesbot.services.Menu;
 
-package org.example;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class Bot {
-    private Map<String,User> users = new HashMap<>();
-    Scanner in = new Scanner(System.in);
-    Help help;
-    Menu menu;
+    private Map<String, User> users = new HashMap<>();
+    private InputService inputService;
+    private OutputService outputService;
+    private  CalorieCountingService calorieService;
+    private Help help;
+    private Menu menu;
 
 
-    public Bot(Help help,Menu menu){
+    public Bot(InputService inputService, OutputService outputService, Help help, Menu menu,CalorieCountingService caloriesService) {
+        this.inputService = inputService;
+        this.outputService = outputService;
         this.help = help;
         this.menu = menu;
+        this.calorieService = caloriesService;
     }
 
 
     public void start() {
-
         showHelp();
         firstAcquaintance();
         while (true) {
-            System.out.println("Введите команду: ");
-            String userRequest = in.nextLine();
+
+            String userRequest = inputService.read("Введите команду: ");
             Command command = new Command(userRequest);
             if (command.isValid()) {
                 executeCommand(command);
@@ -64,14 +74,14 @@ public class Bot {
                 if (args.length>0) {
                     User user = getUserByName(args[0]);
                     if (user == null) {
-                        System.out.println("Пользователя не существует");
+                        outputService.output("Пользователя не существует");
                         break;
                     }
                     calculateCalories(user);
 
                 }
                 else {
-                    System.out.println("Введите команду КБЖУ [имя]");
+                    outputService.output("Введите команду КБЖУ [имя]");
                 }
                 break;
             case "информация":
@@ -80,14 +90,14 @@ public class Bot {
                 }
                 else
                 {
-                    System.out.println("Введи имя пользователя для команды 'информация'");
+                    outputService.output("Введи имя пользователя для команды 'информация'");
                 }
                 break;
             case "/exit":
-                System.out.print("Finish bot");
+                outputService.output("Finish bot");
                 break;
             default:
-                System.out.println("Неверная команда.");
+                outputService.output("Неверная команда.");
         }
     }
 
@@ -99,17 +109,17 @@ public class Bot {
         final int UPPER_AGE_LIMIT = 100;
         final int LOWER_AGE_LIMIT = 12;
 
-        String inputName = readData("Как тебя зовут?");
+        String inputName = inputService.read("Как тебя зовут?");
         String name = getValidName(inputName);
-        String inputHeight = readData("Твой рост в см:");
-        int height = getValidParameter(inputHeight, UPPER_HEIGHT_LIMIT, LOWER_HEIGHT_LIMIT);
-        String inputWeight = readData("Твой вес в кг:");
-        int weight = getValidParameter(inputWeight, UPPER_WEIGHT_LIMIT, LOWER_WEIGHT_LIMIT);
-        String inputAge = readData("Твой возраст:");
-        int age = getValidParameter(inputAge, UPPER_AGE_LIMIT, LOWER_AGE_LIMIT);
+        String inputHeight = inputService.read("Твой рост в см:");
+        int height = getValidParameter(inputHeight, LOWER_HEIGHT_LIMIT, UPPER_HEIGHT_LIMIT);
+        String inputWeight = inputService.read("Твой вес в кг:");
+        int weight = getValidParameter(inputWeight, LOWER_WEIGHT_LIMIT, UPPER_WEIGHT_LIMIT);
+        String inputAge = inputService.read("Твой возраст:");
+        int age = getValidParameter(inputAge, LOWER_AGE_LIMIT, UPPER_AGE_LIMIT);
 
         setUser(name, height, weight, age);
-        System.out.println("Пользователь " + inputName + " успешно добавлен!");
+        outputService.output("Пользователь " + inputName + " успешно добавлен!");
     }
 
     private boolean isValidName(String inputName) {return inputName != null && !inputName.trim().isEmpty();}
@@ -123,12 +133,11 @@ public class Bot {
         return inputName;
     }
 
-    private boolean isValidInputParameter(String inputParameter, int lowerBound, int upperBound) {
-        if (isNumber(inputParameter))
-        {
+    private boolean isValidInputParameter(String inputParameter, int lowerBound, int upperBound)
+    {
+        if (isNumber(inputParameter)) {
             int result = Integer.parseInt(inputParameter);
-            if (isInCorrectBounds(result, lowerBound, upperBound))
-                return true;
+            return isInCorrectBounds(result, lowerBound, upperBound);
         }
         return false;
     }
@@ -144,7 +153,7 @@ public class Bot {
 
     private String reEnter() {
         System.out.println(Errors.INPUT.getErrorMessage());
-        return in.nextLine();
+        return inputService.read("");
     }
 
     private boolean isInCorrectBounds(int value, int lowerBound, int upperBound) {
@@ -156,37 +165,29 @@ public class Bot {
     }
 
     private void calculateCalories(User user) {
-        CalorieCountingService countedCalories = new CalorieCountingService();
-        double calories = countedCalories.calculate(user.getHeight(), user.getWeight(), user.getAge());
-
+        double calories = calorieService.calculate(user.getHeight(), user.getWeight(), user.getAge());
         user.updateCalories(calories);
-
-        System.out.println("Твоя норма калорий на день: " + user.getCalories());
+        outputService.output("Твоя норма калорий на день: " + user.getCalories());
     }
 
 
     public void showUserByName(String name) {
         User user = getUserByName(name);
         if (user != null) {
-            System.out.println(user.getInfo());
+            outputService.output(user.getInfo());
         }
         else {
-            System.out.println("ERROR user not found");
+            outputService.output("ERROR user not found");
         }
 
     }
     public void showHelp()
     {
-        System.out.print(help.getHelp());
+        outputService.output(help.getHelp());
     }
     public void showMenu()
     {
-        System.out.print(menu.getMenu());
-    }
-
-    private String readData(String prompt) {
-        System.out.println(prompt);
-        return in.nextLine();
+        outputService.output(menu.getMenu());
     }
     public User getUserByName(String name){
         User user = users.get(name);

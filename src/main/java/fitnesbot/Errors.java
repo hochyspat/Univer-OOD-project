@@ -1,4 +1,4 @@
-package org.example;
+package fitnesbot;
 
 public enum Errors {
     INPUT("Введены неверные данные. Попробуй ещё раз");

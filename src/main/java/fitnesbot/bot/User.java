@@ -1,5 +1,5 @@
 
-package org.example;
+package fitnesbot.bot;
 
 public class User {
     private String name;

@@ -1,15 +1,10 @@
-import fitnesbot.services.Menu;
-import org.junit.jupiter.api.Test;
+package fitnesbot.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MenuTest {
 
-    @Test
-    public void testGetMenu() {
-
-        Menu testMenu = new Menu();
-        String expectedOutput = """
+public class Menu {
+    public String getMenu() {
+        return  """
         Выберите действие:
             КБЖУ;
             Дневник питания;
@@ -20,7 +15,5 @@ public class MenuTest {
             addПользователь.
             Для выбора действия введите название действия.
         """;
-
-        assertEquals(testMenu.getMenu(),expectedOutput);
     }
 }

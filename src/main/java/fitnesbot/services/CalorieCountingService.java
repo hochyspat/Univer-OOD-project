@@ -1,5 +1,4 @@
-package org.example;
-
+package fitnesbot.services;
 
 public class CalorieCountingService {
 

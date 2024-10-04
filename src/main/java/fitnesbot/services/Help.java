@@ -1,17 +1,10 @@
-import fitnesbot.services.Help;
-
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+package fitnesbot.services;
 
 
-public class HelpTest {
-
-   @Test
-   public void testGetHelp() {
-
-       Help testHelp = new Help();
-       String expectedOutput = """
+public class Help
+{
+    public String getHelp(){
+        return """
         Привет! Меня зовут *название бота*. Я буду помогать тебе при похудении и не только. С моей помощью ты сможешь:
             •рассчитать свои нормы КБЖУ и создать собственный дневник питания;
             •составить меню на день;
@@ -24,8 +17,6 @@ public class HelpTest {
         Чтобы выйти в меню введите "/menu"
         Для справки введите "/help"
         """;
+    }
 
-
-       assertEquals(testHelp.getHelp(),expectedOutput);
-   }
 }

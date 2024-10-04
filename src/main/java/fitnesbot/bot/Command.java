@@ -1,4 +1,5 @@
-package org.example;
+package fitnesbot.bot;
+
 
 import java.util.Set;
 
