@@ -116,7 +116,6 @@ public class Bot {
         outputService.output("Твой рост в см:");
         String inputHeight = inputService.read();
         int height = getValidParameter(inputHeight, LOWER_HEIGHT_LIMIT, UPPER_HEIGHT_LIMIT);
-        outputService.output(String.valueOf(height));
         outputService.output("Твой вес в кг:");
         String inputWeight = inputService.read();
         int weight = getValidParameter(inputWeight, LOWER_WEIGHT_LIMIT, UPPER_WEIGHT_LIMIT);
@@ -150,7 +149,6 @@ public class Bot {
 
     private int getValidParameter(String inputParameter, int lowerBound, int upperBound)
     {
-        outputService.output(inputParameter);
         while (!(isValidInputParameter(inputParameter, lowerBound, upperBound)))
         {
             inputParameter = reEnter();
