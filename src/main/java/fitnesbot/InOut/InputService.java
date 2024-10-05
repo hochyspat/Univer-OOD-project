@@ -1,5 +1,5 @@
 package fitnesbot.InOut;
 
 public interface InputService {
-    String read(String prompt);
+    String read();
 }

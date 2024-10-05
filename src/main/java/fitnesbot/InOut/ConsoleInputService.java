@@ -2,10 +2,9 @@ package fitnesbot.InOut;
 import java.util.Scanner;
 
 public class ConsoleInputService implements InputService {
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     @Override
-    public String read(String prompt) {
-        System.out.println(prompt);
+    public String read() {
         String s = scanner.nextLine();
         return s;
     }

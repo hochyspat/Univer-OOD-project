@@ -32,8 +32,8 @@ public class Bot {
         showHelp();
         firstAcquaintance();
         while (true) {
-
-            String userRequest = inputService.read("Введите команду: ");
+            outputService.output("Введите команду: ");
+            String userRequest = inputService.read();
             Command command = new Command(userRequest);
             if (command.isValid()) {
                 executeCommand(command);
@@ -109,13 +109,19 @@ public class Bot {
         final int UPPER_AGE_LIMIT = 100;
         final int LOWER_AGE_LIMIT = 12;
 
-        String inputName = inputService.read("Как тебя зовут?");
+        outputService.output("Как тебя зовут?");
+        String inputName = inputService.read();
         String name = getValidName(inputName);
-        String inputHeight = inputService.read("Твой рост в см:");
+
+        outputService.output("Твой рост в см:");
+        String inputHeight = inputService.read();
         int height = getValidParameter(inputHeight, LOWER_HEIGHT_LIMIT, UPPER_HEIGHT_LIMIT);
-        String inputWeight = inputService.read("Твой вес в кг:");
+        outputService.output(String.valueOf(height));
+        outputService.output("Твой вес в кг:");
+        String inputWeight = inputService.read();
         int weight = getValidParameter(inputWeight, LOWER_WEIGHT_LIMIT, UPPER_WEIGHT_LIMIT);
-        String inputAge = inputService.read("Твой возраст:");
+        outputService.output("Твой возраст:");
+        String inputAge = inputService.read();
         int age = getValidParameter(inputAge, LOWER_AGE_LIMIT, UPPER_AGE_LIMIT);
 
         setUser(name, height, weight, age);
@@ -144,6 +150,7 @@ public class Bot {
 
     private int getValidParameter(String inputParameter, int lowerBound, int upperBound)
     {
+        outputService.output(inputParameter);
         while (!(isValidInputParameter(inputParameter, lowerBound, upperBound)))
         {
             inputParameter = reEnter();
@@ -153,11 +160,11 @@ public class Bot {
 
     private String reEnter() {
         System.out.println(Errors.INPUT.getErrorMessage());
-        return inputService.read("");
+        return inputService.read();
     }
 
     private boolean isInCorrectBounds(int value, int lowerBound, int upperBound) {
-        return value >= upperBound && value <= lowerBound;
+        return value >= lowerBound && value <= upperBound;
     }
 
     private boolean isNumber(String value) {
