@@ -1,4 +1,4 @@
-package fitnesbot.InOut;
+package fitnesbot.in;
 import java.util.Scanner;
 
 public class ConsoleInputService implements InputService {

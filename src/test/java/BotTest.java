@@ -1,7 +1,8 @@
 
 import fitnesbot.bot.*;
+import fitnesbot.in.InputService;
 import fitnesbot.services.*;
-import fitnesbot.InOut.*;
+import fitnesbot.out.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

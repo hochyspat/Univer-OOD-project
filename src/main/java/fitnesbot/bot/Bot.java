@@ -1,16 +1,21 @@
 package fitnesbot.bot;
 import fitnesbot.*;
-import fitnesbot.InOut.InputService;
-import fitnesbot.InOut.OutputService;
+import fitnesbot.in.InputService;
+import fitnesbot.out.OutputService;
 import fitnesbot.services.CalorieCountingService;
 import fitnesbot.services.Help;
 import fitnesbot.services.Menu;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Bot {
+    final int UPPER_HEIGHT_LIMIT = 220;
+    final int LOWER_HEIGHT_LIMIT = 140;
+    final int UPPER_WEIGHT_LIMIT = 200;
+    final int LOWER_WEIGHT_LIMIT = 35;
+    final int UPPER_AGE_LIMIT = 100;
+    final int LOWER_AGE_LIMIT = 12;
     private Map<String, User> users = new HashMap<>();
     private InputService inputService;
     private OutputService outputService;
@@ -102,12 +107,7 @@ public class Bot {
     }
 
     private void addUser(){
-        final int UPPER_HEIGHT_LIMIT = 220;
-        final int LOWER_HEIGHT_LIMIT = 140;
-        final int UPPER_WEIGHT_LIMIT = 200;
-        final int LOWER_WEIGHT_LIMIT = 35;
-        final int UPPER_AGE_LIMIT = 100;
-        final int LOWER_AGE_LIMIT = 12;
+
 
         outputService.output("Как тебя зовут?");
         String inputName = inputService.read();

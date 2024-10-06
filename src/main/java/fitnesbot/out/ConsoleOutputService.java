@@ -1,4 +1,4 @@
-package fitnesbot.InOut;
+package fitnesbot.out;
 
 public class ConsoleOutputService implements OutputService {
 

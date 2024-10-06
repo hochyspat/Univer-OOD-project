@@ -1,8 +1,10 @@
 package fitnesbot;
 
 
-import fitnesbot.InOut.*;
+import fitnesbot.out.*;
 import fitnesbot.bot.Bot;
+import fitnesbot.in.ConsoleInputService;
+import fitnesbot.in.InputService;
 import fitnesbot.services.*;
 
 public class Main {
