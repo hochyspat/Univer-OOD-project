@@ -1,6 +1,6 @@
 package fitnesbot.out;
 
-import com.pengrad.telegrambot.request.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import fitnesbot.bot.MessageData;
 import fitnesbot.bot.TelegramBot;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -13,9 +13,8 @@ public class TelegramOutputService implements OutputService  {
     }
     @Override
     public void output(MessageData messageData) {
-        SendMessage sendMessage = new SendMessage(messageData.getChatId(), messageData.getText());
+        SendMessage sendMessage = new SendMessage(String.valueOf(messageData.getChatId()), messageData.getTextData());
         try {
-            // Отправляем обработанное сообщение
             telegramBot.execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();

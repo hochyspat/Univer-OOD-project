@@ -27,9 +27,7 @@ public class ConsoleBot {
         commandHandler.showHelp(CHAT_ID);
 
         while (true) {
-
             outputService.output(new MessageData("Введите команду: ",CHAT_ID));
-
             String userRequest = inputService.read();
             Command command = new Command(userRequest);
             if (command.isValid()) {

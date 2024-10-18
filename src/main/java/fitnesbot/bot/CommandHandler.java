@@ -17,7 +17,7 @@ public class CommandHandler {
     final int LOWER_WEIGHT_LIMIT = 35;
     final int UPPER_AGE_LIMIT = 100;
     final int LOWER_AGE_LIMIT = 12;
-    private Map<String, User> users = new HashMap<>();
+    private Map<Long, User> users = new HashMap<>();
     private InputService inputService;
     private OutputService outputService;
     private CalorieCountingService calorieService;
@@ -35,8 +35,8 @@ public class CommandHandler {
 
 
     private void firstAcquaintance(long chatId) {
+        showHelp(chatId);
         outputService.output(new MessageData("Для начала давай познакомимся,введи команду addПользователь [имя] [возраст] [рост] [вес]",chatId));
-
     }
 
     public void setUser(String name, String age, String height, String weight,long chatId) {
@@ -60,7 +60,8 @@ public class CommandHandler {
 
         if (isValid==1){
             User user = new User(name, Integer.parseInt(height), Integer.parseInt(weight), Integer.parseInt(age),chatId);
-            users.put(name, user);
+            outputService.output(new MessageData("Отлично! Введи /help для справки или /menu для выбора команд",chatId));
+            users.put(chatId, user);
         }
 
 
@@ -77,11 +78,12 @@ public class CommandHandler {
                 break;
             case "/start":
                 firstAcquaintance(chatId);
+                break;
             case "/menu":
                 showMenu(chatId);
                 break;
             case "addПользователь":
-                setUser(args[1],args[2],args[3],args[4],chatId);
+                setUser(args[0],args[1],args[2],args[3],chatId);
                 break;
             case "КБЖУ":
                 User user = getUserById(chatId);

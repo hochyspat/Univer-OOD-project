@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 
 public class Main {
     public static void main(String[] args) throws TelegramApiException {
-        String platforma = "console";
+        String platforma = "ccc";
         Help help = new Help();
         Menu menu = new Menu();
         CalorieCountingService calorieCountingService = new CalorieCountingService();
@@ -31,7 +31,7 @@ public class Main {
             try {
                 TelegramOutputService telegramOutputService = new TelegramOutputService();
                 ConsoleInputService consoleInputService = new ConsoleInputService();
-                CommandHandler commandHandler = new CommandHandler(consoleInputService, telegramOutputService, help, menu, calorieCountingService)
+                CommandHandler commandHandler = new CommandHandler(consoleInputService, telegramOutputService, help, menu, calorieCountingService);
                 TelegramBot telegramBot = new TelegramBot(telegramOutputService, commandHandler);
                 telegramOutputService.setTelegramBot(telegramBot);
                 TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
