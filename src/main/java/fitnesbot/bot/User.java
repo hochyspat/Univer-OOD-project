@@ -2,6 +2,7 @@
 package fitnesbot.bot;
 
 public class User {
+    private long chatId;
     private String name;
     private int height;
     private int weight;
@@ -11,11 +12,12 @@ public class User {
     private int fats;
     private int carbohydrates;
 
-    public User(String name, int height, int weight, int age) {
+    public User(String name, int height, int weight, int age,long chatId) {
         this.name = name;
         this.height = height;
         this.weight = weight;
         this.age = age;
+        this.chatId = chatId;
     }
     public void updateCalories(double calories) {
         this.calories = calories;
@@ -36,6 +38,7 @@ public class User {
     public double getCalories() {
         return calories;
     }
+
 
     public String getInfo() {
         return "Имя: " + name + "\nРост: " + height + " см\nВес: " + weight + " кг\nВозраст: " + age + " лет";

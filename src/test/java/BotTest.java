@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 public class BotTest {
 
     @InjectMocks
-    private Bot bot;
+    private ConsoleBot bot;
 
     @Mock
     private Help mockHelp;
