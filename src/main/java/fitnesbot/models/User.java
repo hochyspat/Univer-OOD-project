@@ -1,5 +1,5 @@
 
-package fitnesbot.bot;
+package fitnesbot.models;
 
 public class User {
     private long chatId;
@@ -38,6 +38,7 @@ public class User {
     public double getCalories() {
         return calories;
     }
+    public long getChatId() {return chatId;}
 
 
     public String getInfo() {

@@ -2,10 +2,9 @@ package fitnesbot.bot;
 
 import fitnesbot.Errors;
 import fitnesbot.in.InputService;
+import fitnesbot.models.User;
 import fitnesbot.out.OutputService;
-import fitnesbot.services.CalorieCountingService;
-import fitnesbot.services.Help;
-import fitnesbot.services.Menu;
+import fitnesbot.services.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,58 +16,26 @@ public class CommandHandler {
     final int LOWER_WEIGHT_LIMIT = 35;
     final int UPPER_AGE_LIMIT = 100;
     final int LOWER_AGE_LIMIT = 12;
-    private Map<Long, User> users = new HashMap<>();
     private InputService inputService;
     private OutputService outputService;
     private CalorieCountingService calorieService;
+    private UserService userService;
     private Help help;
     private Menu menu;
 
-    public CommandHandler(InputService inputService, OutputService outputService, Help help, Menu menu, CalorieCountingService caloriesService) {
+    public CommandHandler(InputService inputService, OutputService outputService, Help help, Menu menu,
+                          CalorieCountingService caloriesService, UserService userService) {
         this.inputService = inputService;
         this.outputService = outputService;
         this.help = help;
         this.menu = menu;
         this.calorieService = caloriesService;
+        this.userService = userService;
     }
-
-
-
     private void firstAcquaintance(long chatId) {
         showHelp(chatId);
         outputService.output(new MessageData("Для начала давай познакомимся,введи команду addПользователь [имя] [возраст] [рост] [вес]",chatId));
     }
-
-    public void setUser(String name, String age, String height, String weight,long chatId) {
-        int isValid = 1;
-        if ((!(isValidName(name)))){
-            outputService.output(new MessageData(Errors.INPUT.getErrorMessage(),chatId));
-            isValid = 0;
-        }
-        if ((!(isValidInputParameter(height, LOWER_HEIGHT_LIMIT, UPPER_HEIGHT_LIMIT)))){
-            outputService.output(new MessageData(Errors.INPUT.getErrorMessage(),chatId));
-            isValid = 0;
-        }
-        if ((!(isValidInputParameter(weight, LOWER_WEIGHT_LIMIT, UPPER_WEIGHT_LIMIT)))){
-            outputService.output(new MessageData(Errors.INPUT.getErrorMessage(),chatId));
-            isValid = 0;
-        }
-        if ((!(isValidInputParameter(age, LOWER_AGE_LIMIT, UPPER_AGE_LIMIT)))){
-            outputService.output(new MessageData(Errors.INPUT.getErrorMessage(),chatId));
-            isValid = 0;
-        }
-
-        if (isValid==1){
-            User user = new User(name, Integer.parseInt(height), Integer.parseInt(weight), Integer.parseInt(age),chatId);
-            outputService.output(new MessageData("Отлично! Введи /help для справки или /menu для выбора команд",chatId));
-            users.put(chatId, user);
-        }
-
-
-
-
-    }
-
     public void handleMessage(Command commandData,long chatId) {
         String command = commandData.command();
         String[] args = commandData.args();
@@ -83,10 +50,10 @@ public class CommandHandler {
                 showMenu(chatId);
                 break;
             case "addПользователь":
-                setUser(args[0],args[1],args[2],args[3],chatId);
+                userService.registerUser(args[0],args[1],args[2],args[3],chatId);
                 break;
             case "КБЖУ":
-                User user = getUserById(chatId);
+                User user = userService.getUser(chatId);
                 if (user == null) {
                     outputService.output(new MessageData("Пользователя не существует",chatId));
                     break;
@@ -104,7 +71,61 @@ public class CommandHandler {
         }
     }
 
-   /* private void addUser() {
+
+    private boolean isValidName(String inputName) {
+        return inputName != null && !inputName.trim().isEmpty();
+    }
+
+    /*private String getValidName(String inputName) {
+        while (!(isValidName(inputName))) {
+            inputName = reEnter();
+        }
+        return inputName;
+    }*/
+
+    private boolean isValidInputParameter(String inputParameter, int lowerBound, int upperBound) {
+        if (isNumber(inputParameter)) {
+            int result = Integer.parseInt(inputParameter);
+            return isInCorrectBounds(result, lowerBound, upperBound);
+        }
+        return false;
+    }
+
+
+
+    private boolean isInCorrectBounds(int value, int lowerBound, int upperBound) {
+        return value >= lowerBound && value <= upperBound;
+    }
+
+    private boolean isNumber(String value) {
+        return value.matches("-?\\d+");
+    }
+
+    private void calculateCalories(User user, long chatId) {
+        double calories = calorieService.calculate(user.getHeight(), user.getWeight(), user.getAge());
+        user.updateCalories(calories);
+        outputService.output(new MessageData("Твоя норма калорий на день: " + user.getCalories(),chatId));
+    }
+
+
+    public void showUserById(long chatId) {
+        User user = userService.getUser(chatId);
+        if (user != null) {
+            outputService.output(new MessageData(user.getInfo(),chatId));
+        } else {
+            outputService.output(new MessageData("ERROR user not found",chatId));
+        }
+    }
+
+        public void showHelp(long chatId) {
+            outputService.output(new MessageData(help.getHelp(),chatId));
+        }
+
+        public void showMenu(long chatId) {
+            outputService.output(new MessageData(menu.getMenu(),chatId));
+        }
+
+     /* private void addUser() {
 
 
         outputService.output("Как тебя зовут?");
@@ -125,71 +146,10 @@ public class CommandHandler {
         outputService.output("Пользователь " + inputName + " успешно добавлен!");
     }
 */
-    private boolean isValidName(String inputName) {
-        return inputName != null && !inputName.trim().isEmpty();
-    }
-
-    /*private String getValidName(String inputName) {
-        while (!(isValidName(inputName))) {
-            inputName = reEnter();
-        }
-        return inputName;
-    }*/
-
-    private boolean isValidInputParameter(String inputParameter, int lowerBound, int upperBound) {
-        if (isNumber(inputParameter)) {
-            int result = Integer.parseInt(inputParameter);
-            return isInCorrectBounds(result, lowerBound, upperBound);
-        }
-        return false;
-    }
-
-/*private int getValidParameter(String inputParameter, int lowerBound, int upperBound) {
+    /*private int getValidParameter(String inputParameter, int lowerBound, int upperBound) {
     while (!(isValidInputParameter(inputParameter, lowerBound, upperBound))) {
         inputParameter = reEnter();
     }
     return Integer.parseInt(inputParameter);
 }*/
-
-    private boolean isInCorrectBounds(int value, int lowerBound, int upperBound) {
-        return value >= lowerBound && value <= upperBound;
-    }
-
-    private boolean isNumber(String value) {
-        return value.matches("-?\\d+");
-    }
-
-    private void calculateCalories(User user, long chatId) {
-        double calories = calorieService.calculate(user.getHeight(), user.getWeight(), user.getAge());
-        user.updateCalories(calories);
-        outputService.output(new MessageData("Твоя норма калорий на день: " + user.getCalories(),chatId));
-    }
-
-
-    public void showUserById(long chatId) {
-        User user = getUserById(chatId);
-        if (user != null) {
-            outputService.output(new MessageData(user.getInfo(),chatId));
-        } else {
-            outputService.output(new MessageData("ERROR user not found",chatId));
-        }
-
-    }
-
-    public void showHelp(long chatId) {
-        outputService.output(new MessageData(help.getHelp(),chatId));
-    }
-
-    public void showMenu(long chatId) {
-        outputService.output(new MessageData(menu.getMenu(),chatId));
-    }
-
-    public User getUserById(long chatId) {
-        User user = users.get(chatId);
-        if (user != null) {
-            return user;
-        } else {
-            return null;
-        }
-    }
 }
