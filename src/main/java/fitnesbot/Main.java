@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 
 public class Main {
     public static void main(String[] args) throws TelegramApiException {
-        String platforma = "co";
+        String platforma = "console";
         Help help = new Help();
         Menu menu = new Menu();
         CalorieCountingService calorieCountingService = new CalorieCountingService();

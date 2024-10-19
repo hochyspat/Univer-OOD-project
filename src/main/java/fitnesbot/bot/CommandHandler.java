@@ -10,12 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandHandler {
-    final int UPPER_HEIGHT_LIMIT = 220;
-    final int LOWER_HEIGHT_LIMIT = 140;
-    final int UPPER_WEIGHT_LIMIT = 200;
-    final int LOWER_WEIGHT_LIMIT = 35;
-    final int UPPER_AGE_LIMIT = 100;
-    final int LOWER_AGE_LIMIT = 12;
     private InputService inputService;
     private OutputService outputService;
     private CalorieCountingService calorieService;
@@ -71,36 +65,6 @@ public class CommandHandler {
         }
     }
 
-
-    private boolean isValidName(String inputName) {
-        return inputName != null && !inputName.trim().isEmpty();
-    }
-
-    /*private String getValidName(String inputName) {
-        while (!(isValidName(inputName))) {
-            inputName = reEnter();
-        }
-        return inputName;
-    }*/
-
-    private boolean isValidInputParameter(String inputParameter, int lowerBound, int upperBound) {
-        if (isNumber(inputParameter)) {
-            int result = Integer.parseInt(inputParameter);
-            return isInCorrectBounds(result, lowerBound, upperBound);
-        }
-        return false;
-    }
-
-
-
-    private boolean isInCorrectBounds(int value, int lowerBound, int upperBound) {
-        return value >= lowerBound && value <= upperBound;
-    }
-
-    private boolean isNumber(String value) {
-        return value.matches("-?\\d+");
-    }
-
     private void calculateCalories(User user, long chatId) {
         double calories = calorieService.calculate(user.getHeight(), user.getWeight(), user.getAge());
         user.updateCalories(calories);
@@ -125,7 +89,7 @@ public class CommandHandler {
             outputService.output(new MessageData(menu.getMenu(),chatId));
         }
 
-     /* private void addUser() {
+     /* private void addUser() {//удалим потом
 
 
         outputService.output("Как тебя зовут?");
