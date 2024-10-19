@@ -1,7 +1,5 @@
-
 import fitnesbot.bot.*;
 import fitnesbot.in.InputService;
-import fitnesbot.models.User;
 import fitnesbot.services.*;
 import fitnesbot.out.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,8 +43,8 @@ public class BotTest {
 
     @Test
     void testAddUser() {
-        bot.setUser("Alice", "19", "171", "58",1234);
-        User user = bot.("Alice");
+        bot.setUser("Alice", 171, 58, 19);
+        User user = bot.getUserByName("Alice");
         assertNotNull(user);
         assertEquals("Alice", user.getName());
         assertEquals(171, user.getHeight());

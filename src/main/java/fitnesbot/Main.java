@@ -7,6 +7,7 @@ import fitnesbot.out.*;
 import fitnesbot.bot.ConsoleBot;
 import fitnesbot.in.ConsoleInputService;
 import fitnesbot.repositories.UserRepository;
+import fitnesbot.in.InputService;
 import fitnesbot.services.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;

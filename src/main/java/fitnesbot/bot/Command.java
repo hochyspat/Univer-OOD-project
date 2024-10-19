@@ -11,8 +11,6 @@ public record Command(String command, String[] args) {
             "КБЖУ",
             "addПользователь",
             "информация",
-            "/exit",
-            "/start"
     );
     public boolean isValid() {
         return validCommands.contains(command);
