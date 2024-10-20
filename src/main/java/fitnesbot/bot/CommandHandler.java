@@ -44,7 +44,11 @@ public class CommandHandler {
                 showMenu(chatId);
                 break;
             case "addПользователь":
-                userService.registerUser(args[0],args[1],args[2],args[3],chatId);
+                if (args.length != 4) {
+                    outputService.output(new MessageData("Неверное количество аргументов. Используйте: addПользователь [имя] [возраст] [рост] [вес]", chatId));
+                    return;
+                }
+                userService.registerUser(args[0], args[1], args[2], args[3], chatId);
                 break;
             case "КБЖУ":
                 User user = userService.getUser(chatId);
@@ -89,31 +93,5 @@ public class CommandHandler {
             outputService.output(new MessageData(menu.getMenu(),chatId));
         }
 
-     /* private void addUser() {//удалим потом
 
-
-        outputService.output("Как тебя зовут?");
-        String inputName = inputService.read();
-        String name = getValidName(inputName);
-
-        outputService.output("Твой рост в см:");
-        String inputHeight = inputService.read();
-        int height = getValidParameter(inputHeight, LOWER_HEIGHT_LIMIT, UPPER_HEIGHT_LIMIT);
-        outputService.output("Твой вес в кг:");
-        String inputWeight = inputService.read();
-        int weight = getValidParameter(inputWeight, LOWER_WEIGHT_LIMIT, UPPER_WEIGHT_LIMIT);
-        outputService.output("Твой возраст:");
-        String inputAge = inputService.read();
-        int age = getValidParameter(inputAge, LOWER_AGE_LIMIT, UPPER_AGE_LIMIT);
-
-        setUser(name, height, weight, age);
-        outputService.output("Пользователь " + inputName + " успешно добавлен!");
-    }
-*/
-    /*private int getValidParameter(String inputParameter, int lowerBound, int upperBound) {
-    while (!(isValidInputParameter(inputParameter, lowerBound, upperBound))) {
-        inputParameter = reEnter();
-    }
-    return Integer.parseInt(inputParameter);
-}*/
 }
