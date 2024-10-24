@@ -1,11 +1,29 @@
 package fitnesbot;
 
-public enum Errors {
-    INPUT("Введены неверные данные. Попробуй ещё раз");
+public class Errors {
 
-    private String errorMessage;
-    Errors(String code){
-        this.errorMessage = code;
+    public String invalidNumberOfArguments(String methodName, String... args){
+        String errorMessage = "Неверное количество аргументов. Используйте " + methodName + " ";
+        for (String arg : args) {
+            errorMessage += arg + " ";
+        }
+
+        return errorMessage;
     }
-    public String getErrorMessage(){ return errorMessage;}
+
+    public String invalidCommand() {
+        return "Неверная команда";
+    }
+
+    public String nonExistenceUser() {
+        return "Пользователя не существует";
+    }
+
+    public String invalidParameter(String parameterName) {
+        return "Параметр " + parameterName + " введён неверно.";
+    }
+
+    public String existenceUser() {
+        return "Пользователь уже существует";
+    }
 }

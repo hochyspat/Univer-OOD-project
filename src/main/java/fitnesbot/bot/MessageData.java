@@ -1,21 +1,20 @@
 package fitnesbot.bot;
 
 public class MessageData {
-    private String textData;
-    private long chatId;
+    private Command command;
+    private final long chatId;
 
-    public MessageData(String textData, long chatId) {
-        this.textData = textData;
+    public MessageData(Command command, long chatId) {
+        this.command = command;
         this.chatId = chatId;
     }
 
-    public String getTextData() {
-        return textData;
+    public String getText() {
+        return command.getText();
     }
+
     public long getChatId() {
         return chatId;
     }
-
-
-
 }
+

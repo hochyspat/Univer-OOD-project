@@ -2,7 +2,7 @@ package fitnesbot.services;
 
 import fitnesbot.models.User;
 
-public interface IUserRepository {
+public interface MemoryUserReposytory {
     void save(User user);
     User findById(long chatId);
     void delete(long chatId);

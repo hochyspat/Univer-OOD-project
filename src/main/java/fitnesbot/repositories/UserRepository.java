@@ -1,13 +1,12 @@
 package fitnesbot.repositories;
 
 import fitnesbot.models.User;
-import fitnesbot.services.IUserRepository;
-import fitnesbot.services.UserService;
+import fitnesbot.services.MemoryUserReposytory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserRepository implements IUserRepository {
+public class UserRepository implements MemoryUserReposytory {
     private Map<Long, User> users = new HashMap<>();
 
 

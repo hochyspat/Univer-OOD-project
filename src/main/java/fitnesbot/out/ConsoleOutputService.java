@@ -9,6 +9,6 @@ public class ConsoleOutputService implements OutputService {
 
     @Override
     public void output(MessageData messageData) {
-        System.out.println(messageData.getTextData());
+        System.out.println(messageData.getText());
     }
 }

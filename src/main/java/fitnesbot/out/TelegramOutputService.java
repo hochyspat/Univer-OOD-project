@@ -13,7 +13,7 @@ public class TelegramOutputService implements OutputService  {
     }
     @Override
     public void output(MessageData messageData) {
-        SendMessage sendMessage = new SendMessage(String.valueOf(messageData.getChatId()), messageData.getTextData());
+        SendMessage sendMessage = new SendMessage(String.valueOf(messageData.getChatId()), messageData.getText());
         try {
             telegramBot.execute(sendMessage);
         } catch (TelegramApiException e) {
