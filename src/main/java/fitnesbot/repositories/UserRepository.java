@@ -17,17 +17,25 @@ public class UserRepository implements MemoryUserReposytory {
 
     @Override
     public User findById(long chatId) {
-        return users.get(chatId);
+        User user = users.get(chatId);
+        if (user != null && !user.isDeleted()) {
+            return user;
+        }
+        return null;
     }
 
     @Override
     public void delete(long chatId){
-        users.remove(chatId);
+        User user = users.get(chatId);
+        if(user != null){
+            user.setDeleted(true);
+        }
     }
 
     @Override
     public boolean existsById(long chatId) {
-        return users.containsKey(chatId);
+        User user = users.get(chatId);
+        return (user != null && !user.isDeleted());
     }
 
 

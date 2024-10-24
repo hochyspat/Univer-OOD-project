@@ -1,8 +1,8 @@
 package fitnesbot.services;
 
-import fitnesbot.Errors;
+import fitnesbot.exeptions.Errors;
 import fitnesbot.bot.Command;
-import fitnesbot.bot.MessageData;
+import fitnesbot.bot.MessageOutputData;
 import fitnesbot.models.User;
 import fitnesbot.out.OutputService;
 
@@ -23,34 +23,32 @@ public class UserService {
     }
 
     public void registerUser(String name, String age, String height, String weight, Long chatId) {
-        if ((!(isValidName(name)))){
-            outputService.output(new MessageData(new Command(error.invalidParameter("имя")),chatId));
+        if (!(isValidName(name))) {
+            outputService.output(new MessageOutputData(error.invalidParameter("имя"), chatId));
             return;
         }
-        if ((!(isValidInputParameter(height, LOWER_HEIGHT_LIMIT, UPPER_HEIGHT_LIMIT)))){
-            outputService.output(new MessageData(new Command(error.invalidParameter("рост")),chatId));
+        if (!(isValidInputParameter(height, LOWER_HEIGHT_LIMIT, UPPER_HEIGHT_LIMIT))) {
+            outputService.output(new MessageOutputData(error.invalidParameter("рост"), chatId));
             return;
         }
-        if ((!(isValidInputParameter(weight, LOWER_WEIGHT_LIMIT, UPPER_WEIGHT_LIMIT)))){
-            outputService.output(new MessageData(new Command(error.invalidParameter("вес")),chatId));
+        if (!(isValidInputParameter(weight, LOWER_WEIGHT_LIMIT, UPPER_WEIGHT_LIMIT))) {
+            outputService.output(new MessageOutputData(error.invalidParameter("вес"), chatId));
             return;
         }
-        if ((!(isValidInputParameter(age, LOWER_AGE_LIMIT, UPPER_AGE_LIMIT)))){
-            outputService.output(new MessageData(new Command(error.invalidParameter("возраст")),chatId));
+        if (!(isValidInputParameter(age, LOWER_AGE_LIMIT, UPPER_AGE_LIMIT))) {
+            outputService.output(new MessageOutputData(error.invalidParameter("возраст"), chatId));
             return;
         }
 
-        if (!userRepository.existsById(chatId)){
-            User user = new User(name, Integer.parseInt(height), Integer.parseInt(weight), Integer.parseInt(age),chatId);
+        if (!userRepository.existsById(chatId)) {
+            User user = new User(name, Integer.parseInt(height), Integer.parseInt(weight), Integer.parseInt(age), chatId);
             userRepository.save(user);
-            outputService.output(new MessageData(new Command("Отлично! Введи /help для справки или /menu для выбора команд"),chatId));
+            outputService.output(new MessageOutputData("Отлично! Введи /help для справки или /menu для выбора команд", chatId));
+        } else {
+            outputService.output(new MessageOutputData(error.existenceUser(), chatId));
         }
-        else {
-            outputService.output(new MessageData(new Command(error.existenceUser()),chatId));
-        }
-
-
     }
+
 
     public User getUser(long chatId) {
         return userRepository.findById(chatId);

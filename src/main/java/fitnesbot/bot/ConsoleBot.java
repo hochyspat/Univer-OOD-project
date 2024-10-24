@@ -1,6 +1,6 @@
 package fitnesbot.bot;
 
-import fitnesbot.Errors;
+import fitnesbot.exeptions.Errors;
 import fitnesbot.in.ConsoleInputService;
 import fitnesbot.in.InputService;
 import fitnesbot.out.ConsoleOutputService;
@@ -26,16 +26,16 @@ public class ConsoleBot {
         commandHandler.showHelp(CHAT_ID);
 
         while (true) {
-            outputService.output(new MessageData(new Command("Введите команду: "),CHAT_ID));
+            outputService.output(new MessageOutputData("Введите команду: ",CHAT_ID));
             String userRequest = inputService.read();
             Command command = new Command(userRequest);
             if (command.isValid()) {
-                commandHandler.handleMessage(command, CHAT_ID);
+                commandHandler.handleMessage(new MessageCommandData(command,CHAT_ID));
                 if (command.isExit()) {
                     break;
                 }
             } else {
-                outputService.output(new MessageData(new Command(error.invalidCommand()),CHAT_ID));
+                outputService.output(new MessageOutputData(error.invalidCommand(),CHAT_ID));
             }
         }
     }

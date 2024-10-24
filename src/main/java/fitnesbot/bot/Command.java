@@ -24,7 +24,4 @@ public record Command(String command, String[] args) {
         return "/exit".equals(command);
     }
 
-    public String getText() {
-        return command;
-    }
 }

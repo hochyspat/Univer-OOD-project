@@ -1,4 +1,4 @@
-package fitnesbot;
+package fitnesbot.exeptions;
 
 public class Errors {
 

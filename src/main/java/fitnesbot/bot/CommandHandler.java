@@ -1,6 +1,6 @@
 package fitnesbot.bot;
 
-import fitnesbot.Errors;
+import fitnesbot.exeptions.Errors;
 import fitnesbot.in.InputService;
 import fitnesbot.models.User;
 import fitnesbot.out.OutputService;
@@ -26,12 +26,13 @@ public class CommandHandler {
     }
     private void firstAcquaintance(long chatId) {
         showHelp(chatId);
-        outputService.output(new MessageData(new Command("Для начала давай познакомимся,введи команду addПользователь [имя] [возраст] [рост] [вес]"),chatId));
+        outputService.output(new MessageOutputData("Для начала давай познакомимся,введи команду addПользователь [имя] [возраст] [рост] [вес]", chatId));
     }
-    public void handleMessage(Command commandData,long chatId) {
-        String command = commandData.command();
-        String[] args = commandData.args();
-        switch (command) {
+    public void handleMessage(MessageCommandData commandData) {
+        Command command = commandData.getCommand();
+        long chatId = commandData.getChatId();
+        String[] args = command.args();
+        switch (command.command()) {
             case "/help":
                 showHelp(chatId);
                 break;
@@ -43,7 +44,7 @@ public class CommandHandler {
                 break;
             case "addПользователь":
                 if (args.length != 4) {
-                    outputService.output(new MessageData(new Command(error.invalidNumberOfArguments("addПользователь", "[имя]", "[возраст]", "[рост]", "[вес]")), chatId));
+                    outputService.output(new MessageOutputData(error.invalidNumberOfArguments("addПользователь", "[имя]", "[возраст]", "[рост]", "[вес]"), chatId));
                     return;
                 }
                 userService.registerUser(args[0], args[1], args[2], args[3], chatId);
@@ -51,45 +52,43 @@ public class CommandHandler {
             case "КБЖУ":
                 User user = userService.getUser(chatId);
                 if (user == null) {
-                    outputService.output(new MessageData(new Command(error.nonExistenceUser()),chatId));
+                    outputService.output(new MessageOutputData(error.nonExistenceUser(), chatId));
                     break;
                 }
                 calculateCalories(user, chatId);
                 break;
             case "информация":
-                    showUserById(chatId);
+                showUserById(chatId);
                 break;
             case "/exit":
-                outputService.output(new MessageData(new Command("Finish bot"),chatId));
+                outputService.output(new MessageOutputData("Finish bot", chatId));
                 break;
             default:
-                outputService.output(new MessageData(new Command(error.invalidCommand()),chatId));
+                outputService.output(new MessageOutputData(error.invalidCommand(), chatId));
         }
     }
 
     private void calculateCalories(User user, long chatId) {
         double calories = calorieService.calculate(user.getHeight(), user.getWeight(), user.getAge());
         user.updateCalories(calories);
-        outputService.output(new MessageData(new Command("Твоя норма калорий на день: " + user.getCalories()),chatId));
+        outputService.output(new MessageOutputData("Твоя норма калорий на день: " + user.getCalories(), chatId));
     }
-
 
     public void showUserById(long chatId) {
         User user = userService.getUser(chatId);
         if (user != null) {
-            outputService.output(new MessageData(new Command(user.getInfo()),chatId));
+            outputService.output(new MessageOutputData(user.getInfo(), chatId));
         } else {
-            outputService.output(new MessageData(new Command(error.nonExistenceUser()),chatId));
+            outputService.output(new MessageOutputData(error.nonExistenceUser(), chatId));
         }
     }
 
-        public void showHelp(long chatId) {
-            outputService.output(new MessageData(new Command(help.getHelp()),chatId));
-        }
+    public void showHelp(long chatId) {
+        outputService.output(new MessageOutputData(help.getHelp(), chatId));
+    }
 
-        public void showMenu(long chatId) {
-            outputService.output(new MessageData(new Command(menu.getMenu()),chatId));
-        }
-
+    public void showMenu(long chatId) {
+        outputService.output(new MessageOutputData(menu.getMenu(), chatId));
+    }
 
 }

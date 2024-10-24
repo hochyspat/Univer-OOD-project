@@ -36,7 +36,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
             Command command = new Command(messageText);
-            commandHandler.handleMessage(command,chatId);
+            commandHandler.handleMessage(new MessageCommandData(command, chatId));
         }
     }
 }

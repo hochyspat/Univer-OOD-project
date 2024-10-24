@@ -8,6 +8,7 @@ public class User {
     private int weight;
     private int age;
     private double calories;
+    private boolean deleted;
     private int proteins;
     private int fats;
     private int carbohydrates;
@@ -18,6 +19,7 @@ public class User {
         this.weight = weight;
         this.age = age;
         this.chatId = chatId;
+        this.deleted = false;
     }
     public void updateCalories(double calories) {
         this.calories = calories;
@@ -39,6 +41,10 @@ public class User {
         return calories;
     }
     public long getChatId() {return chatId;}
+    public boolean isDeleted() {return deleted;}
+
+    public void setDeleted(boolean deleted) {this.deleted = deleted;}
+
 
 
     public String getInfo() {

@@ -1,4 +1,5 @@
 import fitnesbot.bot.*;
+import fitnesbot.exeptions.Errors;
 import fitnesbot.in.ConsoleInputService;
 import fitnesbot.in.InputService;
 import fitnesbot.models.User;
@@ -19,10 +20,10 @@ public class CommandHandlerTest {
     private CalorieCountingService calorieService;
     private ConsoleOutputService outputService;
     private ConsoleInputService inputService;
+    private Errors errors = new Errors();
 
     @BeforeEach
     void setUp() {
-        // Инициализируем все реальные компоненты
         userRepository = new UserRepository();
         outputService = new ConsoleOutputService();
         inputService = new ConsoleInputService();
@@ -37,7 +38,7 @@ public class CommandHandlerTest {
     @Test
     void testAddUserToRepository() {
         Command command = new Command("addПользователь Alice 19 171 58");
-        commandHandler.handleMessage(command, 12345L);
+        commandHandler.handleMessage(new MessageCommandData(command,12345L));
         User savedUser = userRepository.findById(12345L);
         assertNotNull(savedUser);
         assertEquals("Alice", savedUser.getName());
@@ -50,7 +51,7 @@ public class CommandHandlerTest {
     void testCalculateCalories() {
         userService.registerUser("Alice", "19", "171", "58", 12345L);
         Command command = new Command("КБЖУ");
-        commandHandler.handleMessage(command, 12345L);
+        commandHandler.handleMessage(new MessageCommandData(command,12345L));
         User alice = userRepository.findById(12345L);
         assertNotNull(alice);
         assertEquals(1392.75, alice.getCalories(), 0.01);
@@ -60,7 +61,15 @@ public class CommandHandlerTest {
     @Test
     void testAddUserInvalidData() {
         Command command = new Command("addПользователь Alice 19 171");
-        commandHandler.handleMessage(command, 12345L);
+        commandHandler.handleMessage(new MessageCommandData(command,12345L));
+        User savedUser = userRepository.findById(12345L);
+        assertNull(savedUser);
+    }
+
+    @Test
+    void testInvalidParamAddUser() {
+        Command command = new Command("addПользователь Alice 19 171 250");
+        commandHandler.handleMessage(new MessageCommandData(command,12345L));
         User savedUser = userRepository.findById(12345L);
         assertNull(savedUser);
     }
@@ -68,7 +77,7 @@ public class CommandHandlerTest {
     @Test
     void testInvalidCommand() {
         Command command = new Command("неизвестнаяКоманда");
-        commandHandler.handleMessage(command, 12345L);
+        commandHandler.handleMessage(new MessageCommandData(command,12345L));
     }
 
 
