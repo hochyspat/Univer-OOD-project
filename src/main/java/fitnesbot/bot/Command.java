@@ -10,8 +10,8 @@ public record Command(String command, String[] args) {
             "/menu",
             "КБЖУ",
             "addПользователь",
-            "информация",
-            "/exit"
+            "информация"
+
     );
     public boolean isValid() {
         return validCommands.contains(command);
@@ -23,4 +23,5 @@ public record Command(String command, String[] args) {
     public boolean isExit() {
         return "/exit".equals(command);
     }
+
 }
