@@ -37,13 +37,17 @@ public class Main {
             consoleThread.start();
         }
         if (platform == BotPlatform.TELEGRAM || platform == BotPlatform.BOTH) {
-            try {
+            Thread telegramThread = new Thread(() -> {try {
                 TelegramBot telegramBot = getTelegramBot(help, menu, calorieCountingService);
                 TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
                 telegramBotsApi.registerBot(telegramBot);
+
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
+            });
+            telegramThread.start();
+
         }
 
 

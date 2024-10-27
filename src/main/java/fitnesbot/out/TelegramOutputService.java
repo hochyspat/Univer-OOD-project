@@ -2,7 +2,6 @@ package fitnesbot.out;
 
 import fitnesbot.bot.MessageOutputData;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import fitnesbot.bot.MessageOutputData;
 import fitnesbot.bot.TelegramBot;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
