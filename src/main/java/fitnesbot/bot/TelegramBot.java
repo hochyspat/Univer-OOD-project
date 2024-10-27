@@ -12,10 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TelegramBot extends TelegramLongPollingBot {
     private BotConfig botConfig;
     private CommandHandler commandHandler;
-    private OutputService outputService;
 
-    public TelegramBot(TelegramOutputService telegramOutputService, CommandHandler commandHandler) {
-        this.outputService = telegramOutputService;
+    public TelegramBot(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
         this.botConfig = new BotConfig();
     }

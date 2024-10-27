@@ -1,23 +1,22 @@
 package fitnesbot.bot;
 
-import fitnesbot.exeptions.Errors;
+import fitnesbot.exeptions.InvalidCommandError;
+import fitnesbot.exeptions.InvalidNumberOfArgumentsError;
+import fitnesbot.exeptions.NonExistenceUserError;
 import fitnesbot.in.InputService;
 import fitnesbot.models.User;
 import fitnesbot.out.OutputService;
 import fitnesbot.services.*;
 
 public class CommandHandler {
-    private InputService inputService;
     private OutputService outputService;
     private CalorieCountingService calorieService;
     private UserService userService;
     private Help help;
     private Menu menu;
-    private Errors error = new Errors();
 
-    public CommandHandler(InputService inputService, OutputService outputService, Help help, Menu menu,
+    public CommandHandler(OutputService outputService, Help help, Menu menu,
                           CalorieCountingService caloriesService, UserService userService) {
-        this.inputService = inputService;
         this.outputService = outputService;
         this.help = help;
         this.menu = menu;
@@ -44,7 +43,7 @@ public class CommandHandler {
                 break;
             case "addПользователь":
                 if (args.length != 4) {
-                    outputService.output(new MessageOutputData(error.invalidNumberOfArguments("addПользователь", "[имя]", "[возраст]", "[рост]", "[вес]"), chatId));
+                    outputService.output(new MessageOutputData(new InvalidNumberOfArgumentsError("addПользователь", "[имя]", "[возраст]", "[рост]", "[вес]").getErrorMessage(), chatId));
                     return;
                 }
                 userService.registerUser(args[0], args[1], args[2], args[3], chatId);
@@ -52,7 +51,7 @@ public class CommandHandler {
             case "КБЖУ":
                 User user = userService.getUser(chatId);
                 if (user == null) {
-                    outputService.output(new MessageOutputData(error.nonExistenceUser(), chatId));
+                    outputService.output(new MessageOutputData(new NonExistenceUserError().getErrorMessage(), chatId));
                     break;
                 }
                 calculateCalories(user, chatId);
@@ -64,7 +63,7 @@ public class CommandHandler {
                 outputService.output(new MessageOutputData("Finish bot", chatId));
                 break;
             default:
-                outputService.output(new MessageOutputData(error.invalidCommand(), chatId));
+                outputService.output(new MessageOutputData(new InvalidCommandError().getErrorMessage(), chatId));
         }
     }
 
@@ -79,7 +78,7 @@ public class CommandHandler {
         if (user != null) {
             outputService.output(new MessageOutputData(user.getInfo(), chatId));
         } else {
-            outputService.output(new MessageOutputData(error.nonExistenceUser(), chatId));
+            outputService.output(new MessageOutputData(new NonExistenceUserError().getErrorMessage(), chatId));
         }
     }
 

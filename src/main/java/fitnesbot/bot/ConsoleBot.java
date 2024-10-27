@@ -1,6 +1,6 @@
 package fitnesbot.bot;
 
-import fitnesbot.exeptions.Errors;
+import fitnesbot.exeptions.InvalidCommandError;
 import fitnesbot.in.ConsoleInputService;
 import fitnesbot.in.InputService;
 import fitnesbot.out.ConsoleOutputService;
@@ -11,7 +11,6 @@ public class ConsoleBot {
     private CommandHandler commandHandler;
     private InputService inputService;
     private OutputService outputService;
-    private Errors error = new Errors();
 
 
 
@@ -35,7 +34,7 @@ public class ConsoleBot {
                     break;
                 }
             } else {
-                outputService.output(new MessageOutputData(error.invalidCommand(),CHAT_ID));
+                outputService.output(new MessageOutputData(new InvalidCommandError().getErrorMessage(),CHAT_ID));
             }
         }
     }
