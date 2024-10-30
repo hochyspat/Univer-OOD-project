@@ -1,6 +1,5 @@
 package fitnesbot.services;
 
-import fitnesbot.bot.Command;
 import fitnesbot.bot.MessageOutputData;
 import fitnesbot.exeptions.InvalidParameterError;
 import fitnesbot.exeptions.UserAlreadyExistsError;
@@ -24,28 +23,28 @@ public class UserService {
 
     public void registerUser(String name, String age, String height, String weight, Long chatId) {
         if (!(isValidName(name))) {
-            outputService.output(new MessageOutputData(new InvalidParameterError("имя").getErrorMessage(),chatId));
+            outputService.sendMessage(new MessageOutputData(new InvalidParameterError("имя").getErrorMessage(),chatId));
             return;
         }
         if (!(isValidInputParameter(height, LOWER_HEIGHT_LIMIT, UPPER_HEIGHT_LIMIT))) {
-            outputService.output(new MessageOutputData(new InvalidParameterError("рост").getErrorMessage(),chatId));
+            outputService.sendMessage(new MessageOutputData(new InvalidParameterError("рост").getErrorMessage(),chatId));
             return;
         }
         if (!(isValidInputParameter(weight, LOWER_WEIGHT_LIMIT, UPPER_WEIGHT_LIMIT))) {
-            outputService.output(new MessageOutputData(new InvalidParameterError("вес").getErrorMessage(),chatId));
+            outputService.sendMessage(new MessageOutputData(new InvalidParameterError("вес").getErrorMessage(),chatId));
             return;
         }
         if (!(isValidInputParameter(age, LOWER_AGE_LIMIT, UPPER_AGE_LIMIT))) {
-            outputService.output(new MessageOutputData(new InvalidParameterError("возраст").getErrorMessage(),chatId));
+            outputService.sendMessage(new MessageOutputData(new InvalidParameterError("возраст").getErrorMessage(),chatId));
             return;
         }
 
         if (!userRepository.existsById(chatId)) {
             User user = new User(name, Integer.parseInt(height), Integer.parseInt(weight), Integer.parseInt(age), chatId);
             userRepository.save(user);
-            outputService.output(new MessageOutputData("Отлично! Введи /help для справки или /menu для выбора команд", chatId));
+            outputService.sendMessage(new MessageOutputData("Отлично! Введи /help для справки или /menu для выбора команд", chatId));
         } else {
-            outputService.output(new MessageOutputData(new UserAlreadyExistsError(chatId).getErrorMessage(), chatId));
+            outputService.sendMessage(new MessageOutputData(new UserAlreadyExistsError(chatId).getErrorMessage(), chatId));
         }
     }
 

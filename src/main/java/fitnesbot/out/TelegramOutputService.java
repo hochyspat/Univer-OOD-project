@@ -8,11 +8,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class TelegramOutputService implements OutputService  {
     private TelegramBot telegramBot;
 
-    public void setTelegramBot(TelegramBot telegramBot) {
+    public TelegramOutputService(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
     }
     @Override
-    public void output(MessageOutputData messageOutputData) {
+    public void sendMessage(MessageOutputData messageOutputData) {
         SendMessage sendMessage = new SendMessage(String.valueOf(messageOutputData.getChatId()), messageOutputData.getMessageData());
         try {
             telegramBot.execute(sendMessage);

@@ -3,7 +3,7 @@ import fitnesbot.bot.MessageOutputData;
 public class ConsoleOutputService implements OutputService {
 
     @Override
-    public void output(MessageOutputData messageData) {
+    public void sendMessage(MessageOutputData messageData) {
         System.out.println(messageData.getMessageData());
     }
 }

@@ -25,7 +25,7 @@ public class ConsoleBot {
         commandHandler.showHelp(CHAT_ID);
 
         while (true) {
-            outputService.output(new MessageOutputData("Введите команду: ",CHAT_ID));
+            outputService.sendMessage(new MessageOutputData("Введите команду: ",CHAT_ID));
             String userRequest = inputService.read();
             Command command = new Command(userRequest);
             if (command.isValid()) {
@@ -34,7 +34,7 @@ public class ConsoleBot {
                     break;
                 }
             } else {
-                outputService.output(new MessageOutputData(new InvalidCommandError().getErrorMessage(),CHAT_ID));
+                outputService.sendMessage(new MessageOutputData(new InvalidCommandError().getErrorMessage(),CHAT_ID));
             }
         }
     }

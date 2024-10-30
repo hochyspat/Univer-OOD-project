@@ -2,20 +2,20 @@ package fitnesbot.bot;
 
 
 import fitnesbot.config.BotConfig;
-import fitnesbot.out.OutputService;
-import fitnesbot.out.TelegramOutputService;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class TelegramBot extends TelegramLongPollingBot {
     private BotConfig botConfig;
     private CommandHandler commandHandler;
 
-    public TelegramBot(CommandHandler commandHandler) {
-        this.commandHandler = commandHandler;
+    public TelegramBot() {
         this.botConfig = new BotConfig();
+    }
+
+    public void setCommandHandler(CommandHandler commandHandler) {
+        this.commandHandler = commandHandler;
     }
 
     @Override

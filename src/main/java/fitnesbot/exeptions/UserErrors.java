@@ -1,6 +1,6 @@
 package fitnesbot.exeptions;
 
-public abstract class UserErrors {
+public class UserErrors {
 
     protected String message;
 
