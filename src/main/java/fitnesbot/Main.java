@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 
 public class Main {
     public static void main(String[] args) throws TelegramApiException {
-        BotPlatform platform = BotPlatform.CONSOLE;
+        BotPlatform platform = BotPlatform.TELEGRAM;
         if (args.length > 0) {
             try {
                 platform = BotPlatform.fromString(args[0]);
@@ -54,8 +54,7 @@ public class Main {
     private static TelegramBot getTelegramBot(Help help, Menu menu, CalorieCountingService calorieCountingService,UserRepository userRepository) {
         UserService userService = new UserService(userRepository);
         CommandHandler commandHandler = new CommandHandler(help, menu, calorieCountingService,userService);
-        TelegramBot telegramBot = new TelegramBot(commandHandler);
-        return telegramBot;
+        return new TelegramBot(commandHandler);
     }
 
     @NotNull

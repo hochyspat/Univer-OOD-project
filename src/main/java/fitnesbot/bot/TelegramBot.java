@@ -19,6 +19,7 @@ public class TelegramBot extends TelegramLongPollingBot implements OutputService
 
     public TelegramBot(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
+        this.botConfig = new BotConfig();
     }
 
     @Override
@@ -38,7 +39,7 @@ public class TelegramBot extends TelegramLongPollingBot implements OutputService
             Command command = new Command(messageText);
             commandHandler.handleMessage(new MessageCommandData(command, chatId));
         }
-        if (commandHandler.getMessageOutputData().getMessageData() != "NULL") {
+        if (!commandHandler.getMessageOutputData().getMessageData().equals("NULL")) {
             sendMessage(commandHandler.getMessageOutputData());
         }
 
