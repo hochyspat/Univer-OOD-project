@@ -45,6 +45,7 @@ public class UserService {
             outputService.sendMessage(new MessageOutputData("Отлично! Введи /help для справки или /menu для выбора команд", chatId));
         } else {
             outputService.sendMessage(new MessageOutputData(new UserAlreadyExistsError(chatId).getErrorMessage(), chatId));
+            System.out.println("Ошибка регистрации пользователя" + chatId);
         }
     }
 

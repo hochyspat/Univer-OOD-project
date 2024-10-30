@@ -50,7 +50,7 @@ public class CommandHandler {
             case "КБЖУ":
                 User user = userService.getUser(chatId);
                 if (user == null) {
-                    outputService.sendMessage(new MessageOutputData(new NonExistenceUserError().getErrorMessage(), chatId));
+                    outputService.sendMessage(new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(), chatId));
                     break;
                 }
                 calculateCalories(user, chatId);
@@ -77,7 +77,7 @@ public class CommandHandler {
         if (user != null) {
             outputService.sendMessage(new MessageOutputData(user.getInfo(), chatId));
         } else {
-            outputService.sendMessage(new MessageOutputData(new NonExistenceUserError().getErrorMessage(), chatId));
+            outputService.sendMessage(new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(), chatId));
         }
     }
 

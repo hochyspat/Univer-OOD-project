@@ -1,6 +1,6 @@
 package fitnesbot.exeptions;
 
-public class InvalidCommandError  extends UserErrors{
+public class InvalidCommandError  extends CommandErrors{
     public InvalidCommandError  () {
         super("Неверная команда");
     }
