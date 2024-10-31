@@ -17,14 +17,12 @@ public class CommandHandlerTest {
     private UserRepository userRepository;
     private UserService userService;
     private CalorieCountingService calorieService;
-    private OutputService outputService;
 
     @BeforeEach
     void setUp() {
         userRepository = new InMemoryUserRepository();
-        outputService = new ConsoleOutputService();
         calorieService = new CalorieCountingService();
-        userService = new UserService(userRepository, outputService);
+        userService = new UserService(userRepository);
         commandHandler = new CommandHandler( new Help(), new Menu(), calorieService, userService);
     }
 

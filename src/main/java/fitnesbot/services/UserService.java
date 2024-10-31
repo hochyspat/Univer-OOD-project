@@ -4,11 +4,10 @@ import fitnesbot.bot.MessageOutputData;
 import fitnesbot.exeptions.InvalidParameterError;
 import fitnesbot.exeptions.UserAlreadyExistsError;
 import fitnesbot.models.User;
-import fitnesbot.out.OutputService;
 
 public class UserService {
     private UserRepository userRepository;
-    private OutputService outputService;
+    private MessageOutputData messageOutputData;
     final int UPPER_HEIGHT_LIMIT = 220;
     final int LOWER_HEIGHT_LIMIT = 140;
     final int UPPER_WEIGHT_LIMIT = 200;
@@ -16,36 +15,35 @@ public class UserService {
     final int UPPER_AGE_LIMIT = 100;
     final int LOWER_AGE_LIMIT = 12;
 
-    public UserService(UserRepository userRepository, OutputService outputService) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.outputService = outputService;
     }
 
     public void registerUser(String name, String age, String height, String weight, Long chatId) {
         if (!(isValidName(name))) {
-            outputService.sendMessage(new MessageOutputData(new InvalidParameterError("имя").getErrorMessage(),chatId));
+            messageOutputData = new MessageOutputData(new InvalidParameterError("имя").getErrorMessage(),chatId);
             return;
         }
         if (!(isValidInputParameter(height, LOWER_HEIGHT_LIMIT, UPPER_HEIGHT_LIMIT))) {
-            outputService.sendMessage(new MessageOutputData(new InvalidParameterError("рост").getErrorMessage(),chatId));
+            messageOutputData = new MessageOutputData(new InvalidParameterError("рост").getErrorMessage(),chatId);
             return;
         }
         if (!(isValidInputParameter(weight, LOWER_WEIGHT_LIMIT, UPPER_WEIGHT_LIMIT))) {
-            outputService.sendMessage(new MessageOutputData(new InvalidParameterError("вес").getErrorMessage(),chatId));
+            messageOutputData = new MessageOutputData(new InvalidParameterError("вес").getErrorMessage(),chatId);
             return;
         }
         if (!(isValidInputParameter(age, LOWER_AGE_LIMIT, UPPER_AGE_LIMIT))) {
-            outputService.sendMessage(new MessageOutputData(new InvalidParameterError("возраст").getErrorMessage(),chatId));
+            messageOutputData = new MessageOutputData(new InvalidParameterError("возраст").getErrorMessage(),chatId);
             return;
         }
 
         if (!userRepository.existsById(chatId)) {
             User user = new User(name, Integer.parseInt(height), Integer.parseInt(weight), Integer.parseInt(age), chatId);
             userRepository.save(user);
-            outputService.sendMessage(new MessageOutputData("Отлично! Введи /help для справки или /menu для выбора команд", chatId));
+            messageOutputData = new MessageOutputData("Отлично! Введи /help для справки или /menu для выбора команд", chatId);
         } else {
-            outputService.sendMessage(new MessageOutputData(new UserAlreadyExistsError(chatId).getErrorMessage(), chatId));
-            System.out.println("Ошибка регистрации пользователя" + chatId);
+            messageOutputData = new MessageOutputData(new UserAlreadyExistsError(chatId).getErrorMessage(), chatId);
+            System.out.println("Пользователь уже существует." + chatId);
         }
     }
 

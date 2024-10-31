@@ -10,8 +10,8 @@ public record Command(String command, String[] args) {
             "/menu",
             "КБЖУ",
             "addПользователь",
-            "информация"
-
+            "информация",
+            "/exit"
     );
     public boolean isValid() {
         return validCommands.contains(command);

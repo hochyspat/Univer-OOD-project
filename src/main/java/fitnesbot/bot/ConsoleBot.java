@@ -23,6 +23,7 @@ public class ConsoleBot {
     }
     public void start() {
         commandHandler.showHelp(CHAT_ID);
+        outputService.sendMessage(commandHandler.getMessageOutputData());
 
         while (true) {
             outputService.sendMessage(new MessageOutputData("Введите команду: ",CHAT_ID));
@@ -30,6 +31,7 @@ public class ConsoleBot {
             Command command = new Command(userRequest);
             if (command.isValid()) {
                 commandHandler.handleMessage(new MessageCommandData(command,CHAT_ID));
+                outputService.sendMessage(commandHandler.getMessageOutputData());
                 if (command.isExit()) {
                     break;
                 }
