@@ -53,12 +53,10 @@ public class Main {
     }
     @NotNull
     private static TelegramBot getTelegramBot(Help help, Menu menu, CalorieCountingService calorieCountingService,UserRepository userRepository) {
-
         TelegramBot telegramBot = new TelegramBot();
         TelegramOutputService telegramOutputService = new TelegramOutputService(telegramBot);
         UserService userService = new UserService(userRepository,telegramOutputService);
-        CommandHandler commandHandler = new CommandHandler(telegramOutputService, help, menu, calorieCountingService,userService);
-        telegramBot.setCommandHandler(commandHandler);
+        CommandHandler commandHandler = new CommandHandler(help, menu, calorieCountingService,userService);
         return telegramBot;
     }
 
@@ -67,7 +65,7 @@ public class Main {
         ConsoleInputService consoleInputService = new ConsoleInputService();
         ConsoleOutputService consoleOutputService = new ConsoleOutputService();
         UserService userService = new UserService(userRepository,consoleOutputService);
-        CommandHandler commandHandler = new CommandHandler(consoleOutputService, help, menu, calorieCountingService,userService);
+        CommandHandler commandHandler = new CommandHandler(help, menu, calorieCountingService,userService);
         return new ConsoleBot(consoleInputService,consoleOutputService,commandHandler);
     }
 }

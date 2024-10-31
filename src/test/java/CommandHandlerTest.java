@@ -25,8 +25,7 @@ public class CommandHandlerTest {
         outputService = new ConsoleOutputService();
         calorieService = new CalorieCountingService();
         userService = new UserService(userRepository, outputService);
-        commandHandler = new CommandHandler(outputService,
-                new Help(), new Menu(), calorieService, userService);
+        commandHandler = new CommandHandler( new Help(), new Menu(), calorieService, userService);
     }
 
 
