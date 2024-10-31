@@ -4,7 +4,6 @@ import fitnesbot.exeptions.InvalidCommandError;
 import fitnesbot.exeptions.InvalidNumberOfArgumentsError;
 import fitnesbot.exeptions.NonExistenceUserError;
 import fitnesbot.models.User;
-import fitnesbot.out.OutputService;
 import fitnesbot.services.*;
 
 public class CommandHandler {
@@ -12,7 +11,7 @@ public class CommandHandler {
     private UserService userService;
     private Help help;
     private Menu menu;
-    private MessageOutputData messageOutputData;
+
 
     public CommandHandler(Help help, Menu menu,
                           CalorieCountingService caloriesService, UserService userService) {
@@ -20,76 +19,62 @@ public class CommandHandler {
         this.menu = menu;
         this.calorieService = caloriesService;
         this.userService = userService;
-        this.messageOutputData = new MessageOutputData("NULL",12345L);
     }
-    private void firstAcquaintance(long chatId) {
-        showHelp(chatId);
-        messageOutputData = new MessageOutputData("Для начала давай познакомимся,введи команду addПользователь [имя] [возраст] [рост] [вес]", chatId);
+    private MessageOutputData firstAcquaintance(long chatId) {
+        return new MessageOutputData(help.getHelp() + "\n\n" + "Для начала давай познакомимся,введи команду addПользователь [имя] [возраст] [рост] [вес]", chatId);
     }
-    public void handleMessage(MessageCommandData commandData) {
+    public MessageOutputData handleMessage(MessageCommandData commandData) {
         Command command = commandData.getCommand();
         long chatId = commandData.getChatId();
         String[] args = command.args();
+
         switch (command.command()) {
             case "/help":
-                showHelp(chatId);
-                break;
+                return showHelp(chatId);
             case "/start":
-                firstAcquaintance(chatId);
-                break;
+                return firstAcquaintance(chatId);
             case "/menu":
-                showMenu(chatId);
-                break;
+                return showMenu(chatId);
             case "addПользователь":
                 if (args.length != 4) {
-                    messageOutputData = new MessageOutputData(new InvalidNumberOfArgumentsError("addПользователь", "[имя]", "[возраст]", "[рост]", "[вес]").getErrorMessage(), chatId);
-                    return;
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addПользователь", "[имя]", "[возраст]", "[рост]", "[вес]").getErrorMessage(), chatId);
                 }
-                userService.registerUser(args[0], args[1], args[2], args[3], chatId);
-                break;
+                return userService.registerUser(args[0], args[1], args[2], args[3], chatId);
             case "КБЖУ":
                 User user = userService.getUser(chatId);
                 if (user == null) {
-                    messageOutputData = new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(), chatId);
-                    break;
+                    return new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(), chatId);
                 }
-                calculateCalories(user, chatId);
-                break;
+                return calculateCalories(user, chatId);
             case "информация":
-                showUserById(chatId);
-                break;
+                return showUserById(chatId);
             case "/exit":
-                messageOutputData = new MessageOutputData("Finish bot", chatId);
-                break;
+                return new MessageOutputData("Finish bot", chatId);
             default:
-                messageOutputData = new MessageOutputData(new InvalidCommandError().getErrorMessage(), chatId);
+                return new MessageOutputData(new InvalidCommandError().getErrorMessage(), chatId);
         }
     }
 
-    private void calculateCalories(User user, long chatId) {
+    private MessageOutputData calculateCalories(User user, long chatId) {
         double calories = calorieService.calculate(user.getHeight(), user.getWeight(), user.getAge());
         user.updateCalories(calories);
-        messageOutputData = new MessageOutputData("Твоя норма калорий на день: " + user.getCalories(), chatId);
+        return new MessageOutputData("Твоя норма калорий на день: " + user.getCalories(), chatId);
     }
 
-    public void showUserById(long chatId) {
+    public MessageOutputData showUserById(long chatId) {
         User user = userService.getUser(chatId);
         if (user != null) {
-            messageOutputData = new MessageOutputData(user.getInfo(), chatId);
+            return new MessageOutputData(user.getInfo(), chatId);
         } else {
-            messageOutputData = new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(), chatId);
+            return new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(), chatId);
         }
     }
 
-    public void showHelp(long chatId) {
-        messageOutputData = new MessageOutputData(help.getHelp(), chatId);
+    public MessageOutputData showHelp(long chatId) {
+        return new MessageOutputData(help.getHelp(), chatId);
     }
 
-    public void showMenu(long chatId) {
-        messageOutputData = new MessageOutputData(menu.getMenu(), chatId);
-    }
-
-    public MessageOutputData getMessageOutputData() {
-        return messageOutputData;
+    public MessageOutputData showMenu(long chatId) {
+        return new MessageOutputData(menu.getMenu(), chatId);
     }
 }

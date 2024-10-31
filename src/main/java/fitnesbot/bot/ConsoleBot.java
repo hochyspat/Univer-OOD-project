@@ -22,16 +22,16 @@ public class ConsoleBot {
         this.commandHandler = commandHandler;
     }
     public void start() {
-        commandHandler.showHelp(CHAT_ID);
-        outputService.sendMessage(commandHandler.getMessageOutputData());
+
+        outputService.sendMessage(commandHandler.showHelp(CHAT_ID));
 
         while (true) {
             outputService.sendMessage(new MessageOutputData("Введите команду: ",CHAT_ID));
             String userRequest = inputService.read();
             Command command = new Command(userRequest);
             if (command.isValid()) {
-                commandHandler.handleMessage(new MessageCommandData(command,CHAT_ID));
-                outputService.sendMessage(commandHandler.getMessageOutputData());
+                MessageOutputData messageOutputData = commandHandler.handleMessage(new MessageCommandData(command,CHAT_ID));
+                outputService.sendMessage(messageOutputData);
                 if (command.isExit()) {
                     break;
                 }

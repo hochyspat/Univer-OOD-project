@@ -13,10 +13,6 @@ public class TelegramBot extends TelegramLongPollingBot implements OutputService
     private BotConfig botConfig;
     private CommandHandler commandHandler;
 
-    public TelegramBot() {
-        this.botConfig = new BotConfig();
-    }
-
     public TelegramBot(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
         this.botConfig = new BotConfig();
@@ -37,11 +33,12 @@ public class TelegramBot extends TelegramLongPollingBot implements OutputService
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
             Command command = new Command(messageText);
-            commandHandler.handleMessage(new MessageCommandData(command, chatId));
+            MessageOutputData messageOutputData = commandHandler.handleMessage(new MessageCommandData(command, chatId));
+            if (messageOutputData != null && messageOutputData.getMessageData() != null) {
+                sendMessage(messageOutputData);
+            }
         }
-        if (!commandHandler.getMessageOutputData().getMessageData().equals("NULL")) {
-            sendMessage(commandHandler.getMessageOutputData());
-        }
+
 
     }
 

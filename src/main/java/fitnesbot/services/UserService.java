@@ -6,7 +6,7 @@ import fitnesbot.exeptions.UserAlreadyExistsError;
 import fitnesbot.models.User;
 
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     private MessageOutputData messageOutputData;
     final int UPPER_HEIGHT_LIMIT = 220;
     final int LOWER_HEIGHT_LIMIT = 140;
@@ -19,31 +19,27 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void registerUser(String name, String age, String height, String weight, Long chatId) {
+    public MessageOutputData registerUser(String name, String age, String height, String weight, Long chatId) {
         if (!(isValidName(name))) {
-            messageOutputData = new MessageOutputData(new InvalidParameterError("имя").getErrorMessage(),chatId);
-            return;
+            return new MessageOutputData(new InvalidParameterError("имя").getErrorMessage(),chatId);
         }
         if (!(isValidInputParameter(height, LOWER_HEIGHT_LIMIT, UPPER_HEIGHT_LIMIT))) {
-            messageOutputData = new MessageOutputData(new InvalidParameterError("рост").getErrorMessage(),chatId);
-            return;
+            return  new MessageOutputData(new InvalidParameterError("рост").getErrorMessage(),chatId);
         }
         if (!(isValidInputParameter(weight, LOWER_WEIGHT_LIMIT, UPPER_WEIGHT_LIMIT))) {
-            messageOutputData = new MessageOutputData(new InvalidParameterError("вес").getErrorMessage(),chatId);
-            return;
+            return  new MessageOutputData(new InvalidParameterError("вес").getErrorMessage(),chatId);
         }
         if (!(isValidInputParameter(age, LOWER_AGE_LIMIT, UPPER_AGE_LIMIT))) {
-            messageOutputData = new MessageOutputData(new InvalidParameterError("возраст").getErrorMessage(),chatId);
-            return;
+            return  new MessageOutputData(new InvalidParameterError("возраст").getErrorMessage(),chatId);
         }
 
         if (!userRepository.existsById(chatId)) {
             User user = new User(name, Integer.parseInt(height), Integer.parseInt(weight), Integer.parseInt(age), chatId);
             userRepository.save(user);
-            messageOutputData = new MessageOutputData("Отлично! Введи /help для справки или /menu для выбора команд", chatId);
+            return  new MessageOutputData("Отлично! Пользователь добавлен. Введи /help для справки или /menu для выбора команд", chatId);
         } else {
-            messageOutputData = new MessageOutputData(new UserAlreadyExistsError(chatId).getErrorMessage(), chatId);
             System.out.println("Пользователь уже существует." + chatId);
+            return new MessageOutputData(new UserAlreadyExistsError(chatId).getErrorMessage(), chatId);
         }
     }
 
