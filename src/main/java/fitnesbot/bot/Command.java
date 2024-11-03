@@ -8,9 +8,9 @@ public record Command(String command, String[] args) {
     private static Set<String> validCommands = Set.of(
             "/help",
             "/menu",
-            "КБЖУ",
-            "addПользователь",
-            "информация",
+            "/mycalories",
+            "addUser",
+            "/myprofile",
             "/exit"
     );
     public boolean isValid() {

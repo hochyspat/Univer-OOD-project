@@ -21,7 +21,7 @@ public class CommandHandler {
         this.userService = userService;
     }
     private MessageOutputData firstAcquaintance(long chatId) {
-        return new MessageOutputData(help.getHelp() + "\n\n" + "Для начала давай познакомимся,введи команду addПользователь [имя] [возраст] [рост] [вес]", chatId);
+        return new MessageOutputData(help.getHelp() + "\n\n" + "Для начала давай познакомимся,введи команду addUser [имя] [возраст] [рост] [вес]", chatId);
     }
     public MessageOutputData handleMessage(MessageCommandData commandData) {
         Command command = commandData.getCommand();
@@ -35,18 +35,18 @@ public class CommandHandler {
                 return firstAcquaintance(chatId);
             case "/menu":
                 return showMenu(chatId);
-            case "addПользователь":
+            case "addUser":
                 if (args.length != 4) {
-                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addПользователь", "[имя]", "[возраст]", "[рост]", "[вес]").getErrorMessage(), chatId);
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addUser", "[имя]", "[возраст]", "[рост]", "[вес]").getErrorMessage(), chatId);
                 }
                 return userService.registerUser(args[0], args[1], args[2], args[3], chatId);
-            case "КБЖУ":
+            case "/mycalories":
                 User user = userService.getUser(chatId);
                 if (user == null) {
                     return new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(), chatId);
                 }
                 return calculateCalories(user, chatId);
-            case "информация":
+            case "/myprofile":
                 return showUserById(chatId);
             case "/exit":
                 return new MessageOutputData("Finish bot", chatId);

@@ -26,7 +26,7 @@ public class CommandHandlerTest {
 
     @Test
     void testAddUserToRepository() {
-        Command command = new Command("addПользователь Alice 19 171 58");
+        Command command = new Command("addUser Alice 19 171 58");
         MessageOutputData outputData = commandHandler.handleMessage(new MessageCommandData(command,12345L));
         User savedUser = userRepository.findById(12345L);
         assertNotNull(savedUser);
@@ -40,7 +40,7 @@ public class CommandHandlerTest {
     @Test
     void testCalculateCalories() {
         userService.registerUser("Alice", "19", "171", "58", 12345L);
-        Command command = new Command("КБЖУ");
+        Command command = new Command("/mycalories");
         MessageOutputData outputData = commandHandler.handleMessage(new MessageCommandData(command, 12345L));
         User alice = userRepository.findById(12345L);
         assertNotNull(alice);
@@ -51,15 +51,15 @@ public class CommandHandlerTest {
 
     @Test
     void testAddUserInvalidData() {
-        Command command = new Command("addПользователь Alice 19 171");
+        Command command = new Command("addUser Alice 19 171");
         MessageOutputData outputData = commandHandler.handleMessage(new MessageCommandData(command, 12345L));
         assertNull(userRepository.findById(12345L));
-        assertEquals("Неверное количество аргументов. Используйте addПользователь [имя] [возраст] [рост] [вес]", outputData.getMessageData());
+        assertEquals("Неверное количество аргументов. Используйте addUser [имя] [возраст] [рост] [вес]", outputData.getMessageData());
     }
 
     @Test
     void testInvalidParamAddUser() {
-        Command command = new Command("addПользователь Alice 19 171 250"); // Высокий вес
+        Command command = new Command("addUser Alice 19 171 250");
         MessageOutputData outputData = commandHandler.handleMessage(new MessageCommandData(command, 12345L));
         assertNull(userRepository.findById(12345L));
         assertEquals("Параметр вес введён неверно.", outputData.getMessageData());

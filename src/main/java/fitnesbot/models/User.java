@@ -9,9 +9,6 @@ public class User {
     private int age;
     private double calories;
     private boolean deleted;
-    private int proteins;
-    private int fats;
-    private int carbohydrates;
 
     public User(String name, int height, int weight, int age,long chatId) {
         this.name = name;

@@ -7,7 +7,6 @@ import fitnesbot.models.User;
 
 public class UserService {
     private final UserRepository userRepository;
-    private MessageOutputData messageOutputData;
     final int UPPER_HEIGHT_LIMIT = 220;
     final int LOWER_HEIGHT_LIMIT = 140;
     final int UPPER_WEIGHT_LIMIT = 200;

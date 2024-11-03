@@ -11,9 +11,9 @@ public class MenuTest {
         Menu testMenu = new Menu();
         String expectedOutput = """
         Выберите действие:
-        addПользователь [имя] [возраст] [рост] [вес]
-        "информация"
-        "КБЖУ"
+        addUser [имя] [возраст] [рост] [вес]
+        "/myprofile"
+        "/myCalories"
         Для выбора действия введите название действия.
         """;
 
