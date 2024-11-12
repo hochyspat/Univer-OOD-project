@@ -104,11 +104,11 @@ public class CommandHandler {
         JsonSimpleParser parser = new JsonSimpleParser();
         Meal parsedMeal = parser.parse(analyseMeals.toString());
         List<Nutrient> nutrients = parsedMeal.totalNutrients();
-        String response = "Калорийность блюда " + parsedMeal.getMealType() + " составляет: " + String.valueOf(parsedMeal.getCalories());
+        String response = "Калорийность блюда " + parsedMeal.getMealType() + " составляет: " + String.format("%.1f", parsedMeal.getCalories());
         response = response + "\n";
-        response = response + "Белки " + String.valueOf(nutrients.get(2).getQuantity()) + "\n";
-        response = response + "Жиры " + String.valueOf(nutrients.get(0).getQuantity()) + "\n";
-        response = response + "Углеводы " + String.valueOf(nutrients.get(1).getQuantity());
+        response = response + "Белки " + String.format("%.1f", nutrients.get(2).getQuantity()) + "\n";
+        response = response + "Жиры " + String.format("%.1f", nutrients.get(0).getQuantity()) + "\n";
+        response = response + "Углеводы " + String.format("%.1f", nutrients.get(1).getQuantity());
 
         return response;
     }
