@@ -11,14 +11,10 @@ public class MenuTest {
         Menu testMenu = new Menu();
         String expectedOutput = """
         Выберите действие:
-            КБЖУ;
-            Дневник питания;
-            Составить меню на день;
-            Найти тренировки;
-            Настроить трекер воды;
-            Записать свои параметры;
-            addПользователь.
-            Для выбора действия введите название действия.
+        addUser [имя] [возраст] [рост] [вес]
+        "/myprofile"
+        "/myCalories"
+        Для выбора действия введите название действия.
         """;
 
         assertEquals(testMenu.getMenu(),expectedOutput);

@@ -1,21 +1,22 @@
 
-package fitnesbot.bot;
+package fitnesbot.models;
 
 public class User {
+    private long chatId;
     private String name;
     private int height;
     private int weight;
     private int age;
     private double calories;
-    private int proteins;
-    private int fats;
-    private int carbohydrates;
+    private boolean deleted;
 
-    public User(String name, int height, int weight, int age) {
+    public User(String name, int height, int weight, int age,long chatId) {
         this.name = name;
         this.height = height;
         this.weight = weight;
         this.age = age;
+        this.chatId = chatId;
+        this.deleted = false;
     }
     public void updateCalories(double calories) {
         this.calories = calories;
@@ -36,6 +37,12 @@ public class User {
     public double getCalories() {
         return calories;
     }
+    public long getChatId() {return chatId;}
+    public boolean isDeleted() {return deleted;}
+
+    public void setDeleted(boolean deleted) {this.deleted = deleted;}
+
+
 
     public String getInfo() {
         return "Имя: " + name + "\nРост: " + height + " см\nВес: " + weight + " кг\nВозраст: " + age + " лет";

@@ -1,6 +1,8 @@
 package fitnesbot.out;
 
+import fitnesbot.bot.MessageOutputData;
+
 public interface OutputService {
-    void output(String message);
+    void sendMessage(MessageOutputData messageData);
 
 }
