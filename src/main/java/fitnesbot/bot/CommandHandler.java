@@ -1,12 +1,17 @@
 package fitnesbot.bot;
 
+import fitnesbot.bot.JsonParser.JsonSimpleParser;
 import fitnesbot.config.MealApiConfig;
 import fitnesbot.exeptions.InvalidCommandError;
 import fitnesbot.exeptions.InvalidNumberOfArgumentsError;
 import fitnesbot.exeptions.NonExistenceUserError;
+import fitnesbot.models.Meal;
+import fitnesbot.models.Nutrient;
 import fitnesbot.models.User;
 import fitnesbot.services.*;
 import org.json.JSONObject;
+
+import java.util.List;
 
 
 public class CommandHandler {
@@ -47,14 +52,16 @@ public class CommandHandler {
                 return userService.registerUser(args[0], args[1], args[2], args[3], chatId);
 
             case "addMeals":
-                if (args.length<1) {
+                if (args.length < 1) {
                     return new MessageOutputData(new InvalidNumberOfArgumentsError("addMeal", "[ингридиент1]","[ингридиент2]").getErrorMessage(), chatId);
                 }
                 String appId = mealapiConfig.getMealApiId();
                 String appKey = mealapiConfig.getMealApikey();
                 MealApiService mealApiService = new MealApiService(appId, appKey);
                 JSONObject analyseMeals = mealApiService.analyzeRecipe("breakfast",args);
-                return new MessageOutputData(analyseMeals.toString(2), chatId);
+
+
+                return new MessageOutputData(processedRequest(analyseMeals), chatId);
             case "/mycalories":
                 User user = userService.getUser(chatId);
                 if (user == null) {
@@ -91,5 +98,18 @@ public class CommandHandler {
 
     public MessageOutputData showMenu(long chatId) {
         return new MessageOutputData(menu.getMenu(), chatId);
+    }
+
+    private String processedRequest(JSONObject analyseMeals) {
+        JsonSimpleParser parser = new JsonSimpleParser();
+        Meal parsedMeal = parser.parse(analyseMeals.toString());
+        List<Nutrient> nutrients = parsedMeal.totalNutrients();
+        String response = "Калорийность блюда " + parsedMeal.getMealType() + " составляет: " + String.valueOf(parsedMeal.getCalories());
+        response = response + "\n";
+        response = response + "Белки " + String.valueOf(nutrients.get(2).getQuantity()) + "\n";
+        response = response + "Жиры " + String.valueOf(nutrients.get(0).getQuantity()) + "\n";
+        response = response + "Углеводы " + String.valueOf(nutrients.get(1).getQuantity());
+
+        return response;
     }
 }
