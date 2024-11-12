@@ -1,16 +1,20 @@
 package fitnesbot.bot;
 
+import fitnesbot.config.MealApiConfig;
 import fitnesbot.exeptions.InvalidCommandError;
 import fitnesbot.exeptions.InvalidNumberOfArgumentsError;
 import fitnesbot.exeptions.NonExistenceUserError;
 import fitnesbot.models.User;
 import fitnesbot.services.*;
+import org.json.JSONObject;
+
 
 public class CommandHandler {
     private CalorieCountingService calorieService;
     private UserService userService;
     private Help help;
     private Menu menu;
+    private MealApiConfig mealapiConfig;
 
 
     public CommandHandler(Help help, Menu menu,
@@ -19,6 +23,7 @@ public class CommandHandler {
         this.menu = menu;
         this.calorieService = caloriesService;
         this.userService = userService;
+        this.mealapiConfig = new MealApiConfig();
     }
     private MessageOutputData firstAcquaintance(long chatId) {
         return new MessageOutputData(help.getHelp() + "\n\n" + "Для начала давай познакомимся,введи команду addUser [имя] [возраст] [рост] [вес]", chatId);
@@ -40,6 +45,16 @@ public class CommandHandler {
                     return new MessageOutputData(new InvalidNumberOfArgumentsError("addUser", "[имя]", "[возраст]", "[рост]", "[вес]").getErrorMessage(), chatId);
                 }
                 return userService.registerUser(args[0], args[1], args[2], args[3], chatId);
+
+            case "addMeals":
+                if (args.length<1) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addMeal", "[ингридиент1]","[ингридиент2]").getErrorMessage(), chatId);
+                }
+                String appId = mealapiConfig.getMealApiId();
+                String appKey = mealapiConfig.getMealApikey();
+                MealApiService mealApiService = new MealApiService(appId, appKey);
+                JSONObject analyseMeals = mealApiService.analyzeRecipe("breakfast",args);
+                return new MessageOutputData(analyseMeals.toString(2), chatId);
             case "/mycalories":
                 User user = userService.getUser(chatId);
                 if (user == null) {
