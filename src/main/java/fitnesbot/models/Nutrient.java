@@ -10,8 +10,18 @@ public class Nutrient {
         this.quantity = quantity;
         this.label = label;
     }
-
     public double getQuantity() {
         return quantity;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+    public String getUnit() {
+        return unit;
+    }
+
+    public String showNutrient(){
+        return quantity + " " + unit + " " + label;
     }
 }

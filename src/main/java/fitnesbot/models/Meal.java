@@ -1,16 +1,25 @@
 package fitnesbot.models;
 
-import javax.swing.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class Meal {
     private String mealType;
     private double totalWeight;
     private double calories;
-    private List<Nutrient> totalNutrients;
+    private Map<String,Nutrient> totalNutrients = new HashMap<>();
 
-    public List<Nutrient> totalNutrients() {
+
+    public Meal(String mealType, double totalWeight, double calories, Map<String,Nutrient> totalNutrients) {
+        this.mealType = mealType;
+        this.totalWeight = totalWeight;
+        this.calories = calories;
+        this.totalNutrients = totalNutrients;
+    }
+
+    public Map<String,Nutrient> totalNutrients() {
         return totalNutrients;
     }
     public double getCalories() {
@@ -19,20 +28,8 @@ public class Meal {
     public String getMealType() {
         return mealType;
     }
-
-    public void setMealType(String newMealType) {
-        mealType = newMealType;
-    }
-
-    public void setTotalWeight(double totalWeight) {
-        this.totalWeight = totalWeight;
-    }
-
-    public void setCalories(double calories) {
-        this.calories = calories;
-    }
-    public  void setTotalNutrients(List<Nutrient> totalNutrients) {
-        this.totalNutrients = totalNutrients;
+    public double getTotalWeight() {
+        return totalWeight;
     }
 
 

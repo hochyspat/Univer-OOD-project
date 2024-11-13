@@ -12,6 +12,7 @@ import fitnesbot.services.*;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 
 
 public class CommandHandler {
@@ -51,9 +52,9 @@ public class CommandHandler {
                 }
                 return userService.registerUser(args[0], args[1], args[2], args[3], chatId);
 
-            case "addMeals":
+            case "addMeals"://например addMeals 100 gram rice,1 cup tea,200 ml milk
                 if (args.length < 1) {
-                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addMeal", "[ингридиент1]","[ингридиент2]").getErrorMessage(), chatId);
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addMeal", "[ингридиент1], ...","[ингридиент n],").getErrorMessage(), chatId);
                 }
                 String appId = mealapiConfig.getMealApiId();
                 String appKey = mealapiConfig.getMealApikey();
@@ -103,12 +104,16 @@ public class CommandHandler {
     private String processedRequest(JSONObject analyseMeals) {
         JsonSimpleParser parser = new JsonSimpleParser();
         Meal parsedMeal = parser.parse(analyseMeals.toString());
-        List<Nutrient> nutrients = parsedMeal.totalNutrients();
-        String response = "Калорийность блюда " + parsedMeal.getMealType() + " составляет: " + String.format("%.1f", parsedMeal.getCalories());
-        response = response + "\n";
-        response = response + "Белки " + String.format("%.1f", nutrients.get(2).getQuantity()) + "\n";
-        response = response + "Жиры " + String.format("%.1f", nutrients.get(0).getQuantity()) + "\n";
-        response = response + "Углеводы " + String.format("%.1f", nutrients.get(1).getQuantity());
+        Map<String,Nutrient> nutrients = parsedMeal.totalNutrients();
+
+        double proteins = nutrients.containsKey("PROCNT") ? nutrients.get("PROCNT").getQuantity() : 0.0;
+        double fats = nutrients.containsKey("FAT") ? nutrients.get("FAT").getQuantity() : 0.0;
+        double carbs = nutrients.containsKey("CHOCDF") ? nutrients.get("CHOCDF").getQuantity() : 0.0;
+
+        String response = "Калорийность блюда " + parsedMeal.getMealType() + " составляет: " + String.format("%.1f", parsedMeal.getCalories()) + "\n";
+        response += "Белки: " + String.format("%.1f", proteins) + "\n";
+        response += "Жиры: " + String.format("%.1f", fats) + "\n";
+        response += "Углеводы: " + String.format("%.1f", carbs);
 
         return response;
     }
