@@ -57,13 +57,19 @@ public class CommandHandler {
                 if (args.length < 1) {
                     return new MessageOutputData(new InvalidNumberOfArgumentsError("addMeal", "[ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
                 }
+
                 String appId = mealapiConfig.getMealApiId();
                 String appKey = mealapiConfig.getMealApikey();
-                MealApiService mealApiService = new MealApiService(appId, appKey);
-                JSONObject analyseMeals = mealApiService.analyzeRecipe("breakfast", args);
+                try {
+                    MealApiService mealApiService = new MealApiService(appId, appKey);
+                    Meal analyseMeal = mealApiService.analyzeRecipe("breakfast", args);
+                    return new MessageOutputData(processedRequest(analyseMeal, "breakfast"), chatId);
+                } catch (Exception e) {
+                    System.out.println("Невозможно сделать meal");
+
+                }
 
 
-                return new MessageOutputData(processedRequest(analyseMeals), chatId);
             case "/mycalories":
                 User user = userService.getUser(chatId);
                 if (user == null) {
@@ -102,20 +108,16 @@ public class CommandHandler {
         return new MessageOutputData(menu.getMenu(), chatId);
     }
 
-    private String processedRequest(JSONObject analyseMeals) {
-        JsonSimpleParser parser = new JsonSimpleParser();
-        Meal parsedMeal = parser.parse(analyseMeals.toString());
-        Map<String, Nutrient> nutrients = parsedMeal.totalNutrients();
+    private String processedRequest(Meal analyseMeal, String mealType) {
 
-        double proteins = nutrients.containsKey("PROCNT") ? nutrients.get("PROCNT").getQuantity() : 0.0;
-        double fats = nutrients.containsKey("FAT") ? nutrients.get("FAT").getQuantity() : 0.0;
-        double carbs = nutrients.containsKey("CHOCDF") ? nutrients.get("CHOCDF").getQuantity() : 0.0;
+        double proteins = analyseMeal.totalNutrients().containsKey("PROCNT") ? analyseMeal.totalNutrients().get("PROCNT").getQuantity() : 0.0;
+        double fats = analyseMeal.totalNutrients().containsKey("FAT") ? analyseMeal.totalNutrients().get("FAT").getQuantity() : 0.0;
+        double carbs = analyseMeal.totalNutrients().containsKey("CHOCDF") ? analyseMeal.totalNutrients().get("CHOCDF").getQuantity() : 0.0;
 
-        String response = "Калорийность блюда " + parsedMeal.getMealType() + " составляет: " + String.format("%.1f", parsedMeal.getCalories()) + "\n";
+        String response = "Калорийность блюда " + MealType.fromString(mealType) + " составляет: " + String.format("%.1f", analyseMeal.getCalories()) + "\n";
         response += "Белки: " + String.format("%.1f", proteins) + "\n";
         response += "Жиры: " + String.format("%.1f", fats) + "\n";
         response += "Углеводы: " + String.format("%.1f", carbs);
-
         return response;
     }
 }

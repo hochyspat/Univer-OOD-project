@@ -8,16 +8,12 @@ public enum MealType {
     INTAKE;
 
     public static MealType fromString(String mealType) {
-
-        return switch (mealType.toUpperCase()) {
-            case "BREAKFAST" -> BREAKFAST;
-            case "LUNCH" -> LUNCH;
-            case "DINNER" -> DINNER;
-            case "SNACK" -> SNACK;
-            default -> INTAKE;
-        };
-
+        for (MealType type : MealType.values()) {
+            if (type.name().equalsIgnoreCase(mealType)) {
+                return type;
+            }
+        }
+        throw new IllegalStateException("Unexpected value: " + mealType);
     }
-
 
 }
