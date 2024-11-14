@@ -10,7 +10,12 @@ public class MessageCommandData {
     }
 
 
-    public Command getCommand() {return command;}
-    public long getChatId() {return chatId;}
+    public Command getCommand() {
+        return command;
+    }
+
+    public long getChatId() {
+        return chatId;
+    }
 }
 

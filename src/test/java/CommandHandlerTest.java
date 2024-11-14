@@ -19,22 +19,21 @@ public class CommandHandlerTest {
         userRepository = new InMemoryUserRepository();
         calorieService = new CalorieCountingService();
         userService = new UserService(userRepository);
-        commandHandler = new CommandHandler( new Help(), new Menu(), calorieService, userService);
+        commandHandler = new CommandHandler(new Help(), new Menu(), calorieService, userService);
     }
-
 
 
     @Test
     void testAddUserToRepository() {
         Command command = new Command("addUser Alice 19 171 58");
-        MessageOutputData outputData = commandHandler.handleMessage(new MessageCommandData(command,12345L));
+        MessageOutputData outputData = commandHandler.handleMessage(new MessageCommandData(command, 12345L));
         User savedUser = userRepository.findById(12345L);
         assertNotNull(savedUser);
         assertEquals("Alice", savedUser.getName());
         assertEquals(19, savedUser.getAge());
         assertEquals(171, savedUser.getHeight());
         assertEquals(58, savedUser.getWeight());
-        assertEquals("Отлично! Пользователь добавлен. Введи /help для справки или /menu для выбора команд",outputData.getMessageData());
+        assertEquals("Отлично! Пользователь добавлен. Введи /help для справки или /menu для выбора команд", outputData.getMessageData());
     }
 
     @Test
@@ -71,8 +70,6 @@ public class CommandHandlerTest {
         MessageOutputData outputData = commandHandler.handleMessage(new MessageCommandData(command, 12345L));
         assertEquals("Неверная команда", outputData.getMessageData());
     }
-
-
 
 
 }

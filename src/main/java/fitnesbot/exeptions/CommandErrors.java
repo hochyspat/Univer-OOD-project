@@ -6,6 +6,7 @@ public class CommandErrors {
     public CommandErrors(String message) {
         this.message = message;
     }
+
     public String getErrorMessage() {
         return message;
     }

@@ -7,6 +7,7 @@ public class UserErrors {
     public UserErrors(String message) {
         this.message = message;
     }
+
     public String getErrorMessage() {
         return message;
     }

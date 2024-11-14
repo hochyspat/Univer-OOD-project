@@ -14,11 +14,13 @@ public record Command(String command, String[] args) {
             "/exit",
             "addMeals"
     );
+
     public boolean isValid() {
         return validCommands.contains(command);
     }
+
     public Command(String commandData) {
-        this(commandData.split(" ")[0],parserArguments(commandData));
+        this(commandData.split(" ")[0], parserArguments(commandData));
     }
 
     private static String[] parserArguments(String commandData) {
@@ -32,6 +34,7 @@ public record Command(String command, String[] args) {
         }
 
     }
+
     public boolean isExit() {
         return "/exit".equals(command);
     }

@@ -1,6 +1,6 @@
 package fitnesbot.bot;
 
-import fitnesbot.bot.JsonParser.JsonSimpleParser;
+import fitnesbot.bot.apiparser.JsonSimpleParser;
 import fitnesbot.config.MealApiConfig;
 import fitnesbot.exeptions.InvalidCommandError;
 import fitnesbot.exeptions.InvalidNumberOfArgumentsError;
@@ -11,7 +11,6 @@ import fitnesbot.models.User;
 import fitnesbot.services.*;
 import org.json.JSONObject;
 
-import java.util.List;
 import java.util.Map;
 
 
@@ -31,9 +30,11 @@ public class CommandHandler {
         this.userService = userService;
         this.mealapiConfig = new MealApiConfig();
     }
+
     private MessageOutputData firstAcquaintance(long chatId) {
         return new MessageOutputData(help.getHelp() + "\n\n" + "Для начала давай познакомимся,введи команду addUser [имя] [возраст] [рост] [вес]", chatId);
     }
+
     public MessageOutputData handleMessage(MessageCommandData commandData) {
         Command command = commandData.getCommand();
         long chatId = commandData.getChatId();
@@ -54,12 +55,12 @@ public class CommandHandler {
 
             case "addMeals"://например addMeals 100 gram rice,1 cup tea,200 ml milk
                 if (args.length < 1) {
-                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addMeal", "[ингридиент1], ...","[ингридиент n],").getErrorMessage(), chatId);
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addMeal", "[ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
                 }
                 String appId = mealapiConfig.getMealApiId();
                 String appKey = mealapiConfig.getMealApikey();
                 MealApiService mealApiService = new MealApiService(appId, appKey);
-                JSONObject analyseMeals = mealApiService.analyzeRecipe("breakfast",args);
+                JSONObject analyseMeals = mealApiService.analyzeRecipe("breakfast", args);
 
 
                 return new MessageOutputData(processedRequest(analyseMeals), chatId);
@@ -104,7 +105,7 @@ public class CommandHandler {
     private String processedRequest(JSONObject analyseMeals) {
         JsonSimpleParser parser = new JsonSimpleParser();
         Meal parsedMeal = parser.parse(analyseMeals.toString());
-        Map<String,Nutrient> nutrients = parsedMeal.totalNutrients();
+        Map<String, Nutrient> nutrients = parsedMeal.totalNutrients();
 
         double proteins = nutrients.containsKey("PROCNT") ? nutrients.get("PROCNT").getQuantity() : 0.0;
         double fats = nutrients.containsKey("FAT") ? nutrients.get("FAT").getQuantity() : 0.0;

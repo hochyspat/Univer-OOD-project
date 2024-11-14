@@ -9,7 +9,9 @@ public class MessageOutputData {
         this.chatId = chatId;
     }
 
-    public String getMessageData() {return messageData;}
+    public String getMessageData() {
+        return messageData;
+    }
 
     public long getChatId() {
         return chatId;

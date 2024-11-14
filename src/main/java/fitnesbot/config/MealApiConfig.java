@@ -16,8 +16,8 @@ public class MealApiConfig {
                 return;
             }
             properties.load(input);
-            this.apiId= properties.getProperty("edamam.api.appId");
-            this.apiKey= properties.getProperty("edamam.api.appKey");
+            this.apiId = properties.getProperty("edamam.api.appId");
+            this.apiKey = properties.getProperty("edamam.api.appKey");
         } catch (IOException e) {
             e.printStackTrace();
         }

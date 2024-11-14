@@ -30,20 +30,21 @@ public class Main {
         UserRepository userRepository = new InMemoryUserRepository();
         if (platform == BotPlatform.CONSOLE || platform == BotPlatform.BOTH) {
             Thread consoleThread = new Thread(() -> {
-                ConsoleBot consoleBot = getConsoleBot(help, menu, calorieCountingService,userRepository);
+                ConsoleBot consoleBot = getConsoleBot(help, menu, calorieCountingService, userRepository);
                 consoleBot.start();
             });
             consoleThread.start();
         }
         if (platform == BotPlatform.TELEGRAM || platform == BotPlatform.BOTH) {
-            Thread telegramThread = new Thread(() -> {try {
-                TelegramBot telegramBot = getTelegramBot(help, menu, calorieCountingService,userRepository);
-                TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-                telegramBotsApi.registerBot(telegramBot);
+            Thread telegramThread = new Thread(() -> {
+                try {
+                    TelegramBot telegramBot = getTelegramBot(help, menu, calorieCountingService, userRepository);
+                    TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+                    telegramBotsApi.registerBot(telegramBot);
 
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             });
             telegramThread.start();
 
@@ -51,19 +52,20 @@ public class Main {
 
 
     }
+
     @NotNull
-    private static TelegramBot getTelegramBot(Help help, Menu menu, CalorieCountingService calorieCountingService,UserRepository userRepository) {
+    private static TelegramBot getTelegramBot(Help help, Menu menu, CalorieCountingService calorieCountingService, UserRepository userRepository) {
         UserService userService = new UserService(userRepository);
-        CommandHandler commandHandler = new CommandHandler(help, menu, calorieCountingService,userService);
+        CommandHandler commandHandler = new CommandHandler(help, menu, calorieCountingService, userService);
         return new TelegramBot(commandHandler);
     }
 
     @NotNull
-    private static ConsoleBot getConsoleBot(Help help, Menu menu, CalorieCountingService calorieCountingService,UserRepository userRepository){
+    private static ConsoleBot getConsoleBot(Help help, Menu menu, CalorieCountingService calorieCountingService, UserRepository userRepository) {
         ConsoleInputService consoleInputService = new ConsoleInputService();
         ConsoleOutputService consoleOutputService = new ConsoleOutputService();
         UserService userService = new UserService(userRepository);
-        CommandHandler commandHandler = new CommandHandler(help, menu, calorieCountingService,userService);
-        return new ConsoleBot(consoleInputService,consoleOutputService,commandHandler);
+        CommandHandler commandHandler = new CommandHandler(help, menu, calorieCountingService, userService);
+        return new ConsoleBot(consoleInputService, consoleOutputService, commandHandler);
     }
 }

@@ -1,15 +1,18 @@
 package fitnesbot.models;
 
+import fitnesbot.services.NutrienUnits;
+
 public class Nutrient {
-    private String unit;
+    private NutrienUnits unit;
     private double quantity;
     private String label;
 
     public Nutrient(String unit, double quantity, String label) {
-        this.unit = unit;
+        this.unit = NutrienUnits.fromString(unit);
         this.quantity = quantity;
         this.label = label;
     }
+
     public double getQuantity() {
         return quantity;
     }
@@ -17,11 +20,12 @@ public class Nutrient {
     public String getLabel() {
         return label;
     }
-    public String getUnit() {
+
+    public NutrienUnits getUnit() {
         return unit;
     }
 
-    public String showNutrient(){
+    public String showNutrient() {
         return quantity + " " + unit + " " + label;
     }
 }

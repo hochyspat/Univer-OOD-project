@@ -20,22 +20,22 @@ public class UserService {
 
     public MessageOutputData registerUser(String name, String age, String height, String weight, Long chatId) {
         if (!(isValidName(name))) {
-            return new MessageOutputData(new InvalidParameterError("имя").getErrorMessage(),chatId);
+            return new MessageOutputData(new InvalidParameterError("имя").getErrorMessage(), chatId);
         }
         if (!(isValidInputParameter(height, LOWER_HEIGHT_LIMIT, UPPER_HEIGHT_LIMIT))) {
-            return  new MessageOutputData(new InvalidParameterError("рост").getErrorMessage(),chatId);
+            return new MessageOutputData(new InvalidParameterError("рост").getErrorMessage(), chatId);
         }
         if (!(isValidInputParameter(weight, LOWER_WEIGHT_LIMIT, UPPER_WEIGHT_LIMIT))) {
-            return  new MessageOutputData(new InvalidParameterError("вес").getErrorMessage(),chatId);
+            return new MessageOutputData(new InvalidParameterError("вес").getErrorMessage(), chatId);
         }
         if (!(isValidInputParameter(age, LOWER_AGE_LIMIT, UPPER_AGE_LIMIT))) {
-            return  new MessageOutputData(new InvalidParameterError("возраст").getErrorMessage(),chatId);
+            return new MessageOutputData(new InvalidParameterError("возраст").getErrorMessage(), chatId);
         }
 
         if (!userRepository.existsById(chatId)) {
             User user = new User(name, Integer.parseInt(height), Integer.parseInt(weight), Integer.parseInt(age), chatId);
             userRepository.save(user);
-            return  new MessageOutputData("Отлично! Пользователь добавлен. Введи /help для справки или /menu для выбора команд", chatId);
+            return new MessageOutputData("Отлично! Пользователь добавлен. Введи /help для справки или /menu для выбора команд", chatId);
         } else {
             System.out.println("Пользователь уже существует." + chatId);
             return new MessageOutputData(new UserAlreadyExistsError(chatId).getErrorMessage(), chatId);

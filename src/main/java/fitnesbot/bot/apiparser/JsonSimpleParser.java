@@ -1,5 +1,6 @@
-package fitnesbot.bot.JsonParser;
+package fitnesbot.bot.apiparser;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fitnesbot.models.Meal;
 import fitnesbot.models.Nutrient;
 import org.json.simple.JSONObject;
@@ -10,7 +11,6 @@ import java.util.Map;
 
 
 public class JsonSimpleParser {
-
     public Meal parse(String analyseMeals) {
         JSONParser parser = new JSONParser();
         JSONObject mealJsonObject = null;

@@ -22,6 +22,7 @@ public class TelegramBot extends TelegramLongPollingBot implements OutputService
     public String getBotUsername() {
         return botConfig.getBotUsername();
     }
+
     @Override
     public String getBotToken() {
         return botConfig.getBotToken();

@@ -1,5 +1,7 @@
 package fitnesbot.out;
+
 import fitnesbot.bot.MessageOutputData;
+
 public class ConsoleOutputService implements OutputService {
 
     @Override
