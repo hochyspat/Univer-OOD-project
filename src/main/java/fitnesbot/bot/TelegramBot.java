@@ -2,12 +2,12 @@ package fitnesbot.bot;
 
 
 import fitnesbot.config.BotConfig;
-
 import fitnesbot.out.OutputService;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
 
 public class TelegramBot extends TelegramLongPollingBot implements OutputService {
     private BotConfig botConfig;

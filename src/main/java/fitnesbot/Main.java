@@ -43,7 +43,7 @@ public class Main {
                     telegramBotsApi.registerBot(telegramBot);
 
                 } catch (TelegramApiException e) {
-                    e.printStackTrace();
+                    System.out.println("Error with TelegramApi: " + e.getMessage());
                 }
             });
             telegramThread.start();

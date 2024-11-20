@@ -34,23 +34,19 @@ public class MealApiService {
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                 .build();
-
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
             if (response.statusCode() == 200) {
                 String analyseMeals = new String(response.body().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
                 analyseMeals = analyseMeals.replace("µ", "u");
                 return parser.parse(analyseMeals);
             } else {
-                System.err.println("Error: " + response.statusCode());
-                return null;
+                System.err.println("Error with HttpResponse: " + response.statusCode());
             }
 
-
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            System.err.println("Error with HttpResponse: " + e.getMessage());
         }
+        return null;
     }
 }

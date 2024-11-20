@@ -1,17 +1,12 @@
 package fitnesbot.bot;
 
-import fitnesbot.bot.apiparser.JsonSimpleParser;
 import fitnesbot.config.MealApiConfig;
 import fitnesbot.exeptions.InvalidCommandError;
 import fitnesbot.exeptions.InvalidNumberOfArgumentsError;
 import fitnesbot.exeptions.NonExistenceUserError;
 import fitnesbot.models.Meal;
-import fitnesbot.models.Nutrient;
 import fitnesbot.models.User;
 import fitnesbot.services.*;
-import org.json.JSONObject;
-
-import java.util.Map;
 
 
 public class CommandHandler {
@@ -20,7 +15,7 @@ public class CommandHandler {
     private Help help;
     private Menu menu;
     private MealApiConfig mealapiConfig;
-
+    private MealApiService mealApiService;
 
     public CommandHandler(Help help, Menu menu,
                           CalorieCountingService caloriesService, UserService userService) {
@@ -29,17 +24,15 @@ public class CommandHandler {
         this.calorieService = caloriesService;
         this.userService = userService;
         this.mealapiConfig = new MealApiConfig();
+        this.mealApiService = new MealApiService(mealapiConfig.getMealApiId(),mealapiConfig.getMealApikey());
     }
-
     private MessageOutputData firstAcquaintance(long chatId) {
         return new MessageOutputData(help.getHelp() + "\n\n" + "Для начала давай познакомимся,введи команду addUser [имя] [возраст] [рост] [вес]", chatId);
     }
-
     public MessageOutputData handleMessage(MessageCommandData commandData) {
         Command command = commandData.getCommand();
         long chatId = commandData.getChatId();
         String[] args = command.args();
-
         switch (command.command()) {
             case "/help":
                 return showHelp(chatId);
@@ -57,11 +50,8 @@ public class CommandHandler {
                 if (args.length < 1) {
                     return new MessageOutputData(new InvalidNumberOfArgumentsError("addMeal", "[ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
                 }
-
-                String appId = mealapiConfig.getMealApiId();
-                String appKey = mealapiConfig.getMealApikey();
                 try {
-                    MealApiService mealApiService = new MealApiService(appId, appKey);
+
                     Meal analyseMeal = mealApiService.analyzeRecipe("breakfast", args);
                     return new MessageOutputData(processedRequest(analyseMeal, "breakfast"), chatId);
                 } catch (Exception e) {
@@ -118,6 +108,7 @@ public class CommandHandler {
         response += "Белки: " + String.format("%.1f", proteins) + "\n";
         response += "Жиры: " + String.format("%.1f", fats) + "\n";
         response += "Углеводы: " + String.format("%.1f", carbs);
+
         return response;
     }
 }

@@ -1,11 +1,6 @@
 package fitnesbot.bot.apiparser;
 
 import fitnesbot.models.Meal;
-import fitnesbot.models.Nutrient;
-import org.json.simple.JSONObject;
-
-import java.util.Map;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -2,7 +2,6 @@ package fitnesbot.repositories;
 
 import fitnesbot.models.User;
 import fitnesbot.services.UserRepository;
-
 import java.util.HashMap;
 import java.util.Map;
 

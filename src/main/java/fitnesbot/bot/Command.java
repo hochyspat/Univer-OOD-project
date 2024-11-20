@@ -1,6 +1,5 @@
 package fitnesbot.bot;
 
-
 import java.util.Set;
 
 public record Command(String command, String[] args) {
