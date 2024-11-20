@@ -1,8 +1,9 @@
 package fitnesbot.config;
 
 import java.io.IOException;
-import java.util.Properties;
 import java.io.InputStream;
+import java.util.Properties;
+
 
 public class BotConfig {
     private String botName;
@@ -10,7 +11,8 @@ public class BotConfig {
 
     public BotConfig() {
         Properties properties = new Properties();
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream
+                ("application.properties")) {
             if (input == null) {
                 System.out.println("файл конфигурации не найден.");
                 return;
@@ -21,7 +23,7 @@ public class BotConfig {
             this.botName = properties.getProperty("telegram.bot.username");
             this.botToken = properties.getProperty("telegram.bot.token");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error with BotConfig properties file." + e.getMessage());
         }
     }
 

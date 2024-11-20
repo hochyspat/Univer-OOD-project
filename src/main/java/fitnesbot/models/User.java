@@ -57,6 +57,7 @@ public class User {
 
 
     public String getInfo() {
-        return "Имя: " + name + "\nРост: " + height + " см\nВес: " + weight + " кг\nВозраст: " + age + " лет";
+        return "Имя: " + name + "\nРост: " + height + " см\nВес: " + weight + " кг\nВозраст: " +
+                age + " лет";
     }
 }

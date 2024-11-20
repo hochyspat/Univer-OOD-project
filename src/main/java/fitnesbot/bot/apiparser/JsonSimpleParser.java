@@ -8,7 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonSimpleParser {
     public Meal parse(String analyseMeals) {
-        ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        ObjectMapper objectMapper = new ObjectMapper().configure
+                (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             //вывод для себя
             /*for (Map.Entry<String, Nutrient> entry : meal.totalNutrients().entrySet()) {

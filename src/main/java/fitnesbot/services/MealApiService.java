@@ -30,14 +30,16 @@ public class MealApiService {
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
         requestBody.put("ingr", new JSONArray(ingredients));
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(apiUrl + "?app_id=" + appId + "&app_key=" + appKey))
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(apiUrl + "?app_id=" +
+                                                                      appId + "&app_key=" + appKey))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                 .build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
-                String analyseMeals = new String(response.body().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+                String analyseMeals = new String(response.body().getBytes(StandardCharsets.UTF_8),
+                        StandardCharsets.UTF_8);
                 analyseMeals = analyseMeals.replace("µ", "u");
                 return parser.parse(analyseMeals);
             } else {

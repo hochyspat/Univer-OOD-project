@@ -10,7 +10,8 @@ public class MealApiConfig {
 
     public MealApiConfig() {
         Properties properties = new Properties();
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream
+                ("application.properties")) {
             if (input == null) {
                 System.out.println("файл конфигурации не найден.");
                 return;
@@ -19,7 +20,7 @@ public class MealApiConfig {
             this.apiId = properties.getProperty("edamam.api.appId");
             this.apiKey = properties.getProperty("edamam.api.appKey");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error with MealApiConfig: " + e.getMessage());
         }
     }
 

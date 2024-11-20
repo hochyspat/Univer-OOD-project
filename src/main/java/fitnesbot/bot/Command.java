@@ -19,15 +19,18 @@ public record Command(String command, String[] args) {
     }
 
     public Command(String commandData) {
-        this(commandData.split(" ")[0], parserArguments(commandData));
+        this(commandData.split(" ")[0],
+                parserArguments(commandData));
     }
 
     private static String[] parserArguments(String commandData) {
         if (commandData.contains(",")) {
-            return commandData.substring(commandData.indexOf(' ') + 1).trim().split(",\\s*");
+            return commandData.substring(commandData.indexOf(' ') + 1)
+                    .trim().split(",\\s*");
         }
         else if (commandData.contains(" ")) {
-            return commandData.substring(commandData.indexOf(' ') + 1).trim().split("\\s+");
+            return commandData.substring(commandData.indexOf(' ') + 1)
+                    .trim().split("\\s+");
         } else {
             return new String[0];
         }

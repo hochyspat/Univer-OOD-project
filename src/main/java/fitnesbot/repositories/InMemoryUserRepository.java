@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryUserRepository implements UserRepository {
-    private Map<Long, User> users = new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>();
 
 
     @Override
