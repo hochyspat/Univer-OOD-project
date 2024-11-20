@@ -7,12 +7,12 @@ import fitnesbot.models.User;
 
 public class UserService {
     private final UserRepository userRepository;
-    final static int UPPER_HEIGHT_LIMIT = 220;
-    final static int LOWER_HEIGHT_LIMIT = 140;
-    final static int UPPER_WEIGHT_LIMIT = 200;
-    final static int LOWER_WEIGHT_LIMIT = 35;
-    final static int UPPER_AGE_LIMIT = 100;
-    final static int LOWER_AGE_LIMIT = 12;
+    static final int UPPER_HEIGHT_LIMIT = 220;
+    static final int LOWER_HEIGHT_LIMIT = 140;
+    static final int UPPER_WEIGHT_LIMIT = 200;
+    static final int LOWER_WEIGHT_LIMIT = 35;
+    static final int UPPER_AGE_LIMIT = 100;
+    static final int LOWER_AGE_LIMIT = 12;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;

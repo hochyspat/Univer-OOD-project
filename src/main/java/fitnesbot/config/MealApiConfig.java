@@ -10,8 +10,8 @@ public class MealApiConfig {
 
     public MealApiConfig() {
         Properties properties = new Properties();
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream
-                ("application.properties")) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(
+                           "application.properties")) {
             if (input == null) {
                 System.out.println("файл конфигурации не найден.");
                 return;

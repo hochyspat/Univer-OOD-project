@@ -2,11 +2,11 @@
 package fitnesbot.models;
 
 public class User {
-    private long chatId;
-    private String name;
-    private int height;
-    private int weight;
-    private int age;
+    private final long chatId;
+    private final String name;
+    private final int height;
+    private final int weight;
+    private final int age;
     private double calories;
     private boolean deleted;
 
