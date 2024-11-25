@@ -25,12 +25,12 @@ public record Command(String command, String[] args) {
 
     private static String[] parserArguments(String commandData) {
         if (commandData.contains(",")) {
-            return commandData.substring(commandData.indexOf(' ') + 1)
-                    .trim().split(",\\s*");
+            return commandData.substring(commandData.indexOf(' ') + 1).trim().split(
+                    ",\\s*");
         }
         else if (commandData.contains(" ")) {
-            return commandData.substring(commandData.indexOf(' ') + 1)
-                    .trim().split("\\s+");
+            return commandData.substring(commandData.indexOf(' ') + 1).trim().split(
+                    "\\s+");
         } else {
             return new String[0];
         }

@@ -1,8 +1,10 @@
 package fitnesbot.bot;
 
+import fitnesbot.bot.apiparser.JsonSimpleParser;
 import fitnesbot.exeptions.InvalidCommandError;
 import fitnesbot.in.ConsoleInputService;
 import fitnesbot.in.InputService;
+import fitnesbot.models.Meal;
 import fitnesbot.out.ConsoleOutputService;
 import fitnesbot.out.OutputService;
 
@@ -27,6 +29,7 @@ public class ConsoleBot {
 
         while (true) {
             outputService.sendMessage(new MessageOutputData("Введите команду: ", CHAT_ID));
+            JsonSimpleParser parser = new JsonSimpleParser();
             String userRequest = inputService.read();
             Command command = new Command(userRequest);
             if (command.isValid()) {

@@ -3,7 +3,8 @@ package fitnesbot.services;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum NutrientUnits {
-    G("g"),
+    GRAM("g"),
+    IU("iu"),
     MG("mg"),
     UG("ug"),
     L("l"),
@@ -18,7 +19,7 @@ public enum NutrientUnits {
         this.unit = unit;
     }
 
-    public String getUnit() {
+    public String getValue() {
         return unit;
     }
 
@@ -26,7 +27,7 @@ public enum NutrientUnits {
     public static NutrientUnits fromString(String nutrientUnit) {
         for (NutrientUnits unit : values()) {
             nutrientUnit = nutrientUnit.toLowerCase();
-            if (unit.getUnit().equals(nutrientUnit)) {
+            if (unit.getValue().equals(nutrientUnit)) {
                 return unit;
             }
         }

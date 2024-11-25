@@ -18,7 +18,6 @@ public class Nutrient {
     public Nutrient() {
     }
 
-
     @JsonProperty("quantity")
     public double getQuantity() {
         return quantity;
@@ -33,6 +32,7 @@ public class Nutrient {
     public NutrientUnits getUnit() {
         return unit;
     }
+
 
     public void setQuantity(double quantity) {
         this.quantity = quantity;

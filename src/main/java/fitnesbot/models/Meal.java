@@ -1,50 +1,50 @@
 package fitnesbot.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class Meal {
-    private double totalWeight;
-    private double calories;
-    private Map<String, Nutrient> totalNutrients = new HashMap<>();
+    private String nameMeal;
+    private double weight;
+    private Map<String, Nutrient> nutrients = new HashMap<>();
 
-
-    public Meal(double totalWeight, double calories, Map<String, Nutrient> totalNutrients) {
-        this.totalWeight = totalWeight;
-        this.calories = calories;
-        this.totalNutrients = totalNutrients;
+    public Meal(double weight, Map<String, Nutrient> nutrients, String nameMeal) {
+        this.nameMeal = nameMeal;
+        this.weight = weight;
+        this.nutrients = nutrients;
     }
 
     public Meal() {
     }
 
-    @JsonProperty("totalNutrients")
-    public Map<String, Nutrient> totalNutrients() {
-        return totalNutrients;
+    @JsonProperty("foodMatch")
+    public String getNameMeal() {
+        return nameMeal;
     }
 
-    @JsonProperty("calories")
-    public double getCalories() {
-        return calories;
+    @JsonProperty("nutrients")
+    public Map<String, Nutrient> nutrients() {
+        return nutrients;
     }
 
-    @JsonProperty("totalWeight")
-    public double getTotalWeight() {
-        return totalWeight;
+    @JsonProperty("weight")
+    public double getWeight() {
+        return weight;
     }
 
-    public void setCalories(double calories) {
-        this.calories = calories;
+    public void setNameMeal(String nameMeal) {
+        this.nameMeal = nameMeal;
     }
 
-    public void setTotalNutrients(Map<String, Nutrient> totalNutrients) {
-        this.totalNutrients = totalNutrients;
+    public void setNutrients(Map<String, Nutrient> nutrients) {
+        this.nutrients = nutrients;
     }
 
-    public void setTotalWeight(double totalWeight) {
-        this.totalWeight = totalWeight;
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 
 }
