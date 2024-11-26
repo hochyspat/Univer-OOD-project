@@ -18,7 +18,7 @@ public class JsonSimpleParserTest {
     public void parseToIntake_valid_calories_totalWeight() throws JsonProcessingException {
         String json = "{\"calories\": 200, \"totalWeight\": 300, \"ingredients\": []}";
 
-        MealsInTake mealsInTake = parser.parsetoIntake(json);
+        MealsInTake mealsInTake = parser.parseToIntake(json);
 
         assertNotNull(mealsInTake);
         assertEquals(200, mealsInTake.getCalories());
@@ -134,7 +134,7 @@ public class JsonSimpleParserTest {
                 "    \"text\" : \"200 gram chicken\"\n" +
                 "  } ]\n" +
                 "}";
-        MealsInTake mealsInTake = parser.parsetoIntake(test);
+        MealsInTake mealsInTake = parser.parseToIntake(test);
         assertNotNull(mealsInTake);
         assertNotNull(mealsInTake.getMeals());
         String actual = mealsInTake.toString().replace("\r\n", "\n");
@@ -146,7 +146,7 @@ public class JsonSimpleParserTest {
     @Test
     void parseToIntake_invalid_returnsNull() throws JsonProcessingException {
         String json = "Some wrong file";
-        MealsInTake mealsInTake = parser.parsetoIntake(json);
+        MealsInTake mealsInTake = parser.parseToIntake(json);
         assertNull(mealsInTake);
     }
 

@@ -1,13 +1,15 @@
-package fitnesbot.exeptions;
+package fitnesbot.exeptions.UserErrors;
 
-public class CommandErrors {
+public class UserErrors {
+
     protected String message;
 
-    public CommandErrors(String message) {
+    public UserErrors(String message) {
         this.message = message;
     }
 
     public String getErrorMessage() {
         return message;
     }
+
 }

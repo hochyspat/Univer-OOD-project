@@ -1,4 +1,4 @@
-package fitnesbot.exeptions;
+package fitnesbot.exeptions.UserErrors;
 
 public class UserAlreadyExistsError extends UserErrors {
     private final long userId;

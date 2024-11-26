@@ -1,9 +1,10 @@
 package fitnesbot.bot;
 
 import fitnesbot.config.MealApiConfig;
-import fitnesbot.exeptions.InvalidCommandError;
-import fitnesbot.exeptions.InvalidNumberOfArgumentsError;
-import fitnesbot.exeptions.NonExistenceUserError;
+import fitnesbot.exeptions.CommandErrors.InvalidCommandError;
+import fitnesbot.exeptions.CommandErrors.InvalidNumberOfArgumentsError;
+import fitnesbot.exeptions.UserErrors.NonExistenceUserError;
+import fitnesbot.exeptions.apiErrors.InputIngredientsError;
 import fitnesbot.models.*;
 import fitnesbot.services.*;
 
@@ -59,6 +60,10 @@ public class CommandHandler {
                 }
                 try {
                     MealsInTake analyseMeal = mealApiService.analyzeRecipe("intake food", args);
+                    if (analyseMeal == null) {
+                        return new MessageOutputData(
+                                new InputIngredientsError().getErrorMessage(), chatId);
+                    }
                     return new MessageOutputData(
                             processedRequest(analyseMeal, "intake food"), chatId);
                 } catch (Exception e) {

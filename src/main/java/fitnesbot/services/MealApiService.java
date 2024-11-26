@@ -6,6 +6,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import fitnesbot.bot.apiparser.JsonSimpleParser;
+import fitnesbot.exeptions.apiErrors.ApiErrorHandler;
 import fitnesbot.models.MealsInTake;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -48,9 +49,9 @@ public class MealApiService {
                 String analyseMeals = new String(response.body().getBytes(StandardCharsets.UTF_8),
                         StandardCharsets.UTF_8);
                 analyseMeals = analyseMeals.replace("µ", "u");
-                return parser.parsetoIntake(analyseMeals);
+                return parser.parseToIntake(analyseMeals);
             } else {
-                System.err.println("Error with HttpResponse: " + response.statusCode());
+                System.err.println(new ApiErrorHandler().errorHandler(response.statusCode()));
                 return null;
             }
 
