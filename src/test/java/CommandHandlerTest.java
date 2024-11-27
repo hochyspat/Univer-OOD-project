@@ -13,13 +13,17 @@ public class CommandHandlerTest {
     private UserRepository userRepository;
     private UserService userService;
     private CalorieCountingService calorieService;
+    private MealService mealService;
+    private MealRepository mealRepository;
 
     @BeforeEach
     void setUp() {
         userRepository = new InMemoryUserRepository();
         calorieService = new CalorieCountingService();
         userService = new UserService(userRepository);
-        commandHandler = new CommandHandler(new Help(), new Menu(), calorieService, userService);
+        mealService = new MealService(mealRepository);
+
+        commandHandler = new CommandHandler(new Help(), new Menu(), calorieService, userService, mealService);
     }
 
 

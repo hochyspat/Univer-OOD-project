@@ -6,6 +6,7 @@ import fitnesbot.bot.TelegramBot;
 import fitnesbot.out.*;
 import fitnesbot.bot.ConsoleBot;
 import fitnesbot.in.ConsoleInputService;
+import fitnesbot.repositories.InMemoryMealRepository;
 import fitnesbot.repositories.InMemoryUserRepository;
 import fitnesbot.services.*;
 import org.jetbrains.annotations.NotNull;
@@ -28,9 +29,10 @@ public class Main {
         Menu menu = new Menu();
         CalorieCountingService calorieCountingService = new CalorieCountingService();
         UserRepository userRepository = new InMemoryUserRepository();
+        MealRepository mealRepository = new InMemoryMealRepository();
         if (platform == BotPlatform.CONSOLE || platform == BotPlatform.BOTH) {
             Thread consoleThread = new Thread(() -> {
-                ConsoleBot consoleBot = getConsoleBot(help, menu, calorieCountingService, userRepository);
+                ConsoleBot consoleBot = getConsoleBot(help, menu, calorieCountingService, userRepository, mealRepository);
                 consoleBot.start();
             });
             consoleThread.start();
@@ -39,7 +41,7 @@ public class Main {
             Thread telegramThread = new Thread(() -> {
                 try {
                     TelegramBot telegramBot = getTelegramBot(help, menu, calorieCountingService,
-                                                             userRepository);
+                                                             userRepository, mealRepository);
                     TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
                     telegramBotsApi.registerBot(telegramBot);
 
@@ -57,24 +59,26 @@ public class Main {
     @NotNull
     private static TelegramBot getTelegramBot(Help help, Menu menu,
                                               CalorieCountingService calorieCountingService,
-                                              UserRepository userRepository) {
+                                              UserRepository userRepository, MealRepository mealRepository) {
         UserService userService = new UserService(userRepository);
+        MealService mealService = new MealService(mealRepository);
         CommandHandler commandHandler = new CommandHandler(help, menu,
                 calorieCountingService,
-                userService);
+                userService, mealService);
         return new TelegramBot(commandHandler);
     }
 
     @NotNull
     private static ConsoleBot getConsoleBot(Help help, Menu menu,
                                             CalorieCountingService calorieCountingService,
-                                            UserRepository userRepository) {
+                                            UserRepository userRepository, MealRepository mealRepository) {
         ConsoleInputService consoleInputService = new ConsoleInputService();
         ConsoleOutputService consoleOutputService = new ConsoleOutputService();
         UserService userService = new UserService(userRepository);
+        MealService mealService = new MealService(mealRepository);
         CommandHandler commandHandler = new CommandHandler(help, menu,
                 calorieCountingService,
-                userService);
+                userService, mealService);
         return new ConsoleBot(consoleInputService, consoleOutputService, commandHandler);
     }
 }

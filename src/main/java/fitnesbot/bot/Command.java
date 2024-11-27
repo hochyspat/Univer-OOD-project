@@ -11,8 +11,15 @@ public record Command(String command, String[] args) {
             "addUser",
             "/myprofile",
             "/exit",
-            "addMeals"
+            "addMeal",
+            "learnMeal",
+            "getMeal"
     );
+
+    public String parseArgsInfo(){
+        int firstSpaceIndex = args[0].indexOf(" ");
+        return args[0].substring(0, firstSpaceIndex);
+    }
 
     public boolean isValid() {
         return validCommands.contains(command);

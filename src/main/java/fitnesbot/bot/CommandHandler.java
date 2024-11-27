@@ -15,14 +15,16 @@ public class CommandHandler {
     private final Help help;
     private final Menu menu;
     private final MealApiService mealApiService;
+    private final MealService mealService;
 
     public CommandHandler(Help help, Menu menu,
                           CalorieCountingService caloriesService,
-                          UserService userService) {
+                          UserService userService, MealService mealService) {
         this.help = help;
         this.menu = menu;
         this.calorieService = caloriesService;
         this.userService = userService;
+        this.mealService = mealService;
         MealApiConfig mealapiConfig = new MealApiConfig();
         this.mealApiService = new MealApiService(mealapiConfig.getMealApiId(),
                 mealapiConfig.getMealApikey());
@@ -53,21 +55,48 @@ public class CommandHandler {
                 }
                 return userService.registerUser(args[0], args[1], args[2], args[3], chatId);
 
-            case "addMeals"://например addMeals 100 gram rice,1 cup tea,200 ml milk
+            case "learnMeal"://например learnMeal 100 gram rice,1 cup tea,200 ml milk
                 if (args.length < 1) {
                     return new MessageOutputData(new InvalidNumberOfArgumentsError("addMeal",
-                            "[ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
+                            "[название] [ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
                 }
                 try {
-                    MealsInTake analyseMeal = mealApiService.analyzeRecipe("intake food", args);
+                    MealsInTake analyseMeal = mealApiService.analyzeRecipe("intake meal", args);
                     if (analyseMeal == null) {
                         return new MessageOutputData(
                                 new InputIngredientsError().getErrorMessage(), chatId);
                     }
                     return new MessageOutputData(
-                            processedRequest(analyseMeal, "intake food"), chatId);
+                            processedRequest(analyseMeal, "intake meal"), chatId);
                 } catch (Exception e) {
-                    System.out.println("Невозможно сделать запись в дневник");
+                    System.out.println("Невозможно сделать анализ");
+                }
+
+            case "getMeal": // getMeal 27.11.2024 завтрак
+                if (args.length != 2) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError(
+                            "getMeal", "[дата]", "[название]").getErrorMessage(), chatId);
+                }
+
+                return mealService.getMeal(args[0], args[1], chatId);
+
+            case "addMeal": //addMeal завтрак 100 gram rice,1 cup tea,200 ml milk
+                if (args.length < 1) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addMeal",
+                            "[название] [ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
+                }
+                try {
+                    String mealType = command.parseArgsInfo();
+                    System.out.println(mealType);
+                    MealsInTake analyseMeal = mealApiService.analyzeRecipe(mealType, args);
+                    if (analyseMeal == null) {
+                        return new MessageOutputData(
+                                new InputIngredientsError().getErrorMessage(), chatId);
+                    }
+
+                    return mealService.addMeal(analyseMeal, chatId, mealType);
+                } catch (Exception e) {
+                    System.out.println("Невозможно записать в дневник");
                 }
 
             case "/mycalories":
@@ -110,7 +139,7 @@ public class CommandHandler {
         return new MessageOutputData(menu.getMenu(), chatId);
     }
 
-    private String processedRequest(MealsInTake analyseMeal, String mealType) {
+    public static String processedRequest(MealsInTake analyseMeal, String mealType) {
         StringBuilder response = new StringBuilder("Результаты анализа блюда: ");
         response.append(mealType)
                 .append("\n");
