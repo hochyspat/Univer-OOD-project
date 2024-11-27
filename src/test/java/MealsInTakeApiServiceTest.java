@@ -1,6 +1,6 @@
 
 import fitnesbot.models.MealsInTake;
-import fitnesbot.services.MealApiService;
+import fitnesbot.services.MealsInTakeApiService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,10 +18,10 @@ import java.net.http.HttpResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class MealApiServiceTest {
+public class MealsInTakeApiServiceTest {
 
 
-    private MealApiService mealApiService;
+    private MealsInTakeApiService mealsIntakeApiService;
 
     private HttpClient httpClient;
     private HttpResponse<String> response;
@@ -38,7 +38,7 @@ public class MealApiServiceTest {
 
         httpClient = mockHttpClient;
         response = mockHttpResponse;
-        mealApiService = new MealApiService("testAppId", "testAppKey", mockHttpClient);
+        mealsIntakeApiService = new MealsInTakeApiService("testAppId", "testAppKey", mockHttpClient);
     }
 
     @Test
@@ -51,6 +51,7 @@ public class MealApiServiceTest {
         String mockResponseBody = """
                 {
                   "calories": 500,
+                  "totalWeight": 300,
                   "ingredients": [
                     {
                       "parsed": [
@@ -81,10 +82,11 @@ public class MealApiServiceTest {
                 .thenReturn(response);
         when(response.statusCode()).thenReturn(200);
         when(response.body()).thenReturn(mockResponseBody);
-        MealsInTake mealsInTake = mealApiService.analyzeRecipe(testTitle, testIngredients);
+        MealsInTake mealsInTake = mealsIntakeApiService.analyzeRecipe(testTitle, testIngredients);
         assertNotNull(mealsInTake);
-        assertEquals(200, mealsInTake.getCalories());
+        assertEquals(500, mealsInTake.getCalories());
         assertEquals(300, mealsInTake.getTotalWeight());
+        assertEquals(2, mealsInTake.getMeals().size());
         assertNotNull(mealsInTake.getMeals());
 
     }

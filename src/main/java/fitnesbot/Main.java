@@ -6,7 +6,7 @@ import fitnesbot.bot.TelegramBot;
 import fitnesbot.out.*;
 import fitnesbot.bot.ConsoleBot;
 import fitnesbot.in.ConsoleInputService;
-import fitnesbot.repositories.InMemoryMealRepository;
+import fitnesbot.repositories.InMemoryMealsInTakeRepository;
 import fitnesbot.repositories.InMemoryUserRepository;
 import fitnesbot.services.*;
 import org.jetbrains.annotations.NotNull;
@@ -29,10 +29,10 @@ public class Main {
         Menu menu = new Menu();
         CalorieCountingService calorieCountingService = new CalorieCountingService();
         UserRepository userRepository = new InMemoryUserRepository();
-        MealRepository mealRepository = new InMemoryMealRepository();
+        MealsInTakeRepository mealsIntakeRepository = new InMemoryMealsInTakeRepository();
         if (platform == BotPlatform.CONSOLE || platform == BotPlatform.BOTH) {
             Thread consoleThread = new Thread(() -> {
-                ConsoleBot consoleBot = getConsoleBot(help, menu, calorieCountingService, userRepository, mealRepository);
+                ConsoleBot consoleBot = getConsoleBot(help, menu, calorieCountingService, userRepository, mealsIntakeRepository);
                 consoleBot.start();
             });
             consoleThread.start();
@@ -41,7 +41,7 @@ public class Main {
             Thread telegramThread = new Thread(() -> {
                 try {
                     TelegramBot telegramBot = getTelegramBot(help, menu, calorieCountingService,
-                                                             userRepository, mealRepository);
+                            userRepository, mealsIntakeRepository);
                     TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
                     telegramBotsApi.registerBot(telegramBot);
 
@@ -59,9 +59,9 @@ public class Main {
     @NotNull
     private static TelegramBot getTelegramBot(Help help, Menu menu,
                                               CalorieCountingService calorieCountingService,
-                                              UserRepository userRepository, MealRepository mealRepository) {
+                                              UserRepository userRepository, MealsInTakeRepository mealsIntakeRepository) {
         UserService userService = new UserService(userRepository);
-        MealService mealService = new MealService(mealRepository);
+        MealsInTakeService mealService = new MealsInTakeService(mealsIntakeRepository);
         CommandHandler commandHandler = new CommandHandler(help, menu,
                 calorieCountingService,
                 userService, mealService);
@@ -71,11 +71,11 @@ public class Main {
     @NotNull
     private static ConsoleBot getConsoleBot(Help help, Menu menu,
                                             CalorieCountingService calorieCountingService,
-                                            UserRepository userRepository, MealRepository mealRepository) {
+                                            UserRepository userRepository, MealsInTakeRepository mealsIntakeRepository) {
         ConsoleInputService consoleInputService = new ConsoleInputService();
         ConsoleOutputService consoleOutputService = new ConsoleOutputService();
         UserService userService = new UserService(userRepository);
-        MealService mealService = new MealService(mealRepository);
+        MealsInTakeService mealService = new MealsInTakeService(mealsIntakeRepository);
         CommandHandler commandHandler = new CommandHandler(help, menu,
                 calorieCountingService,
                 userService, mealService);

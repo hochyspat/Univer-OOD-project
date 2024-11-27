@@ -1,7 +1,6 @@
 package fitnesbot.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,12 +14,14 @@ public class MealsInTake {
 
     private double totalWeight;
     private double calories;
+    private boolean deleted;
     private List<ParsedMeal> meals;
 
     public MealsInTake(double totalWeight, double calories, List<ParsedMeal> meals) {
         this.totalWeight = totalWeight;
         this.calories = calories;
         this.meals = meals;
+        this.deleted = false;
     }
 
     public MealsInTake() {
@@ -51,6 +52,13 @@ public class MealsInTake {
 
     public void setTotalWeight(double totalWeight) {
         this.totalWeight = totalWeight;
+    }
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted() {
+        this.deleted = true;
     }
 
     @Override

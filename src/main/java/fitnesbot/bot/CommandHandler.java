@@ -14,19 +14,19 @@ public class CommandHandler {
     private final UserService userService;
     private final Help help;
     private final Menu menu;
-    private final MealApiService mealApiService;
-    private final MealService mealService;
+    private final MealsInTakeApiService mealsIntakeApiService;
+    private final MealsInTakeService mealService;
 
     public CommandHandler(Help help, Menu menu,
                           CalorieCountingService caloriesService,
-                          UserService userService, MealService mealService) {
+                          UserService userService, MealsInTakeService mealService) {
         this.help = help;
         this.menu = menu;
         this.calorieService = caloriesService;
         this.userService = userService;
         this.mealService = mealService;
         MealApiConfig mealapiConfig = new MealApiConfig();
-        this.mealApiService = new MealApiService(mealapiConfig.getMealApiId(),
+        this.mealsIntakeApiService = new MealsInTakeApiService(mealapiConfig.getMealApiId(),
                 mealapiConfig.getMealApikey());
     }
 
@@ -61,7 +61,7 @@ public class CommandHandler {
                             "[название] [ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
                 }
                 try {
-                    MealsInTake analyseMeal = mealApiService.analyzeRecipe("intake meal", args);
+                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe("intake meal", args);
                     if (analyseMeal == null) {
                         return new MessageOutputData(
                                 new InputIngredientsError().getErrorMessage(), chatId);
@@ -77,8 +77,8 @@ public class CommandHandler {
                     return new MessageOutputData(new InvalidNumberOfArgumentsError(
                             "getMeal", "[дата]", "[название]").getErrorMessage(), chatId);
                 }
-
-                return mealService.getMeal(args[0], args[1], chatId);
+                MealsInTake mealsInTake =  mealService.getMealsInTake(args[0], args[1], chatId);
+                return new MessageOutputData(processedRequest(mealsInTake, args[1]), chatId);
 
             case "addMeal": //addMeal завтрак 100 gram rice,1 cup tea,200 ml milk
                 if (args.length < 1) {
@@ -87,14 +87,13 @@ public class CommandHandler {
                 }
                 try {
                     String mealType = command.parseArgsInfo();
-                    System.out.println(mealType);
-                    MealsInTake analyseMeal = mealApiService.analyzeRecipe(mealType, args);
+                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe(mealType, args);
                     if (analyseMeal == null) {
                         return new MessageOutputData(
                                 new InputIngredientsError().getErrorMessage(), chatId);
                     }
 
-                    return mealService.addMeal(analyseMeal, chatId, mealType);
+                    return mealService.saveMealIntake(analyseMeal, chatId, mealType);
                 } catch (Exception e) {
                     System.out.println("Невозможно записать в дневник");
                 }

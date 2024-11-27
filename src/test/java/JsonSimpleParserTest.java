@@ -94,6 +94,7 @@ public class JsonSimpleParserTest {
                 "  ]\n" +
                 "}";
         String expected = "{\n" +
+                "  \"deleted\" : false,\n" +
                 "  \"totalWeight\" : 543.2655384812423,\n" +
                 "  \"calories\" : 488.0,\n" +
                 "  \"ingredients\" : [ {\n" +
