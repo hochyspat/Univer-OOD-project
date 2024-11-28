@@ -6,14 +6,14 @@ import java.util.Map;
 
 
 public interface MealsInTakeRepository {
-    void save(MealsInTake mealInTake, long chatId, String date, String mealType);
+    void save(MealsInTake mealInTake, long chatId, String date, MealType mealType);
 
-    MealsInTake findByMealsInTakeType(String mealType, String date, long chatId);
+    MealsInTake findByMealsInTakeType(MealType mealType, String date, long chatId);
 
-    Map<String, Map<String, MealsInTake>> findDiaryByChatId(long chatId);
+    Map<String, Map<MealType, MealsInTake>> findDiaryByChatId(long chatId);
 
-    Map<String, MealsInTake> findByDate(long chatId, String data);
+    Map<MealType, MealsInTake> findByDate(long chatId, String data);
 
-    void deleteMealType(String mealType, String date, long chatId);
+    void deleteMealType(MealType mealType, String date, long chatId);
 
 }

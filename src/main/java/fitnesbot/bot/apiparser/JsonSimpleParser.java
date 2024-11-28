@@ -8,16 +8,9 @@ import java.io.IOException;
 
 
 public class JsonSimpleParser {
+    private final ObjectMapper objectMapper = new ObjectMapper().configure(
+            DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     public MealsInTake parseToIntake(String analyseMeals) {
-        ObjectMapper objectMapper = new ObjectMapper().configure(
-                DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        //вывод для себя
-            /*for (Map.Entry<String, Nutrient> entry : meal.totalNutrients().entrySet()) {
-                String nutrientName = entry.getKey();
-                Nutrient nutrient = entry.getValue();
-                System.out.println(nutrientName + ": " +
-                 nutrient.getQuantity() + " " + nutrient.getUnit());
-            }*/
         try {
             return objectMapper.readValue(analyseMeals, MealsInTake.class);
         } catch (IOException e) {

@@ -28,118 +28,116 @@ public class JsonSimpleParserTest {
 
     @Test
     public void parseToIntake_valid_returnsMealsIntake() throws JsonProcessingException {
-        String test = "{\n" +
-                "  \"calories\": 488,\n" +
-                "  \"totalWeight\": 543.2655384812423,\n" +
-                "  \"ingredients\": [\n" +
-                "    {\n" +
-                "      \"parsed\": [{\n" +
-                "        \n" +
-                "          \"quantity\": 100,\n" +
-                "          \"measure\": \"gram\",\n" +
-                "          \"retainedWeight\": 100,\n" +
-                "          \"foodId\": \"food_bpumdjzb5rtqaeabb0kbgbcgr4t9\",\n" +
-                "          \"weight\": 100,\n" +
-                "          \"foodMatch\": \"rice\",\n" +
-                "          \"food\": \"rice\",\n" +
-                "          \"measureURI\": " +
-                "\"http://www.edamam.com/ontologies/edamam.owl#Measure_gram\",\n" +
-                "          \"nutrients\": {\n" +
-                "            \"VITB6A\": {\n" +
-                "              \"unit\": \"mg\",\n" +
-                "              \"quantity\": 0.145,\n" +
-                "              \"label\": \"Vitamin B-6\"\n" +
-                "            },\n" +
-                "            \"FE\": {\n" +
-                "              \"unit\": \"g\",\n" +
-                "              \"quantity\": 0.8,\n" +
-                "              \"label\": \"Iron, Fe\"\n" +
-                "            }\n" +
-                "          },\n" +
-                "          \"status\": \"OK\"\n" +
-                "        }],\n" +
-                "      \n" +
-                "      \"text\": \"100 gram rice\"\n" +
-                "    },\n" +
-                "    \n" +
-                "    {\n" +
-                "       \"parsed\" :  [\n" +
-                "        {\n" +
-                "          \"quantity\": 200,\n" +
-                "          \"measure\": \"gram\",\n" +
-                "          \"retainedWeight\": 200,\n" +
-                "          \"foodId\": \"food_bpumdjzb5rtqaeabb0kbgbcgr4t10\",\n" +
-                "          \"weight\": 200,\n" +
-                "          \"foodMatch\": \"chicken\",\n" +
-                "          \"food\": \"chicken\",\n" +
-                "          \"measureURI\": " +
-                "\"http://www.edamam.com/ontologies/edamam.owl#Measure_gram\",\n" +
-                "          \"nutrients\": {\n" +
-                "            \"VITB6A\": {\n" +
-                "              \"unit\": \"mg\",\n" +
-                "              \"quantity\": 0.200,\n" +
-                "              \"label\": \"Vitamin B-6\"\n" +
-                "            },\n" +
-                "            \"FE\": {\n" +
-                "              \"unit\": \"mg\",\n" +
-                "              \"quantity\": 1.2,\n" +
-                "              \"label\": \"Iron, Fe\"\n" +
-                "            }\n" +
-                "          },\n" +
-                "          \"status\": \"OK\"\n" +
-                "        }\n" +
-                "       ],\n" +
-                "       \"text\" : \"200 gram chicken\"\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
-        String expected = "{\n" +
-                "  \"deleted\" : false,\n" +
-                "  \"totalWeight\" : 543.2655384812423,\n" +
-                "  \"calories\" : 488.0,\n" +
-                "  \"ingredients\" : [ {\n" +
-                "    \"parsed\" : [ {\n" +
-                "      \"foodMatch\" : \"rice\",\n" +
-                "      \"weight\" : 100.0,\n" +
-                "      \"nutrients\" : {\n" +
-                "        \"VITB6A\" : {\n" +
-                "          \"unit\" : \"MG\",\n" +
-                "          \"quantity\" : 0.145,\n" +
-                "          \"label\" : \"Vitamin B-6\"\n" +
-                "        },\n" +
-                "        \"FE\" : {\n" +
-                "          \"unit\" : \"GRAM\",\n" +
-                "          \"quantity\" : 0.8,\n" +
-                "          \"label\" : \"Iron, Fe\"\n" +
-                "        }\n" +
-                "      }\n" +
-                "    } ],\n" +
-                "    \"text\" : \"100 gram rice\"\n" +
-                "  }, {\n" +
-                "    \"parsed\" : [ {\n" +
-                "      \"foodMatch\" : \"chicken\",\n" +
-                "      \"weight\" : 200.0,\n" +
-                "      \"nutrients\" : {\n" +
-                "        \"VITB6A\" : {\n" +
-                "          \"unit\" : \"MG\",\n" +
-                "          \"quantity\" : 0.2,\n" +
-                "          \"label\" : \"Vitamin B-6\"\n" +
-                "        },\n" +
-                "        \"FE\" : {\n" +
-                "          \"unit\" : \"MG\",\n" +
-                "          \"quantity\" : 1.2,\n" +
-                "          \"label\" : \"Iron, Fe\"\n" +
-                "        }\n" +
-                "      }\n" +
-                "    } ],\n" +
-                "    \"text\" : \"200 gram chicken\"\n" +
-                "  } ]\n" +
-                "}";
+
+       String test = """
+        {
+          "calories": 488,
+          "totalWeight": 543.2655384812423,
+          "ingredients": [
+            {
+              "parsed": [{
+                "quantity": 100,
+                "measure": "gram",
+                "retainedWeight": 100,
+                "foodId": "food_bpumdjzb5rtqaeabb0kbgbcgr4t9",
+                "weight": 100,
+                "foodMatch": "rice",
+                "food": "rice",
+                "measureURI": "http://www.edamam.com/ontologies/edamam.owl#Measure_gram",
+                "nutrients": {
+                  "VITB6A": {
+                    "unit": "mg",
+                    "quantity": 0.145,
+                    "label": "Vitamin B-6"
+                  },
+                  "FE": {
+                    "unit": "g",
+                    "quantity": 0.8,
+                    "label": "Iron, Fe"
+                  }
+                },
+                "status": "OK"
+              }],
+              "text": "100 gram rice"
+            },
+            {
+              "parsed": [{
+                "quantity": 200,
+                "measure": "gram",
+                "retainedWeight": 200,
+                "foodId": "food_bpumdjzb5rtqaeabb0kbgbcgr4t10",
+                "weight": 200,
+                "foodMatch": "chicken",
+                "food": "chicken",
+                "measureURI": "http://www.edamam.com/ontologies/edamam.owl#Measure_gram",
+                "nutrients": {
+                  "VITB6A": {
+                    "unit": "mg",
+                    "quantity": 0.200,
+                    "label": "Vitamin B-6"
+                  },
+                  "FE": {
+                    "unit": "mg",
+                    "quantity": 1.2,
+                    "label": "Iron, Fe"
+                  }
+                },
+                "status": "OK"
+              }],
+              "text": "200 gram chicken"
+            }
+          ]
+        }
+        """;
+       String expected =  """
+               {
+                 "deleted" : false,
+                 "totalWeight" : 543.2655384812423,
+                 "calories" : 488.0,
+                 "ingredients" : [ {
+                   "parsed" : [ {
+                     "foodMatch" : "rice",
+                     "weight" : 100.0,
+                     "nutrients" : {
+                       "VITB6A" : {
+                         "unit" : "MG",
+                         "quantity" : 0.145,
+                         "label" : "Vitamin B-6"
+                       },
+                       "FE" : {
+                         "unit" : "GRAM",
+                         "quantity" : 0.8,
+                         "label" : "Iron, Fe"
+                       }
+                     }
+                   } ],
+                   "text" : "100 gram rice"
+                 }, {
+                   "parsed" : [ {
+                     "foodMatch" : "chicken",
+                     "weight" : 200.0,
+                     "nutrients" : {
+                       "VITB6A" : {
+                         "unit" : "MG",
+                         "quantity" : 0.2,
+                         "label" : "Vitamin B-6"
+                       },
+                       "FE" : {
+                         "unit" : "MG",
+                         "quantity" : 1.2,
+                         "label" : "Iron, Fe"
+                       }
+                     }
+                   } ],
+                   "text" : "200 gram chicken"
+                 } ]
+               }""";
+
         MealsInTake mealsInTake = parser.parseToIntake(test);
         assertNotNull(mealsInTake);
         assertNotNull(mealsInTake.getMeals());
-        String actual = mealsInTake.toString().replace("\r\n", "\n");
-        expected = expected.replace("\r\n", "\n");
+        String actual = mealsInTake.toString().replace("\r\n","\n");
+        System.out.println(actual);
         assertEquals(expected, actual);
 
     }
@@ -147,8 +145,11 @@ public class JsonSimpleParserTest {
     @Test
     void parseToIntake_invalid_returnsNull() throws JsonProcessingException {
         String json = "Some wrong file";
-        MealsInTake mealsInTake = parser.parseToIntake(json);
-        assertNull(mealsInTake);
+        final MealsInTake[] mealsInTake = {null};
+        assertDoesNotThrow(() -> {
+            mealsInTake[0] = parser.parseToIntake(json);
+        });
+        assertNull(mealsInTake[0]);
     }
 
 

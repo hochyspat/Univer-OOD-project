@@ -4,29 +4,30 @@ import fitnesbot.exeptions.MealInTakeErrors.MealsInTakeAlreadyDeletedError;
 import fitnesbot.exeptions.MealInTakeErrors.MealsInTakeNotFoundError;
 import fitnesbot.exeptions.MealInTakeErrors.UserDiaryNotFoundError;
 import fitnesbot.models.MealsInTake;
+import fitnesbot.services.MealType;
 import fitnesbot.services.MealsInTakeRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryMealsInTakeRepository implements MealsInTakeRepository {
-    private final Map<Long, Map<String, Map<String, MealsInTake>>> usersDiary = new HashMap<>();
+    private final Map<Long, Map<String, Map<MealType, MealsInTake>>> usersDiary = new HashMap<>();
 
 
     @Override
-    public void save(MealsInTake mealInTake, long chatId, String date, String mealType) {
-        Map<String, MealsInTake> mapByName = new HashMap<>();
+    public void save(MealsInTake mealInTake, long chatId, String date, MealType mealType) {
+        Map<MealType, MealsInTake> mapByName = new HashMap<>();
         mapByName.put(mealType, mealInTake);
-        Map<String, Map<String, MealsInTake>> mapByData = new HashMap<>();
+        Map<String, Map<MealType, MealsInTake>> mapByData = new HashMap<>();
         mapByData.put(date, mapByName);
         usersDiary.put(chatId, mapByData);
     }
 
     @Override
-    public MealsInTake findByMealsInTakeType(String mealType, String date, long chatId) {
-        Map<String, Map<String, MealsInTake>> userDiaryData = usersDiary.get(chatId);
+    public MealsInTake findByMealsInTakeType(MealType mealType, String date, long chatId) {
+        Map<String, Map<MealType, MealsInTake>> userDiaryData = usersDiary.get(chatId);
         if (userDiaryData != null) {
-            Map<String, MealsInTake> mealsByDate = userDiaryData.get(date);
+            Map<MealType, MealsInTake> mealsByDate = userDiaryData.get(date);
             if (mealsByDate != null) {
                 MealsInTake meal = mealsByDate.get(mealType);
                 if (meal != null && !meal.isDeleted()) {
@@ -46,8 +47,8 @@ public class InMemoryMealsInTakeRepository implements MealsInTakeRepository {
     }
 
     @Override
-    public Map<String, Map<String, MealsInTake>> findDiaryByChatId(long chatId) {
-        Map<String, Map<String, MealsInTake>> userMealsData = usersDiary.get(chatId);
+    public Map<String, Map<MealType, MealsInTake>> findDiaryByChatId(long chatId) {
+        Map<String, Map<MealType, MealsInTake>> userMealsData = usersDiary.get(chatId);
         if (userMealsData != null) {
             return userMealsData;
         } else {
@@ -57,10 +58,10 @@ public class InMemoryMealsInTakeRepository implements MealsInTakeRepository {
     }
 
     @Override
-    public Map<String, MealsInTake> findByDate(long chatId, String data) {
-        Map<String, Map<String, MealsInTake>> userMealsData = usersDiary.get(chatId);
+    public Map<MealType, MealsInTake> findByDate(long chatId, String data) {
+        Map<String, Map<MealType, MealsInTake>> userMealsData = usersDiary.get(chatId);
         if (userMealsData != null) {
-            Map<String, MealsInTake> mealsByDate = userMealsData.get(data);
+            Map<MealType, MealsInTake> mealsByDate = userMealsData.get(data);
             if (mealsByDate != null) {
                 return mealsByDate;
             } else {
@@ -75,10 +76,10 @@ public class InMemoryMealsInTakeRepository implements MealsInTakeRepository {
 
 
     @Override
-    public void deleteMealType(String mealType, String date, long chatId) {
-        Map<String, Map<String, MealsInTake>> userDiary = usersDiary.get(chatId);
+    public void deleteMealType(MealType mealType, String date, long chatId) {
+        Map<String, Map<MealType, MealsInTake>> userDiary = usersDiary.get(chatId);
         if (userDiary != null) {
-            Map<String, MealsInTake> mealsByDate = userDiary.get(date);
+            Map<MealType, MealsInTake> mealsByDate = userDiary.get(date);
             if (mealsByDate != null) {
                 MealsInTake meal = mealsByDate.get(mealType);
                 meal.setDeleted();

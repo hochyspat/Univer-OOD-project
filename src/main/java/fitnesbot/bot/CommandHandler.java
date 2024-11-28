@@ -77,7 +77,8 @@ public class CommandHandler {
                     return new MessageOutputData(new InvalidNumberOfArgumentsError(
                             "getMeal", "[дата]", "[название]").getErrorMessage(), chatId);
                 }
-                MealsInTake mealsInTake =  mealService.getMealsInTake(args[0], args[1], chatId);
+                MealType mealType = MealType.fromString(args[1]);
+                MealsInTake mealsInTake =  mealService.getMealsInTake(args[0], mealType, chatId);
                 return new MessageOutputData(processedRequest(mealsInTake, args[1]), chatId);
 
             case "addMeal": //addMeal завтрак 100 gram rice,1 cup tea,200 ml milk
@@ -86,14 +87,19 @@ public class CommandHandler {
                             "[название] [ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
                 }
                 try {
-                    String mealType = command.parseArgsInfo();
-                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe(mealType, args);
+                    String mealTypeFromArgs = command.parseArgsInfo();
+                    MealType mealTypeAddMeal = MealType.fromString(mealTypeFromArgs);
+                    if (mealTypeAddMeal == null){
+                        return new MessageOutputData("Неверный тип приема пищи."
+                                + "Возможные названия: Завтрак,Обед,Ужин,Перекус",chatId);
+                    }
+                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe(mealTypeFromArgs, args);
                     if (analyseMeal == null) {
                         return new MessageOutputData(
                                 new InputIngredientsError().getErrorMessage(), chatId);
                     }
 
-                    return mealService.saveMealIntake(analyseMeal, chatId, mealType);
+                    return mealService.saveMealIntake(analyseMeal, chatId, mealTypeAddMeal);
                 } catch (Exception e) {
                     System.out.println("Невозможно записать в дневник");
                 }

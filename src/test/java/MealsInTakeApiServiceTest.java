@@ -1,4 +1,5 @@
 
+import fitnesbot.models.Meal;
 import fitnesbot.models.MealsInTake;
 import fitnesbot.services.MealsInTakeApiService;
 import org.json.JSONArray;
@@ -14,6 +15,8 @@ import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -58,7 +61,7 @@ public class MealsInTakeApiServiceTest {
                         {
                           "quantity": 100,
                           "measure": "gram",
-                          "food": "rice",
+                          "foodMatch": "rice",
                           "calories": 300
                         }
                       ],
@@ -69,7 +72,7 @@ public class MealsInTakeApiServiceTest {
                         {
                           "quantity": 200,
                           "measure": "ml",
-                          "food": "milk",
+                          "foodMatch": "milk",
                           "calories": 200
                         }
                       ],
@@ -88,6 +91,9 @@ public class MealsInTakeApiServiceTest {
         assertEquals(300, mealsInTake.getTotalWeight());
         assertEquals(2, mealsInTake.getMeals().size());
         assertNotNull(mealsInTake.getMeals());
+        Meal meal1 = new Meal(100,new HashMap<>(),"rice");
+        Meal meal2 = new Meal(200,new HashMap<>(),"milk");
+        assertEquals(meal1,mealsInTake.getMeals().get(0).getParsedMeals().get(0));
 
     }
 

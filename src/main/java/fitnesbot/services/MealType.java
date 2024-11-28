@@ -1,19 +1,34 @@
 package fitnesbot.services;
 
 public enum MealType {
-    BREAKFAST,
-    LUNCH,
-    DINNER,
-    SNACK,
-    INTAKE;
+    BREAKFAST("завтрак"),
+    LUNCH("обед"),
+    DINNER("ужин"),
+    SNACK("перекус");
+
+    private final String mealType;
+
+    MealType(String mealType ) {
+        this.mealType = mealType;
+    }
+
+    public String getMealType() {
+        return mealType;
+    }
 
     public static MealType fromString(String mealType) {
         for (MealType type : MealType.values()) {
-            if (type.name().equalsIgnoreCase(mealType)) {
+            mealType = mealType.toLowerCase();
+            if (type.getMealType().equals(mealType)){
                 return type;
             }
+            else {
+                System.out.println("Incorrect MealType");
+                return null;
+
+            }
         }
-        throw new IllegalStateException("Unexpected value: " + mealType);
+        return null;
     }
 
 }
