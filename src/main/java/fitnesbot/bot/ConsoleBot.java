@@ -1,6 +1,5 @@
 package fitnesbot.bot;
 
-import fitnesbot.bot.apiparser.JsonSimpleParser;
 import fitnesbot.exeptions.CommandErrors.InvalidCommandError;
 import fitnesbot.in.ConsoleInputService;
 import fitnesbot.in.InputService;

@@ -8,7 +8,7 @@ public enum MealType {
 
     private final String mealType;
 
-    MealType(String mealType ) {
+    MealType(String mealType) {
         this.mealType = mealType;
     }
 
@@ -19,10 +19,9 @@ public enum MealType {
     public static MealType fromString(String mealType) {
         for (MealType type : MealType.values()) {
             mealType = mealType.toLowerCase();
-            if (type.getMealType().equals(mealType)){
+            if (type.getMealType().equals(mealType)) {
                 return type;
-            }
-            else {
+            } else {
                 System.out.println("Incorrect MealType");
                 return null;
 

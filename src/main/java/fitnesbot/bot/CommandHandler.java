@@ -5,8 +5,18 @@ import fitnesbot.exeptions.CommandErrors.InvalidCommandError;
 import fitnesbot.exeptions.CommandErrors.InvalidNumberOfArgumentsError;
 import fitnesbot.exeptions.UserErrors.NonExistenceUserError;
 import fitnesbot.exeptions.apiErrors.InputIngredientsError;
-import fitnesbot.models.*;
-import fitnesbot.services.*;
+import fitnesbot.models.User;
+import fitnesbot.models.MealsInTake;
+import fitnesbot.models.ParsedMeal;
+import fitnesbot.models.Nutrient;
+import fitnesbot.models.Meal;
+import fitnesbot.services.Help;
+import fitnesbot.services.MealsInTakeApiService;
+import fitnesbot.services.Menu;
+import fitnesbot.services.UserService;
+import fitnesbot.services.MealsInTakeService;
+import fitnesbot.services.CalorieCountingService;
+import fitnesbot.services.MealType;
 
 
 public class CommandHandler {
@@ -54,7 +64,6 @@ public class CommandHandler {
                             "[рост]", "[вес]").getErrorMessage(), chatId);
                 }
                 return userService.registerUser(args[0], args[1], args[2], args[3], chatId);
-
             case "learnMeal"://например learnMeal 100 gram rice,1 cup tea,200 ml milk
                 if (args.length < 1) {
                     return new MessageOutputData(new InvalidNumberOfArgumentsError("addMeal",
@@ -71,7 +80,6 @@ public class CommandHandler {
                 } catch (Exception e) {
                     System.out.println("Невозможно сделать анализ");
                 }
-
             case "getMeal": // getMeal 27.11.2024 завтрак
                 if (args.length != 2) {
                     return new MessageOutputData(new InvalidNumberOfArgumentsError(
@@ -103,7 +111,6 @@ public class CommandHandler {
                 } catch (Exception e) {
                     System.out.println("Невозможно записать в дневник");
                 }
-
             case "/mycalories":
                 User user = userService.getUser(chatId);
                 if (user == null) {

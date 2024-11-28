@@ -16,7 +16,7 @@ public record Command(String command, String[] args) {
             "getMeal"
     );
 
-    public String parseArgsInfo(){
+    public String parseArgsInfo() {
         int firstSpaceIndex = args[0].indexOf(" ");
         return args[0].substring(0, firstSpaceIndex);
     }
@@ -34,8 +34,7 @@ public record Command(String command, String[] args) {
         if (commandData.contains(",")) {
             return commandData.substring(commandData.indexOf(' ') + 1).trim().split(
                     ",\\s*");
-        }
-        else if (commandData.contains(" ")) {
+        } else if (commandData.contains(" ")) {
             return commandData.substring(commandData.indexOf(' ') + 1).trim().split(
                     "\\s+");
         } else {
