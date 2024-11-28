@@ -1,6 +1,7 @@
 
 import fitnesbot.models.Meal;
 import fitnesbot.models.MealsInTake;
+import fitnesbot.models.ParsedMeal;
 import fitnesbot.services.MealsInTakeApiService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,7 +60,7 @@ public class MealsInTakeApiServiceTest {
                     {
                       "parsed": [
                         {
-                          "quantity": 100,
+                          "weight": 100,
                           "measure": "gram",
                           "foodMatch": "rice",
                           "calories": 300
@@ -70,7 +71,7 @@ public class MealsInTakeApiServiceTest {
                     {
                       "parsed": [
                         {
-                          "quantity": 200,
+                          "weight": 200,
                           "measure": "ml",
                           "foodMatch": "milk",
                           "calories": 200
@@ -93,8 +94,11 @@ public class MealsInTakeApiServiceTest {
         assertNotNull(mealsInTake.getMeals());
         Meal meal1 = new Meal(100,new HashMap<>(),"rice");
         Meal meal2 = new Meal(200,new HashMap<>(),"milk");
-        assertEquals(meal1,mealsInTake.getMeals().get(0).getParsedMeals().get(0));
-
+        assertEquals(meal1.getNameMeal(),mealsInTake.getMeals().get(0).getParsedMeals().get(0).getNameMeal());
+        assertEquals(meal2.getNameMeal(),mealsInTake.getMeals().get(1).getParsedMeals().get(0).getNameMeal());
+        System.out.println(mealsInTake.getMeals().get(1).getParsedMeals().get(0).getWeight());
+        assertEquals(meal1.getWeight(),mealsInTake.getMeals().get(0).getParsedMeals().get(0).getWeight());
+        assertEquals(meal2.getWeight(),mealsInTake.getMeals().get(1).getParsedMeals().get(0).getWeight());
     }
 
 
