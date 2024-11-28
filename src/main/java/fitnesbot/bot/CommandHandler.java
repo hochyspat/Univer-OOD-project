@@ -4,7 +4,7 @@ import fitnesbot.config.MealApiConfig;
 import fitnesbot.exeptions.commanderrors.InvalidCommandError;
 import fitnesbot.exeptions.commanderrors.InvalidNumberOfArgumentsError;
 import fitnesbot.exeptions.usererrors.NonExistenceUserError;
-import fitnesbot.exeptions.apiErrors.InputIngredientsError;
+import fitnesbot.exeptions.apierrors.InputIngredientsError;
 import fitnesbot.models.User;
 import fitnesbot.models.MealsInTake;
 import fitnesbot.models.ParsedMeal;

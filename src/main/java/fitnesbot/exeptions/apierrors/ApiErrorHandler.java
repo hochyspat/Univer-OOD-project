@@ -1,12 +1,12 @@
-package fitnesbot.exeptions.apiErrors;
+package fitnesbot.exeptions.apierrors;
 
 
 public class ApiErrorHandler {
-    private final static int NOT_MODIFIED = 304;
-    private final static int NOT_FOUND = 404;
-    private final static int E_TAG_TOKEN = 409;
-    private final static int UNPROCESSABLE_ENTITY = 422;
-    private final static int INVALID_RECIPE = 555;
+    private static final int NOT_MODIFIED = 304;
+    private static final int NOT_FOUND = 404;
+    private static final int E_TAG_TOKEN = 409;
+    private static final int UNPROCESSABLE_ENTITY = 422;
+    private static final int INVALID_RECIPE = 555;
 
     public String errorHandler(int errorCode) {
         return switch (errorCode) {

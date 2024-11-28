@@ -7,7 +7,7 @@ import fitnesbot.out.ConsoleOutputService;
 import fitnesbot.out.OutputService;
 
 public class ConsoleBot {
-    private final static long CHAT_ID = 12345;
+    private static final long CHAT_ID = 12345;
     private final CommandHandler commandHandler;
     private final InputService inputService;
     private final OutputService outputService;

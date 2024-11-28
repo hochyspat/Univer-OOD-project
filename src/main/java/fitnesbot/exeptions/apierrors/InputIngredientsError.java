@@ -1,4 +1,4 @@
-package fitnesbot.exeptions.apiErrors;
+package fitnesbot.exeptions.apierrors;
 
 public class InputIngredientsError extends ApiErrors {
 

@@ -7,7 +7,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
 import fitnesbot.bot.apiparser.JsonSimpleParser;
-import fitnesbot.exeptions.apiErrors.ApiErrorHandler;
+import fitnesbot.exeptions.apierrors.ApiErrorHandler;
 import fitnesbot.models.MealsInTake;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -17,7 +17,7 @@ public class MealsInTakeApiService {
     private final String appId;
     private final String appKey;
     private final JsonSimpleParser parser = new JsonSimpleParser();
-    private final String apiUrl = "https://api.edamam.com/api/nutrition-details";
+    private static final String apiUrl = "https://api.edamam.com/api/nutrition-details";
 
 
     public MealsInTakeApiService(String appId, String appKey) {
