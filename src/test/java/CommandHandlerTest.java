@@ -1,7 +1,17 @@
-import fitnesbot.bot.*;
+import fitnesbot.bot.Command;
+import fitnesbot.bot.CommandHandler;
+import fitnesbot.bot.MessageCommandData;
+import fitnesbot.bot.MessageOutputData;
 import fitnesbot.models.User;
 import fitnesbot.repositories.InMemoryUserRepository;
-import fitnesbot.services.*;
+
+import fitnesbot.services.CalorieCountingService;
+import fitnesbot.services.Help;
+import fitnesbot.services.MealsInTakeRepository;
+import fitnesbot.services.MealsInTakeService;
+import fitnesbot.services.Menu;
+import fitnesbot.services.UserRepository;
+import fitnesbot.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +33,8 @@ public class CommandHandlerTest {
         userService = new UserService(userRepository);
         mealService = new MealsInTakeService(mealsIntakeRepository);
 
-        commandHandler = new CommandHandler(new Help(), new Menu(), calorieService, userService, mealService);
+        commandHandler = new CommandHandler(new Help(), new Menu(),
+                calorieService, userService, mealService);
     }
 
 
@@ -32,14 +43,14 @@ public class CommandHandlerTest {
         Command command = new Command("addUser Alice 19 171 58");
         MessageOutputData outputData = commandHandler.handleMessage(
                 new MessageCommandData(command, 12345L));
+        assertEquals("Отлично! Пользователь добавлен. Введи /help для справки "
+                + "или /menu для выбора команд", outputData.messageData());
         User savedUser = userRepository.findById(12345L);
         assertNotNull(savedUser);
         assertEquals("Alice", savedUser.getName());
         assertEquals(19, savedUser.getAge());
         assertEquals(171, savedUser.getHeight());
         assertEquals(58, savedUser.getWeight());
-        assertEquals("Отлично! Пользователь добавлен. Введи /help для справки " +
-                "или /menu для выбора команд", outputData.messageData());
     }
 
     @Test
@@ -62,8 +73,8 @@ public class CommandHandlerTest {
         MessageOutputData outputData = commandHandler.handleMessage(
                 new MessageCommandData(command, 12345L));
         assertNull(userRepository.findById(12345L));
-        assertEquals("Неверное количество аргументов. " +
-                "Используйте addUser [имя] [возраст] [рост] [вес]", outputData.messageData());
+        assertEquals("Неверное количество аргументов. "
+                + "Используйте addUser [имя] [возраст] [рост] [вес]", outputData.messageData());
     }
 
     @Test

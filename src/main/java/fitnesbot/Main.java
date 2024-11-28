@@ -39,7 +39,10 @@ public class Main {
         MealsInTakeRepository mealsIntakeRepository = new InMemoryMealsInTakeRepository();
         if (platform == BotPlatform.CONSOLE || platform == BotPlatform.BOTH) {
             Thread consoleThread = new Thread(() -> {
-                ConsoleBot consoleBot = getConsoleBot(help, menu, calorieCountingService, userRepository, mealsIntakeRepository);
+                ConsoleBot consoleBot = getConsoleBot(
+                        help, menu, calorieCountingService,
+                        userRepository, mealsIntakeRepository
+                );
                 consoleBot.start();
             });
             consoleThread.start();
@@ -59,14 +62,13 @@ public class Main {
             telegramThread.start();
 
         }
-
-
     }
 
     @NotNull
-    private static TelegramBot getTelegramBot(Help help, Menu menu,
-                                              CalorieCountingService calorieCountingService,
-                                              UserRepository userRepository, MealsInTakeRepository mealsIntakeRepository) {
+    private static TelegramBot getTelegramBot(
+            Help help, Menu menu,
+            CalorieCountingService calorieCountingService,
+            UserRepository userRepository, MealsInTakeRepository mealsIntakeRepository) {
         UserService userService = new UserService(userRepository);
         MealsInTakeService mealService = new MealsInTakeService(mealsIntakeRepository);
         CommandHandler commandHandler = new CommandHandler(help, menu,
@@ -76,9 +78,11 @@ public class Main {
     }
 
     @NotNull
-    private static ConsoleBot getConsoleBot(Help help, Menu menu,
-                                            CalorieCountingService calorieCountingService,
-                                            UserRepository userRepository, MealsInTakeRepository mealsIntakeRepository) {
+    private static ConsoleBot getConsoleBot(
+            Help help, Menu menu,
+            CalorieCountingService calorieCountingService,
+            UserRepository userRepository,
+            MealsInTakeRepository mealsIntakeRepository) {
         ConsoleInputService consoleInputService = new ConsoleInputService();
         ConsoleOutputService consoleOutputService = new ConsoleOutputService();
         UserService userService = new UserService(userRepository);

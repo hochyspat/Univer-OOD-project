@@ -1,10 +1,12 @@
-import com.fasterxml.jackson.core.JsonProcessingException;
 import fitnesbot.bot.apiparser.JsonSimpleParser;
 import fitnesbot.models.MealsInTake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class JsonSimpleParserTest {
     private JsonSimpleParser parser;
@@ -15,7 +17,7 @@ public class JsonSimpleParserTest {
     }
 
     @Test
-    public void parseToIntake_valid_calories_totalWeight(){
+    public void parseToIntake_valid_calories_totalWeight() {
         String json = "{\"calories\": 200, \"totalWeight\": 300, \"ingredients\": []}";
 
         MealsInTake mealsInTake = parser.parseToIntake(json);
@@ -27,7 +29,7 @@ public class JsonSimpleParserTest {
     }
 
     @Test
-    public void parseToIntake_valid_returnsMealsIntake(){
+    public void parseToIntake_valid_returnsMealsIntake() {
 
         String test = """
                 {
@@ -137,7 +139,6 @@ public class JsonSimpleParserTest {
         assertNotNull(mealsInTake);
         assertNotNull(mealsInTake.getMeals());
         String actual = mealsInTake.toString().replace("\r\n", "\n");
-        System.out.println(actual);
         assertEquals(expected, actual);
 
     }
