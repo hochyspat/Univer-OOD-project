@@ -80,14 +80,16 @@ public class InMemoryMealsInTakeRepository implements MealsInTakeRepository {
         Map<String, Map<MealType, MealsInTake>> userDiary = usersDiary.get(chatId);
         if (userDiary != null) {
             Map<MealType, MealsInTake> mealsByDate = userDiary.get(date);
-            if (mealsByDate != null) {
-                MealsInTake meal = mealsByDate.get(mealType);
-                meal.setDeleted();
+            if (mealsByDate != null && mealsByDate.containsKey(mealType)) {
+                mealsByDate.remove(mealType);
+                if (mealsByDate.isEmpty()) {
+                    userDiary.remove(date);
+                }
             } else {
                 System.out.println(new MealsInTakeAlreadyDeletedError(mealType, date, chatId).getErrorMessage());
             }
+        } else {
+            System.out.println(new MealsInTakeAlreadyDeletedError(mealType, date, chatId).getErrorMessage());
         }
-
-
     }
 }

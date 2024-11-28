@@ -12,7 +12,7 @@ public class BotConfig {
     public BotConfig() {
         Properties properties = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(
-                           "application.properties")) {
+                "application.properties")) {
             if (input == null) {
                 System.out.println("файл конфигурации не найден.");
                 return;

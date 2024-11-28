@@ -28,19 +28,18 @@ public class ConsoleBot {
 
         while (true) {
             outputService.sendMessage(new MessageOutputData("Введите команду: ", CHAT_ID));
-            JsonSimpleParser parser = new JsonSimpleParser();
             String userRequest = inputService.read();
             Command command = new Command(userRequest);
             if (command.isValid()) {
                 MessageOutputData messageOutputData = commandHandler.handleMessage(
-                                  new MessageCommandData(command, CHAT_ID));
+                        new MessageCommandData(command, CHAT_ID));
                 outputService.sendMessage(messageOutputData);
                 if (command.isExit()) {
                     break;
                 }
             } else {
                 outputService.sendMessage(new MessageOutputData(
-                                          new InvalidCommandError().getErrorMessage(), CHAT_ID));
+                        new InvalidCommandError().getErrorMessage(), CHAT_ID));
             }
         }
     }

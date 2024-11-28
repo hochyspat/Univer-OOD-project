@@ -21,7 +21,7 @@ public class HelpTest {
     
             Чтобы выйти в меню введите "/menu"
             Для справки введите "/help"
-        """;
+            """;
 
 
         assertEquals(testHelp.getHelp(), expectedOutput);

@@ -1,7 +1,6 @@
 
 import fitnesbot.models.Meal;
 import fitnesbot.models.MealsInTake;
-import fitnesbot.models.ParsedMeal;
 import fitnesbot.services.MealsInTakeApiService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,7 +16,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -92,13 +90,13 @@ public class MealsInTakeApiServiceTest {
         assertEquals(300, mealsInTake.getTotalWeight());
         assertEquals(2, mealsInTake.getMeals().size());
         assertNotNull(mealsInTake.getMeals());
-        Meal meal1 = new Meal(100,new HashMap<>(),"rice");
-        Meal meal2 = new Meal(200,new HashMap<>(),"milk");
-        assertEquals(meal1.getNameMeal(),mealsInTake.getMeals().get(0).getParsedMeals().get(0).getNameMeal());
-        assertEquals(meal2.getNameMeal(),mealsInTake.getMeals().get(1).getParsedMeals().get(0).getNameMeal());
+        Meal meal1 = new Meal(100, new HashMap<>(), "rice");
+        Meal meal2 = new Meal(200, new HashMap<>(), "milk");
+        assertEquals(meal1.getNameMeal(), mealsInTake.getMeals().get(0).getParsedMeals().get(0).getNameMeal());
+        assertEquals(meal2.getNameMeal(), mealsInTake.getMeals().get(1).getParsedMeals().get(0).getNameMeal());
         System.out.println(mealsInTake.getMeals().get(1).getParsedMeals().get(0).getWeight());
-        assertEquals(meal1.getWeight(),mealsInTake.getMeals().get(0).getParsedMeals().get(0).getWeight());
-        assertEquals(meal2.getWeight(),mealsInTake.getMeals().get(1).getParsedMeals().get(0).getWeight());
+        assertEquals(meal1.getWeight(), mealsInTake.getMeals().get(0).getParsedMeals().get(0).getWeight());
+        assertEquals(meal2.getWeight(), mealsInTake.getMeals().get(1).getParsedMeals().get(0).getWeight());
     }
 
 

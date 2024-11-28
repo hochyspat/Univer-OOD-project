@@ -7,10 +7,12 @@ import java.util.List;
 
 public class ParsedMeal {
     private List<Meal> parsedMeals;
-    private String text ;
+    private String text;
+
     public ParsedMeal() {
 
     }
+
     public ParsedMeal(List<Meal> meal, String text) {
         this.parsedMeals = meal;
         this.text = text;

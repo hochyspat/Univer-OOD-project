@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 public class MealsInTakeService {
     private final MealsInTakeRepository mealsIntakeRepository;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
     public MealsInTakeService(MealsInTakeRepository mealsIntakeRepository) {
         this.mealsIntakeRepository = mealsIntakeRepository;
     }

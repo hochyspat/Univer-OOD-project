@@ -53,6 +53,7 @@ public class MealsInTake {
     public void setTotalWeight(double totalWeight) {
         this.totalWeight = totalWeight;
     }
+
     public boolean isDeleted() {
         return deleted;
     }

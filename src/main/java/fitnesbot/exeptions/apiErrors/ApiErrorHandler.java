@@ -8,7 +8,7 @@ public class ApiErrorHandler {
     private final int UNPROCESSABLE_ENTITY = 422;
     private final int INVALID_RECIPE = 555;
 
-    public String errorHandler(int errorCode){
+    public String errorHandler(int errorCode) {
         switch (errorCode) {
             case NOT_MODIFIED:
                 return "Not Modified";

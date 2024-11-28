@@ -35,7 +35,7 @@ public class TelegramBot extends TelegramLongPollingBot implements OutputService
             long chatId = update.getMessage().getChatId();
             Command command = new Command(messageText);
             MessageOutputData messageOutputData = commandHandler.handleMessage(
-                              new MessageCommandData(command, chatId));
+                    new MessageCommandData(command, chatId));
             if (messageOutputData != null && messageOutputData.messageData() != null) {
                 sendMessage(messageOutputData);
             }
@@ -47,7 +47,7 @@ public class TelegramBot extends TelegramLongPollingBot implements OutputService
     @Override
     public void sendMessage(MessageOutputData messageData) {
         SendMessage sendMessage = new SendMessage(String.valueOf(messageData.chatId()),
-                                                     messageData.messageData());
+                messageData.messageData());
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {

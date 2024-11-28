@@ -57,8 +57,9 @@ public class User {
 
 
     public String getInfo() {
-        String.format("Bvz %s", name);
-        return "Имя: " + name + "\nРост: " + height + " см\nВес: " + weight + " кг\nВозраст: " +
-                age + " лет";
+        return String.format(
+                "Имя: %s%nРост: %d см%nВес: %d кг%nВозраст: %d лет",
+                name, height, weight, age
+        );
     }
 }
