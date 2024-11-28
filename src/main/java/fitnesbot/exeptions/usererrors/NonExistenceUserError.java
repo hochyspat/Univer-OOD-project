@@ -1,4 +1,4 @@
-package fitnesbot.exeptions.UserErrors;
+package fitnesbot.exeptions.usererrors;
 
 public class NonExistenceUserError extends UserErrors {
     private final long userId;

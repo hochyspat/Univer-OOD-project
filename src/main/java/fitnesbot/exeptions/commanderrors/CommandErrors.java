@@ -1,4 +1,4 @@
-package fitnesbot.exeptions.CommandErrors;
+package fitnesbot.exeptions.commanderrors;
 
 public class CommandErrors {
     protected String message;

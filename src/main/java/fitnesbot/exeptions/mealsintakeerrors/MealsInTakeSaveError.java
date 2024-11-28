@@ -1,4 +1,4 @@
-package fitnesbot.exeptions.MealInTakeErrors;
+package fitnesbot.exeptions.mealsintakeerrors;
 
 public class MealsInTakeSaveError extends MealInTakeErrors {
     public MealsInTakeSaveError(String mealType, String date, long chatId) {

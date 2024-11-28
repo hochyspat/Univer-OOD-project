@@ -1,4 +1,4 @@
-package fitnesbot.exeptions.MealInTakeErrors;
+package fitnesbot.exeptions.mealsintakeerrors;
 
 public class MealInTakeErrors {
     protected String message;

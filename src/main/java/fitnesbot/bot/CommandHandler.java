@@ -1,9 +1,9 @@
 package fitnesbot.bot;
 
 import fitnesbot.config.MealApiConfig;
-import fitnesbot.exeptions.CommandErrors.InvalidCommandError;
-import fitnesbot.exeptions.CommandErrors.InvalidNumberOfArgumentsError;
-import fitnesbot.exeptions.UserErrors.NonExistenceUserError;
+import fitnesbot.exeptions.commanderrors.InvalidCommandError;
+import fitnesbot.exeptions.commanderrors.InvalidNumberOfArgumentsError;
+import fitnesbot.exeptions.usererrors.NonExistenceUserError;
 import fitnesbot.exeptions.apiErrors.InputIngredientsError;
 import fitnesbot.models.User;
 import fitnesbot.models.MealsInTake;
@@ -78,7 +78,8 @@ public class CommandHandler {
                     return new MessageOutputData(
                             processedRequest(analyseMeal, "intake meal"), chatId);
                 } catch (Exception e) {
-                    System.out.println("Невозможно сделать анализ");
+                    System.out.println("Невозможно сделать анализ" + e.getMessage());
+                    return new MessageOutputData("Невозможно сделать анализ", chatId);
                 }
             case "getMeal": // getMeal 27.11.2024 завтрак
                 if (args.length != 2) {
@@ -106,10 +107,10 @@ public class CommandHandler {
                         return new MessageOutputData(
                                 new InputIngredientsError().getErrorMessage(), chatId);
                     }
-
                     return mealService.saveMealIntake(analyseMeal, chatId, mealTypeAddMeal);
                 } catch (Exception e) {
-                    System.out.println("Невозможно записать в дневник");
+                    System.out.println("Невозможно записать в дневник" + e.getMessage());
+                    return new MessageOutputData("Произошла ощибка при записи в дневник", chatId);
                 }
             case "/mycalories":
                 User user = userService.getUser(chatId);

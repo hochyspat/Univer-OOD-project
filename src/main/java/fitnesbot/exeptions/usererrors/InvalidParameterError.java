@@ -1,4 +1,4 @@
-package fitnesbot.exeptions.UserErrors;
+package fitnesbot.exeptions.usererrors;
 
 public class InvalidParameterError extends UserErrors {
     public InvalidParameterError(String parameterName) {

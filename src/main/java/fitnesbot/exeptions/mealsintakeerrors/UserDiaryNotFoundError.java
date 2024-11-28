@@ -1,4 +1,4 @@
-package fitnesbot.exeptions.MealInTakeErrors;
+package fitnesbot.exeptions.mealsintakeerrors;
 
 public class UserDiaryNotFoundError extends MealInTakeErrors {
     public UserDiaryNotFoundError(long chatId) {

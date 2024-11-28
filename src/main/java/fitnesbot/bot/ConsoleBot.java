@@ -1,13 +1,13 @@
 package fitnesbot.bot;
 
-import fitnesbot.exeptions.CommandErrors.InvalidCommandError;
+import fitnesbot.exeptions.commanderrors.InvalidCommandError;
 import fitnesbot.in.ConsoleInputService;
 import fitnesbot.in.InputService;
 import fitnesbot.out.ConsoleOutputService;
 import fitnesbot.out.OutputService;
 
 public class ConsoleBot {
-    long CHAT_ID = 12345;
+    private final static long CHAT_ID = 12345;
     private final CommandHandler commandHandler;
     private final InputService inputService;
     private final OutputService outputService;

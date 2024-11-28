@@ -1,8 +1,8 @@
 package fitnesbot.services;
 
 import fitnesbot.bot.MessageOutputData;
-import fitnesbot.exeptions.UserErrors.InvalidParameterError;
-import fitnesbot.exeptions.UserErrors.UserAlreadyExistsError;
+import fitnesbot.exeptions.usererrors.InvalidParameterError;
+import fitnesbot.exeptions.usererrors.UserAlreadyExistsError;
 import fitnesbot.models.User;
 
 public class UserService {

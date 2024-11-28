@@ -1,8 +1,8 @@
 package fitnesbot.repositories;
 
-import fitnesbot.exeptions.MealInTakeErrors.MealsInTakeAlreadyDeletedError;
-import fitnesbot.exeptions.MealInTakeErrors.MealsInTakeNotFoundError;
-import fitnesbot.exeptions.MealInTakeErrors.UserDiaryNotFoundError;
+import fitnesbot.exeptions.mealsintakeerrors.MealsInTakeAlreadyDeletedError;
+import fitnesbot.exeptions.mealsintakeerrors.MealsInTakeNotFoundError;
+import fitnesbot.exeptions.mealsintakeerrors.UserDiaryNotFoundError;
 import fitnesbot.models.MealsInTake;
 import fitnesbot.services.MealType;
 import fitnesbot.services.MealsInTakeRepository;

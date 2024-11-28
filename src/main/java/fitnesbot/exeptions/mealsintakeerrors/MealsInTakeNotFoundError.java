@@ -1,4 +1,4 @@
-package fitnesbot.exeptions.MealInTakeErrors;
+package fitnesbot.exeptions.mealsintakeerrors;
 
 import fitnesbot.services.MealType;
 

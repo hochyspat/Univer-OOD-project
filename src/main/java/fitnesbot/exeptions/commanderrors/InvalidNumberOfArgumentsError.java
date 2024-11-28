@@ -1,4 +1,4 @@
-package fitnesbot.exeptions.CommandErrors;
+package fitnesbot.exeptions.commanderrors;
 
 public class InvalidNumberOfArgumentsError extends CommandErrors {
     public InvalidNumberOfArgumentsError(String methodName, String... args) {
