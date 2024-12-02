@@ -1,12 +1,14 @@
-package fitnesbot.exeptions;
+package fitnesbot.exeptions.usererrors;
 
-public class NonExistenceUserError extends UserErrors{
+public class NonExistenceUserError extends UserErrors {
     private final long userId;
+
     public NonExistenceUserError(long userId) {
 
         super("Пользователя не существует");
         this.userId = userId;
     }
+
     public long getUserId() {
         return userId;
     }

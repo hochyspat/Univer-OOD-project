@@ -1,4 +1,4 @@
-package fitnesbot.exeptions;
+package fitnesbot.exeptions.usererrors;
 
 public class UserErrors {
 
@@ -7,6 +7,7 @@ public class UserErrors {
     public UserErrors(String message) {
         this.message = message;
     }
+
     public String getErrorMessage() {
         return message;
     }

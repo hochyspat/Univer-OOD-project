@@ -1,17 +1,16 @@
 package fitnesbot.bot;
 
-import fitnesbot.exeptions.InvalidCommandError;
+import fitnesbot.exeptions.commanderrors.InvalidCommandError;
 import fitnesbot.in.ConsoleInputService;
 import fitnesbot.in.InputService;
 import fitnesbot.out.ConsoleOutputService;
 import fitnesbot.out.OutputService;
 
 public class ConsoleBot {
-    long CHAT_ID = 12345;
-    private CommandHandler commandHandler;
-    private InputService inputService;
-    private OutputService outputService;
-
+    private static final long CHAT_ID = 12345;
+    private final CommandHandler commandHandler;
+    private final InputService inputService;
+    private final OutputService outputService;
 
 
     public ConsoleBot(ConsoleInputService inputService,
@@ -21,22 +20,25 @@ public class ConsoleBot {
         this.outputService = outputService;
         this.commandHandler = commandHandler;
     }
+
     public void start() {
 
         outputService.sendMessage(commandHandler.showHelp(CHAT_ID));
 
         while (true) {
-            outputService.sendMessage(new MessageOutputData("Введите команду: ",CHAT_ID));
+            outputService.sendMessage(new MessageOutputData("Введите команду: ", CHAT_ID));
             String userRequest = inputService.read();
             Command command = new Command(userRequest);
             if (command.isValid()) {
-                MessageOutputData messageOutputData = commandHandler.handleMessage(new MessageCommandData(command,CHAT_ID));
+                MessageOutputData messageOutputData = commandHandler.handleMessage(
+                        new MessageCommandData(command, CHAT_ID));
                 outputService.sendMessage(messageOutputData);
                 if (command.isExit()) {
                     break;
                 }
             } else {
-                outputService.sendMessage(new MessageOutputData(new InvalidCommandError().getErrorMessage(),CHAT_ID));
+                outputService.sendMessage(new MessageOutputData(
+                        new InvalidCommandError().getErrorMessage(), CHAT_ID));
             }
         }
     }

@@ -1,11 +1,12 @@
-package fitnesbot.exeptions;
+package fitnesbot.exeptions.apierrors;
 
-public class CommandErrors {
+public class ApiErrors {
     protected String message;
 
-    public CommandErrors(String message) {
+    public ApiErrors(String message) {
         this.message = message;
     }
+
     public String getErrorMessage() {
         return message;
     }

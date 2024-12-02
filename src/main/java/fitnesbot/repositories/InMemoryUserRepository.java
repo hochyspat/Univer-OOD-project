@@ -7,12 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryUserRepository implements UserRepository {
-    private Map<Long, User> users = new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>();
 
 
     @Override
     public void save(User user) {
-        users.put(user.getChatId(),user);
+        users.put(user.getChatId(), user);
     }
 
     @Override
@@ -25,9 +25,9 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public void delete(long chatId){
+    public void delete(long chatId) {
         User user = users.get(chatId);
-        if(user != null){
+        if (user != null) {
             user.setDeleted(true);
         }
     }
@@ -35,9 +35,8 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public boolean existsById(long chatId) {
         User user = users.get(chatId);
-        return (user != null && !user.isDeleted());
+        return (user != null && user.isDeleted());
     }
-
 
 
 }

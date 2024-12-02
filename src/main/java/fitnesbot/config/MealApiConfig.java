@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+public class MealApiConfig {
+    private String apiId;
+    private String apiKey;
 
-public class BotConfig {
-    private String botName;
-    private String botToken;
-
-    public BotConfig() {
+    public MealApiConfig() {
         Properties properties = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(
                 "application.properties")) {
@@ -18,24 +17,20 @@ public class BotConfig {
                 return;
             }
             properties.load(input);
-
-
-            this.botName = properties.getProperty("telegram.bot.username");
-            this.botToken = properties.getProperty("telegram.bot.token");
+            this.apiId = properties.getProperty("edamam.api.appId");
+            this.apiKey = properties.getProperty("edamam.api.appKey");
         } catch (IOException e) {
-            System.err.println("Error with BotConfig properties file." + e.getMessage());
+            System.err.println("Error with MealApiConfig: " + e.getMessage());
         }
     }
 
-    public String getBotUsername() {
-        return botName;
+    public String getMealApiId() {
+        return apiId;
     }
 
-    public String getBotToken() {
-        return botToken;
+    public String getMealApikey() {
+        return apiKey;
     }
 
 
 }
-
-
