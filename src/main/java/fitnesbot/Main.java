@@ -8,14 +8,8 @@ import fitnesbot.bot.ConsoleBot;
 import fitnesbot.in.ConsoleInputService;
 import fitnesbot.repositories.InMemoryMealsInTakeRepository;
 import fitnesbot.repositories.InMemoryUserRepository;
-import fitnesbot.services.CalorieCountingService;
-import fitnesbot.services.Help;
-import fitnesbot.services.MealsInTakeRepository;
-import fitnesbot.services.MealsInTakeService;
-import fitnesbot.services.Menu;
-import fitnesbot.services.UserRepository;
-import fitnesbot.services.UserService;
-import fitnesbot.services.BotPlatform;
+import fitnesbot.repositories.InMemoryWaterRepository;
+import fitnesbot.services.*;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -70,7 +64,8 @@ public class Main {
             CalorieCountingService calorieCountingService,
             UserRepository userRepository, MealsInTakeRepository mealsIntakeRepository) {
         UserService userService = new UserService(userRepository);
-        MealsInTakeService mealService = new MealsInTakeService(mealsIntakeRepository);
+        WaterInTakeRepository waterInTakeRepository = new InMemoryWaterRepository();
+        MealsInTakeService mealService = new MealsInTakeService(mealsIntakeRepository, waterInTakeRepository);
         CommandHandler commandHandler = new CommandHandler(help, menu,
                 calorieCountingService,
                 userService, mealService);
@@ -86,7 +81,8 @@ public class Main {
         ConsoleInputService consoleInputService = new ConsoleInputService();
         ConsoleOutputService consoleOutputService = new ConsoleOutputService();
         UserService userService = new UserService(userRepository);
-        MealsInTakeService mealService = new MealsInTakeService(mealsIntakeRepository);
+        WaterInTakeRepository waterInTakeRepository = new InMemoryWaterRepository();
+        MealsInTakeService mealService = new MealsInTakeService(mealsIntakeRepository,waterInTakeRepository);
         CommandHandler commandHandler = new CommandHandler(help, menu,
                 calorieCountingService,
                 userService, mealService);

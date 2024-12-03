@@ -31,8 +31,7 @@ public enum NutrientUnits {
                 return unit;
             }
         }
-        throw new IllegalStateException("Unexpected value: " + nutrientUnit);
-
+        System.out.println("Incorrect NutrientUnit");
+        return null;
     }
-
 }

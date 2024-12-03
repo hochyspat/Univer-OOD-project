@@ -10,9 +10,10 @@ import java.time.format.DateTimeFormatter;
 public class MealsInTakeService {
     private final MealsInTakeRepository mealsIntakeRepository;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
-    public MealsInTakeService(MealsInTakeRepository mealsIntakeRepository) {
+    private final WaterInTakeRepository waterInTakeRepository;
+    public MealsInTakeService(MealsInTakeRepository mealsIntakeRepository, WaterInTakeRepository waterInTakeRepository) {
         this.mealsIntakeRepository = mealsIntakeRepository;
+        this.waterInTakeRepository = waterInTakeRepository;
     }
 
     public MessageOutputData saveMealIntake(MealsInTake mealInTake, long chatId, MealType mealType) {
@@ -24,12 +25,22 @@ public class MealsInTakeService {
                 + " Введи /help для справки или /menu для выбора команд", chatId);
     }
 
+    public MessageOutputData saveWaterInTake(long chatId){
+        LocalDate currentDate = LocalDate.now();
+        String date = currentDate.format(formatter);
+        waterInTakeRepository.save(chatId, date);
+        return new MessageOutputData("Прием воды добавлен", chatId);
+    }
+
+    public int getWaterInTake(long chatId,String date) {
+        date = date.formatted(formatter);
+        return waterInTakeRepository.findWaterInTakeByDate(chatId,date);
+
+    }
+
     public MealsInTake getMealsInTake(String date, MealType mealType, long chatId) {
-        MealsInTake meal = mealsIntakeRepository.findByMealsInTakeType(mealType, date, chatId);
-        if (meal == null) {
-            System.out.println("Meal not found for user " + chatId + " on " + date + " for mealType " + mealType);
-        }
-        return meal;
+        date = date.formatted(formatter);
+        return mealsIntakeRepository.findByMealsInTakeType(mealType, date, chatId);
     }
 
     public void deleteMealInTake(long chatId, String date, MealType mealType) {

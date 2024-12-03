@@ -2,8 +2,10 @@ package fitnesbot.services;
 
 import fitnesbot.bot.MessageOutputData;
 import fitnesbot.exeptions.usererrors.InvalidParameterError;
+import fitnesbot.exeptions.usererrors.NonExistenceUserError;
 import fitnesbot.exeptions.usererrors.UserAlreadyExistsError;
 import fitnesbot.models.User;
+import fitnesbot.models.WaterGoal;
 
 public class UserService {
     private final UserRepository userRepository;
@@ -58,6 +60,30 @@ public class UserService {
         return userRepository.findById(chatId);
     }
 
+    public MessageOutputData saveWaterIntake(long chatId,
+                                             String inputQuantity,
+                                             String inputUnit) {
+        User user = getUser(chatId);
+        if (user == null) {
+            return new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(), chatId);
+        }
+        if (isNumber(inputQuantity)) {
+            int quantity = Integer.parseUnsignedInt(inputQuantity);
+            NutrientUnits nutrientUnit = NutrientUnits.fromString(inputUnit);
+            if (nutrientUnit != null) {
+                user.setWaterGoal(new WaterGoal(quantity, nutrientUnit));
+                return new MessageOutputData(
+                        "Цель по потреблению воды успешно установлена!", chatId);
+            }
+        } else {
+            return new MessageOutputData(
+                    "Неправильные параметры при установке цели по воде,попробуйте еще раз",
+                    chatId);
+        }
+        return new MessageOutputData(
+                "Ошибка при установке цели по воде",
+                chatId);
+    }
 
     private boolean isValidName(String inputName) {
         return inputName != null && !inputName.trim().isEmpty();

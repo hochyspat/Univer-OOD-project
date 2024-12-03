@@ -21,12 +21,9 @@ public enum MealType {
             mealType = mealType.toLowerCase();
             if (type.getMealType().equals(mealType)) {
                 return type;
-            } else {
-                System.out.println("Incorrect MealType");
-                return null;
-
             }
         }
+        System.out.println("Incorrect MealType");
         return null;
     }
 

@@ -3,20 +3,11 @@ package fitnesbot.bot;
 import fitnesbot.config.MealApiConfig;
 import fitnesbot.exeptions.commanderrors.InvalidCommandError;
 import fitnesbot.exeptions.commanderrors.InvalidNumberOfArgumentsError;
+import fitnesbot.exeptions.mealsintakeerrors.MealsInTakeNotFoundError;
 import fitnesbot.exeptions.usererrors.NonExistenceUserError;
 import fitnesbot.exeptions.apierrors.InputIngredientsError;
-import fitnesbot.models.User;
-import fitnesbot.models.MealsInTake;
-import fitnesbot.models.ParsedMeal;
-import fitnesbot.models.Nutrient;
-import fitnesbot.models.Meal;
-import fitnesbot.services.Help;
-import fitnesbot.services.MealsInTakeApiService;
-import fitnesbot.services.Menu;
-import fitnesbot.services.UserService;
-import fitnesbot.services.MealsInTakeService;
-import fitnesbot.services.CalorieCountingService;
-import fitnesbot.services.MealType;
+import fitnesbot.models.*;
+import fitnesbot.services.*;
 
 
 public class CommandHandler {
@@ -88,6 +79,11 @@ public class CommandHandler {
                 }
                 MealType mealType = MealType.fromString(args[1]);
                 MealsInTake mealsInTake = mealService.getMealsInTake(args[0], mealType, chatId);
+                if (mealsInTake == null) {
+                    System.out.println(new MealsInTakeNotFoundError(mealType, args[0], chatId).getErrorMessage());
+                    return new MessageOutputData("Meal not found", chatId);
+
+                }
                 return new MessageOutputData(processedRequest(mealsInTake, args[1]), chatId);
 
             case "addMeal": //addMeal завтрак 100 gram rice,1 cup tea,200 ml milk
@@ -112,6 +108,31 @@ public class CommandHandler {
                     System.out.println("Невозможно записать в дневник" + e.getMessage());
                     return new MessageOutputData("Произошла ощибка при записи в дневник", chatId);
                 }
+
+            case "addWaterGoal": //например addWaterGoal 2 l
+                if (args.length != 2) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addWaterGoal", "количество", "мера измерения").getErrorMessage(), chatId);
+                }
+                return userService.saveWaterIntake(chatId, args[0], args[1]);
+            case "addWaterInTake":
+                return mealService.saveWaterInTake(chatId);
+            case "getWaterInTakeInfo":
+                int countWaterInTake = mealService.getWaterInTake(chatId, args[0]);
+                if (countWaterInTake == -1) {
+                    return new MessageOutputData("Нет приемов воды по указанной дате" + args[0], chatId);
+                }
+                User userforWaterGoal = userService.getUser(chatId);
+                if (userforWaterGoal != null) {
+                    WaterGoal waterGoal = userforWaterGoal.getWaterGoal();
+                    int waterCount = userforWaterGoal.getWaterGoal().quantity()*1000 - 200 * countWaterInTake;
+                    if (waterCount > 0) {
+                        return new MessageOutputData("Вам осталось выпить"
+                                + waterCount + " " + waterGoal.units(), chatId);
+                    }
+                    return new MessageOutputData("Поздравляю вы выполнили цель!", chatId);
+                }
+                return new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(),
+                        chatId);
             case "/mycalories":
                 User user = userService.getUser(chatId);
                 if (user == null) {

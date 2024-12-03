@@ -5,6 +5,7 @@ import fitnesbot.bot.MessageOutputData;
 import fitnesbot.models.User;
 import fitnesbot.repositories.InMemoryUserRepository;
 
+import fitnesbot.repositories.InMemoryWaterRepository;
 import fitnesbot.services.CalorieCountingService;
 import fitnesbot.services.Help;
 import fitnesbot.services.MealsInTakeRepository;
@@ -33,7 +34,7 @@ public class CommandHandlerTest {
         userRepository = new InMemoryUserRepository();
         calorieService = new CalorieCountingService();
         userService = new UserService(userRepository);
-        mealService = new MealsInTakeService(mealsIntakeRepository);
+        mealService = new MealsInTakeService(mealsIntakeRepository,new InMemoryWaterRepository());
 
         commandHandler = new CommandHandler(new Help(), new Menu(),
                 calorieService, userService, mealService);

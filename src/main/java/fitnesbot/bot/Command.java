@@ -13,7 +13,10 @@ public record Command(String command, String[] args) {
             "/exit",
             "addMeal",
             "learnMeal",
-            "getMeal"
+            "getMeal",
+            "addWaterGoal",
+            "addWaterInTake",
+            "getWaterInTakeInfo"
     );
 
     public String parseArgsInfo() {

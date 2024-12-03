@@ -25,7 +25,6 @@ public class MealsInTakeApiServiceTest {
 
 
     private MealsInTakeApiService mealsIntakeApiService;
-
     private HttpClient httpClient;
     private HttpResponse<String> response;
 
