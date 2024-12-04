@@ -16,7 +16,15 @@ public record Command(String command, String[] args) {
             "getMeal",
             "addWaterGoal",
             "addWaterInTake",
-            "getWaterInTakeInfo"
+            "getWaterInTakeInfo",
+            "getWeekSleepStat",
+            "getDaySleepStat",
+            "addSleepGoal",
+            "addSleep",
+            "addTraining",
+            "getTrainings",
+            "getTrainingsByDate",
+            "deleteTraining"
     );
 
     public String parseArgsInfo() {

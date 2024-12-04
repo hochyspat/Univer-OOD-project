@@ -1,4 +1,4 @@
 package fitnesbot.models;
 
-public record SleepGoal(int quantity) {
+public record SleepGoal(double quantity) {
 }

@@ -10,11 +10,7 @@ public class InMemoryWaterRepository implements WaterInTakeRepository {
 
     @Override
     public void save(long chatId, String datetime) {
-        Map<String, Integer> userWaterMap = waterInTakes.get(chatId);
-        if (userWaterMap == null) {
-            userWaterMap = new HashMap<>();
-            waterInTakes.put(chatId, userWaterMap);
-        }
+        Map<String, Integer> userWaterMap = waterInTakes.computeIfAbsent(chatId, k -> new HashMap<>());
         userWaterMap.put(datetime, userWaterMap.getOrDefault(datetime, 0) + 1);
     }
 

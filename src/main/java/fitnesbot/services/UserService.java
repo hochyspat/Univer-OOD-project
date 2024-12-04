@@ -4,6 +4,7 @@ import fitnesbot.bot.MessageOutputData;
 import fitnesbot.exeptions.usererrors.InvalidParameterError;
 import fitnesbot.exeptions.usererrors.NonExistenceUserError;
 import fitnesbot.exeptions.usererrors.UserAlreadyExistsError;
+import fitnesbot.models.Nutrient;
 import fitnesbot.models.SleepGoal;
 import fitnesbot.models.User;
 import fitnesbot.models.WaterGoal;
@@ -61,18 +62,19 @@ public class UserService {
         return userRepository.findById(chatId);
     }
 
-    public MessageOutputData saveWaterIntake(long chatId,
-                                             String inputQuantity,
-                                             String inputUnit) {
+    public MessageOutputData saveWaterInTakeGoal(long chatId,
+                                                 String inputQuantity,
+                                                 String inputUnit) {
         User user = getUser(chatId);
         if (user == null) {
             return new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(), chatId);
         }
         if (isNumber(inputQuantity)) {
-            int quantity = Integer.parseUnsignedInt(inputQuantity);
+            double quantity = Double.parseDouble(inputQuantity);
             NutrientUnits nutrientUnit = NutrientUnits.fromString(inputUnit);
             if (nutrientUnit != null) {
-                user.setWaterGoal(new WaterGoal(quantity, nutrientUnit));
+                quantity = nutrientUnit.equals(NutrientUnits.L) ? quantity * 1000 : quantity;
+                user.setWaterGoal(new WaterGoal(quantity, NutrientUnits.ML));
                 return new MessageOutputData(
                         "Цель по потреблению воды успешно установлена!", chatId);
             }
@@ -86,14 +88,14 @@ public class UserService {
                 chatId);
     }
 
-    public MessageOutputData saveSleepInTake(long chatId,
-                                             String inputQuantity) {
+    public MessageOutputData saveSleepInTakeGoal(long chatId,
+                                                 String inputQuantity) {
         User user = getUser(chatId);
         if (user == null) {
             return new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(), chatId);
         }
         if (isNumber(inputQuantity)) {
-            int quantity = Integer.parseUnsignedInt(inputQuantity);
+            double quantity = Double.parseDouble(inputQuantity);
             user.setSleepGoal(new SleepGoal(quantity));
             return new MessageOutputData(
                     "Цель по количеству сна успешно установлена!", chatId);
@@ -113,8 +115,9 @@ public class UserService {
     }
 
     private boolean isNumber(String value) {
-        return value.matches("-?\\d+");
+        return value.matches("-?\\d+(\\.\\d+)?");
     }
+
 
     private boolean isValidInputParameter(String inputParameter, int lowerBound, int upperBound) {
         if (isNumber(inputParameter)) {

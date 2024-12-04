@@ -13,7 +13,7 @@ public class SleepInTakeService {
         this.sleepInTakeRepository = sleepInTakeRepository;
     }
 
-    public MessageOutputData saveSleepInTake(long chatId, int quantity){
+    public MessageOutputData saveSleepInTake(long chatId, double quantity) {
         LocalDate currentDate = LocalDate.now();
         String date = currentDate.format(formatter);
         sleepInTakeRepository.save(chatId, date, quantity);
@@ -22,6 +22,18 @@ public class SleepInTakeService {
 
     public MessageOutputData getWeekSleepStat(long chatId) {
         double result = sleepInTakeRepository.getWeekStat(chatId);
-        return (new MessageOutputData(new StringBuilder("Среднее количество сна за неделю: ").append(result).toString(), chatId));
+        return (new MessageOutputData("Среднее количество сна за неделю: "
+                + result, chatId));
     }
+
+    public MessageOutputData getDaySleepStat(long chatId, String day) {
+        String date = day.formatted(formatter);
+        double result = sleepInTakeRepository.getDayStat(chatId, date);
+        if (result != 0.0) {
+            return new MessageOutputData("В этот день вы спали: " + result, chatId);
+        }
+        return new MessageOutputData("Нет статистики за  этот день", chatId);
+    }
+
+    ;
 }

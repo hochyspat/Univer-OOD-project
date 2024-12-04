@@ -6,16 +6,21 @@ import fitnesbot.exeptions.commanderrors.InvalidNumberOfArgumentsError;
 import fitnesbot.exeptions.mealsintakeerrors.MealsInTakeNotFoundError;
 import fitnesbot.exeptions.usererrors.NonExistenceUserError;
 import fitnesbot.exeptions.apierrors.InputIngredientsError;
-import fitnesbot.models.*;
+import fitnesbot.models.Meal;
+import fitnesbot.models.MealsInTake;
+import fitnesbot.models.Nutrient;
+import fitnesbot.models.ParsedMeal;
+import fitnesbot.models.User;
+import fitnesbot.models.WaterGoal;
 import fitnesbot.services.CalorieCountingService;
 import fitnesbot.services.MealType;
 import fitnesbot.services.MealsInTakeApiService;
 import fitnesbot.services.MealsInTakeService;
 import fitnesbot.services.Menu;
 import fitnesbot.services.SleepInTakeService;
+import fitnesbot.services.TrainingService;
 import fitnesbot.services.UserService;
 import fitnesbot.services.Help;
-
 
 
 public class CommandHandler {
@@ -26,16 +31,19 @@ public class CommandHandler {
     private final MealsInTakeApiService mealsIntakeApiService;
     private final MealsInTakeService mealService;
     private final SleepInTakeService sleepService;
+    private final TrainingService trainingService;
 
     public CommandHandler(Help help, Menu menu,
                           CalorieCountingService caloriesService,
-                          UserService userService, MealsInTakeService mealService, SleepInTakeService sleepService) {
+                          UserService userService, MealsInTakeService mealService,
+                          SleepInTakeService sleepService, TrainingService trainingService) {
         this.help = help;
         this.menu = menu;
         this.calorieService = caloriesService;
         this.userService = userService;
         this.mealService = mealService;
         this.sleepService = sleepService;
+        this.trainingService = trainingService;
         MealApiConfig mealapiConfig = new MealApiConfig();
         this.mealsIntakeApiService = new MealsInTakeApiService(mealapiConfig.getMealApiId(),
                 mealapiConfig.getMealApikey());
@@ -121,22 +129,27 @@ public class CommandHandler {
 
             case "addWaterGoal": //например addWaterGoal 2 l
                 if (args.length != 2) {
-                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addWaterGoal", "количество", "мера измерения").getErrorMessage(), chatId);
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addWaterGoal",
+                            "количество", "мера измерения").getErrorMessage(), chatId);
                 }
-                return userService.saveWaterIntake(chatId, args[0], args[1]);
+                return userService.saveWaterInTakeGoal(chatId, args[0], args[1]);
             case "addWaterInTake":
                 return mealService.saveWaterInTake(chatId);
             case "getWaterInTakeInfo":
+                if (args.length != 1) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("getWaterInTakeInfo",
+                            "дата").getErrorMessage(), chatId);
+                }
                 int countWaterInTake = mealService.getWaterInTake(chatId, args[0]);
                 if (countWaterInTake == -1) {
                     return new MessageOutputData("Нет приемов воды по указанной дате" + args[0], chatId);
                 }
-                User userforWaterGoal = userService.getUser(chatId);
-                if (userforWaterGoal != null) {
-                    WaterGoal waterGoal = userforWaterGoal.getWaterGoal();
-                    int waterCount = userforWaterGoal.getWaterGoal().quantity()*1000 - 200 * countWaterInTake;
+                User userforWaterStatic = userService.getUser(chatId);
+                if (userforWaterStatic != null) {
+                    WaterGoal waterGoal = userforWaterStatic.getWaterGoal();
+                    double waterCount = userforWaterStatic.getWaterGoal().quantity() - 200 * countWaterInTake;
                     if (waterCount > 0) {
-                        return new MessageOutputData("Вам осталось выпить"
+                        return new MessageOutputData("Вам осталось выпить "
                                 + waterCount + " " + waterGoal.units(), chatId);
                     }
                     return new MessageOutputData("Поздравляю вы выполнили цель!", chatId);
@@ -145,16 +158,51 @@ public class CommandHandler {
                         chatId);
             case "addSleepGoal": // addSleepGoal 8 часов
                 if (args.length != 2) {
-                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addSleepGoal", "количество", "часов").getErrorMessage(), chatId);
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addSleepGoal",
+                            "количество", "часов").getErrorMessage(), chatId);
                 }
-                return userService.saveSleepInTake(chatId, args[0]);
+                return userService.saveSleepInTakeGoal(chatId, args[0]);
             case "addSleep":
-                if (args.length != 2) {
-                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addSleep", "количество", "часов").getErrorMessage(), chatId);
+                if (args.length != 1) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addSleep",
+                            "количество", "часов").getErrorMessage(), chatId);
                 }
-                return sleepService.saveSleepInTake(chatId, Integer.parseUnsignedInt(args[0]));
-            case "getWeekStat":
+                return sleepService.saveSleepInTake(chatId, Double.parseDouble(args[0]));
+            case "getWeekSleepStat":
                 return sleepService.getWeekSleepStat(chatId);
+
+            case "getDaySleepStat":
+                if (args.length != 1) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("getDayStat",
+                            "дата").getErrorMessage(), chatId);
+                }
+                return sleepService.getDaySleepStat(chatId, args[0]);
+            case "addTraining": // addTraining Бег 1.5 500
+                if (args.length != 3) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addTraining",
+                            "[название]", "[длительность в часах]", "[сожженные калории]").getErrorMessage(), chatId);
+                }
+                try {
+                    String name = args[0];
+                    double trainingTime = Double.parseDouble(args[1]);
+                    double calories= Double.parseDouble(args[2]);
+                    trainingService.addTraining(chatId, name, trainingTime, calories);
+                    return new MessageOutputData("Тренировка успешно добавлена!", chatId);
+                } catch (NumberFormatException e) {
+                    return new MessageOutputData("Неверный формат чисел.", chatId);
+                }
+            case "getTrainings":
+                return trainingService.getTrainingSessions(chatId);
+            case "getTrainingsByDate":
+                if (args.length != 1) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("getTrainingsByDate","[дата]").getErrorMessage(), chatId);
+                }
+                return trainingService.getTrainingSessionsByDate(chatId, args[0]);
+            case "deleteTraining": // deleteTraining 05.12.2024 Бег
+                if (args.length != 2) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("deleteTraining", "[название]").getErrorMessage(), chatId);
+                }
+                return  trainingService.deleteTrainingSession(chatId, args[0], args[1]);
             case "/mycalories":
                 User user = userService.getUser(chatId);
                 if (user == null) {

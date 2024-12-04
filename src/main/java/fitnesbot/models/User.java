@@ -66,9 +66,18 @@ public class User {
     public void setSleepGoal(SleepGoal sleepGoal) {this.sleepGoal = sleepGoal;}
 
     public String getInfo() {
+        String waterGoalInfo = (waterGoal != null)
+                ? String.format("%.1f %s", waterGoal.quantity(), waterGoal.units())
+                : "не установлена";
+
+        String sleepGoalInfo = (sleepGoal != null)
+                ? String.format("%.1f ч", sleepGoal.quantity())
+                : "не установлена";
+
         return String.format(
-                "Имя: %s%nРост: %d см%nВес: %d кг%nВозраст: %d лет%nЦель по воде: %d %s",
-                name, height, weight, age, waterGoal.quantity(), waterGoal.units()
+                "Имя: %s%nРост: %d см%nВес: %d кг%nВозраст: %d лет%nЦель по воде: %s%nЦель по сну: %s",
+                name, height, weight, age, waterGoalInfo, sleepGoalInfo
         );
     }
+
 }

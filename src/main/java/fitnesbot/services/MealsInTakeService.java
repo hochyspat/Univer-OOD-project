@@ -11,7 +11,9 @@ public class MealsInTakeService {
     private final MealsInTakeRepository mealsIntakeRepository;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private final WaterInTakeRepository waterInTakeRepository;
-    public MealsInTakeService(MealsInTakeRepository mealsIntakeRepository, WaterInTakeRepository waterInTakeRepository) {
+
+    public MealsInTakeService(MealsInTakeRepository mealsIntakeRepository,
+                              WaterInTakeRepository waterInTakeRepository) {
         this.mealsIntakeRepository = mealsIntakeRepository;
         this.waterInTakeRepository = waterInTakeRepository;
     }
@@ -25,16 +27,16 @@ public class MealsInTakeService {
                 + " Введи /help для справки или /menu для выбора команд", chatId);
     }
 
-    public MessageOutputData saveWaterInTake(long chatId){
+    public MessageOutputData saveWaterInTake(long chatId) {
         LocalDate currentDate = LocalDate.now();
         String date = currentDate.format(formatter);
         waterInTakeRepository.save(chatId, date);
         return new MessageOutputData("Прием воды добавлен", chatId);
     }
 
-    public int getWaterInTake(long chatId,String date) {
+    public int getWaterInTake(long chatId, String date) {
         date = date.formatted(formatter);
-        return waterInTakeRepository.findWaterInTakeByDate(chatId,date);
+        return waterInTakeRepository.findWaterInTakeByDate(chatId, date);
 
     }
 
