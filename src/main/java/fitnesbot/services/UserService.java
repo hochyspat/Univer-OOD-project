@@ -4,6 +4,7 @@ import fitnesbot.bot.MessageOutputData;
 import fitnesbot.exeptions.usererrors.InvalidParameterError;
 import fitnesbot.exeptions.usererrors.NonExistenceUserError;
 import fitnesbot.exeptions.usererrors.UserAlreadyExistsError;
+import fitnesbot.models.SleepGoal;
 import fitnesbot.models.User;
 import fitnesbot.models.WaterGoal;
 
@@ -83,6 +84,24 @@ public class UserService {
         return new MessageOutputData(
                 "Ошибка при установке цели по воде",
                 chatId);
+    }
+
+    public MessageOutputData saveSleepInTake(long chatId,
+                                             String inputQuantity) {
+        User user = getUser(chatId);
+        if (user == null) {
+            return new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(), chatId);
+        }
+        if (isNumber(inputQuantity)) {
+            int quantity = Integer.parseUnsignedInt(inputQuantity);
+            user.setSleepGoal(new SleepGoal(quantity));
+            return new MessageOutputData(
+                    "Цель по количеству сна успешно установлена!", chatId);
+        } else {
+            return new MessageOutputData(
+                    "Неправильные параметры при установке цели сна,попробуйте еще раз",
+                    chatId);
+        }
     }
 
     private boolean isValidName(String inputName) {

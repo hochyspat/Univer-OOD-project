@@ -9,6 +9,7 @@ public class User {
     private final int age;
     private double calories;
     private WaterGoal waterGoal;
+    private SleepGoal sleepGoal;
     private boolean deleted;
 
     public User(String name, int height, int weight, int age, long chatId) {
@@ -60,9 +61,9 @@ public class User {
         return this.waterGoal;
     }
 
-    public void setWaterGoal(WaterGoal waterGoal) {
-        this.waterGoal = waterGoal;
-    }
+    public void setWaterGoal(WaterGoal waterGoal) {this.waterGoal = waterGoal;}
+
+    public void setSleepGoal(SleepGoal sleepGoal) {this.sleepGoal = sleepGoal;}
 
     public String getInfo() {
         return String.format(

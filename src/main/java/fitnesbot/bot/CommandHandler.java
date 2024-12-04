@@ -7,7 +7,15 @@ import fitnesbot.exeptions.mealsintakeerrors.MealsInTakeNotFoundError;
 import fitnesbot.exeptions.usererrors.NonExistenceUserError;
 import fitnesbot.exeptions.apierrors.InputIngredientsError;
 import fitnesbot.models.*;
-import fitnesbot.services.*;
+import fitnesbot.services.CalorieCountingService;
+import fitnesbot.services.MealType;
+import fitnesbot.services.MealsInTakeApiService;
+import fitnesbot.services.MealsInTakeService;
+import fitnesbot.services.Menu;
+import fitnesbot.services.SleepInTakeService;
+import fitnesbot.services.UserService;
+import fitnesbot.services.Help;
+
 
 
 public class CommandHandler {
@@ -17,15 +25,17 @@ public class CommandHandler {
     private final Menu menu;
     private final MealsInTakeApiService mealsIntakeApiService;
     private final MealsInTakeService mealService;
+    private final SleepInTakeService sleepService;
 
     public CommandHandler(Help help, Menu menu,
                           CalorieCountingService caloriesService,
-                          UserService userService, MealsInTakeService mealService) {
+                          UserService userService, MealsInTakeService mealService, SleepInTakeService sleepService) {
         this.help = help;
         this.menu = menu;
         this.calorieService = caloriesService;
         this.userService = userService;
         this.mealService = mealService;
+        this.sleepService = sleepService;
         MealApiConfig mealapiConfig = new MealApiConfig();
         this.mealsIntakeApiService = new MealsInTakeApiService(mealapiConfig.getMealApiId(),
                 mealapiConfig.getMealApikey());
@@ -133,6 +143,18 @@ public class CommandHandler {
                 }
                 return new MessageOutputData(new NonExistenceUserError(chatId).getErrorMessage(),
                         chatId);
+            case "addSleepGoal": // addSleepGoal 8 часов
+                if (args.length != 2) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addSleepGoal", "количество", "часов").getErrorMessage(), chatId);
+                }
+                return userService.saveSleepInTake(chatId, args[0]);
+            case "addSleep":
+                if (args.length != 2) {
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("addSleep", "количество", "часов").getErrorMessage(), chatId);
+                }
+                return sleepService.saveSleepInTake(chatId, Integer.parseUnsignedInt(args[0]));
+            case "getWeekStat":
+                return sleepService.getWeekSleepStat(chatId);
             case "/mycalories":
                 User user = userService.getUser(chatId);
                 if (user == null) {

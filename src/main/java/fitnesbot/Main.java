@@ -7,6 +7,7 @@ import fitnesbot.out.ConsoleOutputService;
 import fitnesbot.bot.ConsoleBot;
 import fitnesbot.in.ConsoleInputService;
 import fitnesbot.repositories.InMemoryMealsInTakeRepository;
+import fitnesbot.repositories.InMemorySleepRepository;
 import fitnesbot.repositories.InMemoryUserRepository;
 import fitnesbot.repositories.InMemoryWaterRepository;
 import fitnesbot.services.*;
@@ -31,11 +32,12 @@ public class Main {
         CalorieCountingService calorieCountingService = new CalorieCountingService();
         UserRepository userRepository = new InMemoryUserRepository();
         MealsInTakeRepository mealsIntakeRepository = new InMemoryMealsInTakeRepository();
+        SleepInTakeRepository sleepInTakeRepository = new InMemorySleepRepository();
         if (platform == BotPlatform.CONSOLE || platform == BotPlatform.BOTH) {
             Thread consoleThread = new Thread(() -> {
                 ConsoleBot consoleBot = getConsoleBot(
                         help, menu, calorieCountingService,
-                        userRepository, mealsIntakeRepository
+                        userRepository, mealsIntakeRepository, sleepInTakeRepository
                 );
                 consoleBot.start();
             });
@@ -45,7 +47,7 @@ public class Main {
             Thread telegramThread = new Thread(() -> {
                 try {
                     TelegramBot telegramBot = getTelegramBot(help, menu, calorieCountingService,
-                            userRepository, mealsIntakeRepository);
+                            userRepository, mealsIntakeRepository, sleepInTakeRepository);
                     TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
                     telegramBotsApi.registerBot(telegramBot);
 
@@ -62,13 +64,14 @@ public class Main {
     private static TelegramBot getTelegramBot(
             Help help, Menu menu,
             CalorieCountingService calorieCountingService,
-            UserRepository userRepository, MealsInTakeRepository mealsIntakeRepository) {
+            UserRepository userRepository, MealsInTakeRepository mealsIntakeRepository, SleepInTakeRepository sleepInTakeRepository) {
         UserService userService = new UserService(userRepository);
         WaterInTakeRepository waterInTakeRepository = new InMemoryWaterRepository();
+        SleepInTakeService sleepService = new SleepInTakeService(sleepInTakeRepository);
         MealsInTakeService mealService = new MealsInTakeService(mealsIntakeRepository, waterInTakeRepository);
         CommandHandler commandHandler = new CommandHandler(help, menu,
                 calorieCountingService,
-                userService, mealService);
+                userService, mealService, sleepService);
         return new TelegramBot(commandHandler);
     }
 
@@ -77,15 +80,16 @@ public class Main {
             Help help, Menu menu,
             CalorieCountingService calorieCountingService,
             UserRepository userRepository,
-            MealsInTakeRepository mealsIntakeRepository) {
+            MealsInTakeRepository mealsIntakeRepository, SleepInTakeRepository sleepInTakeRepository) {
         ConsoleInputService consoleInputService = new ConsoleInputService();
         ConsoleOutputService consoleOutputService = new ConsoleOutputService();
         UserService userService = new UserService(userRepository);
         WaterInTakeRepository waterInTakeRepository = new InMemoryWaterRepository();
         MealsInTakeService mealService = new MealsInTakeService(mealsIntakeRepository,waterInTakeRepository);
+        SleepInTakeService sleepService = new SleepInTakeService(sleepInTakeRepository);
         CommandHandler commandHandler = new CommandHandler(help, menu,
                 calorieCountingService,
-                userService, mealService);
+                userService, mealService, sleepService);
         return new ConsoleBot(consoleInputService, consoleOutputService, commandHandler);
     }
 }

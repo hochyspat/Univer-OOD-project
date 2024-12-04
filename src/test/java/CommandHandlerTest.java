@@ -11,6 +11,8 @@ import fitnesbot.services.Help;
 import fitnesbot.services.MealsInTakeRepository;
 import fitnesbot.services.MealsInTakeService;
 import fitnesbot.services.Menu;
+import fitnesbot.services.SleepInTakeRepository;
+import fitnesbot.services.SleepInTakeService;
 import fitnesbot.services.UserRepository;
 import fitnesbot.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +29,9 @@ public class CommandHandlerTest {
     private UserService userService;
     private CalorieCountingService calorieService;
     private MealsInTakeService mealService;
+    private SleepInTakeService sleepService;
     private MealsInTakeRepository mealsIntakeRepository;
+    private SleepInTakeRepository sleepInTakeRepository;
 
     @BeforeEach
     void setUp() {
@@ -35,9 +39,10 @@ public class CommandHandlerTest {
         calorieService = new CalorieCountingService();
         userService = new UserService(userRepository);
         mealService = new MealsInTakeService(mealsIntakeRepository,new InMemoryWaterRepository());
+        sleepService = new SleepInTakeService(sleepInTakeRepository);
 
         commandHandler = new CommandHandler(new Help(), new Menu(),
-                calorieService, userService, mealService);
+                calorieService, userService, mealService, sleepService);
     }
 
 
