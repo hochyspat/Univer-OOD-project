@@ -4,7 +4,6 @@ import fitnesbot.bot.MessageOutputData;
 import fitnesbot.exeptions.usererrors.InvalidParameterError;
 import fitnesbot.exeptions.usererrors.NonExistenceUserError;
 import fitnesbot.exeptions.usererrors.UserAlreadyExistsError;
-import fitnesbot.models.Nutrient;
 import fitnesbot.models.SleepGoal;
 import fitnesbot.models.User;
 import fitnesbot.models.WaterGoal;

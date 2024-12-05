@@ -61,9 +61,13 @@ public class User {
         return this.waterGoal;
     }
 
-    public void setWaterGoal(WaterGoal waterGoal) {this.waterGoal = waterGoal;}
+    public void setWaterGoal(WaterGoal waterGoal) {
+        this.waterGoal = waterGoal;
+    }
 
-    public void setSleepGoal(SleepGoal sleepGoal) {this.sleepGoal = sleepGoal;}
+    public void setSleepGoal(SleepGoal sleepGoal) {
+        this.sleepGoal = sleepGoal;
+    }
 
     public String getInfo() {
         String waterGoalInfo = (waterGoal != null)

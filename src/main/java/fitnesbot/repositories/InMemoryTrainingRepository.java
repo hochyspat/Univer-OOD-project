@@ -3,7 +3,11 @@ package fitnesbot.repositories;
 import fitnesbot.models.TrainingSession;
 import fitnesbot.services.TrainingRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class InMemoryTrainingRepository implements TrainingRepository {
     private final Map<Long, Map<String, List<TrainingSession>>> userTrainingDiary = new HashMap<>();
