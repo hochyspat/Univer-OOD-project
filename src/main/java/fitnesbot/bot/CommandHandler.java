@@ -185,7 +185,7 @@ public class CommandHandler {
                 try {
                     String name = args[0];
                     double trainingTime = Double.parseDouble(args[1]);
-                    double calories= Double.parseDouble(args[2]);
+                    double calories = Double.parseDouble(args[2]);
                     trainingService.addTraining(chatId, name, trainingTime, calories);
                     return new MessageOutputData("Тренировка успешно добавлена!", chatId);
                 } catch (NumberFormatException e) {
@@ -195,14 +195,14 @@ public class CommandHandler {
                 return trainingService.getTrainingSessions(chatId);
             case "getTrainingsByDate":
                 if (args.length != 1) {
-                    return new MessageOutputData(new InvalidNumberOfArgumentsError("getTrainingsByDate","[дата]").getErrorMessage(), chatId);
+                    return new MessageOutputData(new InvalidNumberOfArgumentsError("getTrainingsByDate", "[дата]").getErrorMessage(), chatId);
                 }
                 return trainingService.getTrainingSessionsByDate(chatId, args[0]);
             case "deleteTraining": // deleteTraining 05.12.2024 Бег
                 if (args.length != 2) {
                     return new MessageOutputData(new InvalidNumberOfArgumentsError("deleteTraining", "[название]").getErrorMessage(), chatId);
                 }
-                return  trainingService.deleteTrainingSession(chatId, args[0], args[1]);
+                return trainingService.deleteTrainingSession(chatId, args[0], args[1]);
             case "/mycalories":
                 User user = userService.getUser(chatId);
                 if (user == null) {

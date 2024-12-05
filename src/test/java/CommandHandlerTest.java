@@ -50,7 +50,7 @@ public class CommandHandlerTest {
         sleepService = new SleepInTakeService(sleepInTakeRepository);
         trainingService = new TrainingService(trainingRepository);
         commandHandler = new CommandHandler(new Help(), new Menu(),
-                calorieService, userService, mealService, sleepService,trainingService);
+                calorieService, userService, mealService, sleepService, trainingService);
     }
 
 
@@ -109,6 +109,7 @@ public class CommandHandlerTest {
                 new MessageCommandData(command, 12345L));
         assertEquals("Неверная команда", outputData.messageData());
     }
+
     @Test
     void testAddWaterGoal() {
         userService.registerUser("Alice", "19", "171", "58", 12345L);
@@ -150,7 +151,7 @@ public class CommandHandlerTest {
     void testAddWaterIntake() {
         mealService.saveWaterInTake(12345L);
         String date = "05.12.2024";
-        int count = mealService.getWaterInTake(12345L,"05.12.2024");
+        int count = mealService.getWaterInTake(12345L, "05.12.2024");
         assertEquals(1, count);
     }
 
@@ -161,23 +162,19 @@ public class CommandHandlerTest {
         double sleep = sleepInTakeRepository.getDayStat(12345L, date);
         assertEquals(7.5, sleep);
     }
+
     @Test
     void testGetWeekSleepStat() {
         sleepInTakeRepository.save(12345L, "23.11.2024", 7.0);
         sleepInTakeRepository.save(12345L, "25.11.2024", 8.0);
-         sleepInTakeRepository.save(12345L, "25.11.2024", 6.5);
-         sleepInTakeRepository.save(12345L, "26.11.2024", 7.5);
-         sleepInTakeRepository.save(12345L, "27.11.2024", 7.0);
-         sleepInTakeRepository.save(12345L, "28.11.2024", 6.0);
-         sleepInTakeRepository.save(12345L, "29.11.2024", 8.0);
+        sleepInTakeRepository.save(12345L, "25.11.2024", 6.5);
+        sleepInTakeRepository.save(12345L, "26.11.2024", 7.5);
+        sleepInTakeRepository.save(12345L, "27.11.2024", 7.0);
+        sleepInTakeRepository.save(12345L, "28.11.2024", 6.0);
+        sleepInTakeRepository.save(12345L, "29.11.2024", 8.0);
 
         double avgSleep = sleepInTakeRepository.getWeekStat(12345L);
         assertEquals(8.0, avgSleep, 0.1);
     }
-
-
-
-
-
 }
 

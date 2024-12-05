@@ -18,8 +18,8 @@ public class InMemoryMealsInTakeRepository implements MealsInTakeRepository {
     public void save(MealsInTake mealInTake, long chatId, String date, MealType mealType) {
         if (usersDiary.containsKey(chatId)) {
             if (usersDiary.get(chatId).containsKey(date)) {
-              usersDiary.get(chatId).get(date).put(mealType, mealInTake);
-              return;
+                usersDiary.get(chatId).get(date).put(mealType, mealInTake);
+                return;
             }
         }
         Map<MealType, MealsInTake> mapByName = new HashMap<>();

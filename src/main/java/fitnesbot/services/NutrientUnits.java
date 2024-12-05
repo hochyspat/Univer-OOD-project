@@ -11,7 +11,7 @@ public enum NutrientUnits {
     ML("ml"),
     CUP("cup"),
     KCAL("kcal"),
-    PERСENT("%");
+    PRESENT("%");
 
     private final String unit;
 
