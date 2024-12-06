@@ -3,9 +3,11 @@ package fitnesbot;
 
 import fitnesbot.bot.CommandHandler;
 import fitnesbot.bot.TelegramBot;
+import fitnesbot.config.DataBaseConfig;
 import fitnesbot.out.ConsoleOutputService;
 import fitnesbot.bot.ConsoleBot;
 import fitnesbot.in.ConsoleInputService;
+import fitnesbot.repositories.DataBaseUserRepository;
 import fitnesbot.repositories.InMemoryMealsInTakeRepository;
 import fitnesbot.repositories.InMemorySleepRepository;
 import fitnesbot.repositories.InMemoryTrainingRepository;
@@ -43,7 +45,7 @@ public class Main {
         Help help = new Help();
         Menu menu = new Menu();
         CalorieCountingService calorieCountingService = new CalorieCountingService();
-        UserRepository userRepository = new InMemoryUserRepository();
+        UserRepository userRepository = new DataBaseUserRepository();
         MealsInTakeRepository mealsIntakeRepository = new InMemoryMealsInTakeRepository();
         SleepInTakeRepository sleepInTakeRepository = new InMemorySleepRepository();
         WaterInTakeRepository waterInTakeRepository = new InMemoryWaterRepository();
@@ -55,6 +57,8 @@ public class Main {
                         userRepository, mealsIntakeRepository, sleepInTakeRepository,
                         waterInTakeRepository, trainingRepository
                 );
+                DataBaseConfig dataBaseConfig = new DataBaseConfig();
+                dataBaseConfig.createAllTable();
                 consoleBot.start();
             });
             consoleThread.start();
@@ -73,6 +77,8 @@ public class Main {
                     System.out.println("Error with TelegramApi: " + e.getMessage());
                 }
             });
+            DataBaseConfig dataBaseConfig = new DataBaseConfig();
+            dataBaseConfig.createAllTable();
             telegramThread.start();
 
         }
