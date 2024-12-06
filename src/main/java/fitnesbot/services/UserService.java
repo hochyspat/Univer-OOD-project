@@ -73,7 +73,7 @@ public class UserService {
             NutrientUnits nutrientUnit = NutrientUnits.fromString(inputUnit);
             if (nutrientUnit != null) {
                 quantity = nutrientUnit.equals(NutrientUnits.L) ? quantity * 1000 : quantity;
-                user.setWaterGoal(new WaterGoal(quantity, NutrientUnits.ML));
+                userRepository.updateWaterGoal(chatId,quantity);
                 return new MessageOutputData(
                         "Цель по потреблению воды успешно установлена!", chatId);
             }
@@ -95,7 +95,7 @@ public class UserService {
         }
         if (isNumber(inputQuantity)) {
             double quantity = Double.parseDouble(inputQuantity);
-            user.setSleepGoal(new SleepGoal(quantity));
+            userRepository.updateSleepGoal(chatId,quantity);
             return new MessageOutputData(
                     "Цель по количеству сна успешно установлена!", chatId);
         } else {
@@ -103,6 +103,10 @@ public class UserService {
                     "Неправильные параметры при установке цели сна,попробуйте еще раз",
                     chatId);
         }
+    }
+
+    public boolean isExistence(long chatId) {
+        return userRepository.existsById(chatId);
     }
 
     private boolean isValidName(String inputName) {
