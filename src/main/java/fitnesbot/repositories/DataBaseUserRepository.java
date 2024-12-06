@@ -1,8 +1,11 @@
 package fitnesbot.repositories;
 
-import fitnesbot.config.DataBaseConfig;
+import fitnesbot.models.SleepGoal;
+import fitnesbot.models.WaterGoal;
+import fitnesbot.services.DataBaseService;
 import fitnesbot.models.User;
 import fitnesbot.models.UserSQL;
+import fitnesbot.services.NutrientUnits;
 import fitnesbot.services.UserRepository;
 
 import java.sql.Connection;
@@ -15,7 +18,7 @@ public class DataBaseUserRepository implements UserRepository {
 
     @Override
     public void save(User user) {
-        try (Connection connection = DataBaseConfig.connect();
+        try (Connection connection = DataBaseService.connect();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(UserSQL.INSERT_USER)) {
             statement.setLong(1, user.getChatId());
             statement.setString(2, user.getName());
@@ -36,18 +39,27 @@ public class DataBaseUserRepository implements UserRepository {
 
     @Override
     public User findById(long chatId) {
-        try (Connection connection = DataBaseConfig.connect();
+        try (Connection connection = DataBaseService.connect();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(UserSQL.SELECT_USER_BY_ID)) {
             statement.setLong(1, chatId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return new User(
-                        resultSet.getString("name"),
-                        resultSet.getInt("height"),
-                        resultSet.getInt("weight"),
-                        resultSet.getInt("age"),
-                        resultSet.getLong("chat_id")
-                );
+                String name = resultSet.getString("name");
+                int height = resultSet.getInt("height");
+                int weight = resultSet.getInt("weight");
+                int age = resultSet.getInt("age");
+                double waterGoalQuantity = resultSet.getDouble("water_goal_quantity");
+                String waterGoalUnits = resultSet.getString("water_goal_units");
+                double sleepGoalQuantity = resultSet.getDouble("sleep_goal_quantity");
+                User user = new User(name, height, weight, age, chatId);
+                if (waterGoalQuantity > 0 && waterGoalUnits != null) {
+                    user.setWaterGoal(new WaterGoal(waterGoalQuantity, NutrientUnits.fromString(waterGoalUnits)));
+                }
+
+                if (sleepGoalQuantity > 0) {
+                    user.setSleepGoal(new SleepGoal(sleepGoalQuantity));
+                }
+                return user;
             }
         } catch (SQLException e) {
             System.err.println("Ошибка поиска пользователя: " + e.getMessage());
@@ -57,7 +69,7 @@ public class DataBaseUserRepository implements UserRepository {
 
     @Override
     public void delete(long chatId) {
-        try (Connection connection = DataBaseConfig.connect();
+        try (Connection connection = DataBaseService.connect();
              PreparedStatement preparedStatement = Objects.requireNonNull(connection).prepareStatement(UserSQL.DELETE_USER)) {
             preparedStatement.setLong(1, chatId);
             preparedStatement.executeUpdate();
@@ -67,7 +79,7 @@ public class DataBaseUserRepository implements UserRepository {
         }
     }
     public boolean existsById(long chatId) {
-        try (Connection connection = DataBaseConfig.connect();
+        try (Connection connection = DataBaseService.connect();
              PreparedStatement preparedStatement = Objects.requireNonNull(connection).prepareStatement(UserSQL.EXISTS_BY_ID)) {
             preparedStatement.setLong(1, chatId);
             ResultSet rs = preparedStatement.executeQuery();
@@ -79,6 +91,32 @@ public class DataBaseUserRepository implements UserRepository {
         }
         return false;
     }
+
+    @Override
+    public void updateWaterGoal(long chatId, double quantity) {
+        try (Connection conn = DataBaseService.connect();
+             PreparedStatement stmt = Objects.requireNonNull(conn).prepareStatement(UserSQL.UPDATE_WATER_GOAL)) {
+            stmt.setDouble(1, quantity);
+            stmt.setLong(2, chatId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.
+                    err.println("Ошибка обновления цели по воде: " + e.getMessage());
+        }
+    }
+    @Override
+    public void updateSleepGoal(long chatId, double quantity) {
+        try (Connection conn = DataBaseService.connect();
+             PreparedStatement stmt = Objects.requireNonNull(conn).prepareStatement(UserSQL.UPDATE_SLEEP_GOAL)) {
+            stmt.setDouble(1, quantity);
+            stmt.setLong(2, chatId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.
+                    err.println("Ошибка обновления цели по сну: " + e.getMessage());
+        }
+    }
+
 
 
 }

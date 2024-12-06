@@ -63,7 +63,10 @@ public class CommandHandler {
             case "/help":
                 return showHelp(chatId);
             case "/start":
-                return firstAcquaintance(chatId);
+                if (!userService.isExistence(chatId)) {
+                    return firstAcquaintance(chatId);
+                }
+                return showHelp(chatId);
             case "/menu":
                 return showMenu(chatId);
             case "addUser":

@@ -11,4 +11,7 @@ public interface UserRepository {
 
     boolean existsById(long chatId);
 
+    public void updateWaterGoal(long chatId, double quantity);
+
+    public void updateSleepGoal(long chatId, double quantity);
 }

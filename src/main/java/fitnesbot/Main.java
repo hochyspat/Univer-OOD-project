@@ -3,7 +3,8 @@ package fitnesbot;
 
 import fitnesbot.bot.CommandHandler;
 import fitnesbot.bot.TelegramBot;
-import fitnesbot.config.DataBaseConfig;
+import fitnesbot.repositories.InMemoryUserRepository;
+import fitnesbot.services.DataBaseService;
 import fitnesbot.out.ConsoleOutputService;
 import fitnesbot.bot.ConsoleBot;
 import fitnesbot.in.ConsoleInputService;
@@ -11,7 +12,6 @@ import fitnesbot.repositories.DataBaseUserRepository;
 import fitnesbot.repositories.InMemoryMealsInTakeRepository;
 import fitnesbot.repositories.InMemorySleepRepository;
 import fitnesbot.repositories.InMemoryTrainingRepository;
-import fitnesbot.repositories.InMemoryUserRepository;
 import fitnesbot.repositories.InMemoryWaterRepository;
 import fitnesbot.services.BotPlatform;
 import fitnesbot.services.CalorieCountingService;
@@ -46,6 +46,7 @@ public class Main {
         Menu menu = new Menu();
         CalorieCountingService calorieCountingService = new CalorieCountingService();
         UserRepository userRepository = new DataBaseUserRepository();
+        UserRepository userRepositoryforConsole = new InMemoryUserRepository();
         MealsInTakeRepository mealsIntakeRepository = new InMemoryMealsInTakeRepository();
         SleepInTakeRepository sleepInTakeRepository = new InMemorySleepRepository();
         WaterInTakeRepository waterInTakeRepository = new InMemoryWaterRepository();
@@ -54,13 +55,13 @@ public class Main {
             Thread consoleThread = new Thread(() -> {
                 ConsoleBot consoleBot = getConsoleBot(
                         help, menu, calorieCountingService,
-                        userRepository, mealsIntakeRepository, sleepInTakeRepository,
+                        userRepositoryforConsole, mealsIntakeRepository, sleepInTakeRepository,
                         waterInTakeRepository, trainingRepository
                 );
-                DataBaseConfig dataBaseConfig = new DataBaseConfig();
-                dataBaseConfig.createAllTable();
                 consoleBot.start();
             });
+            DataBaseService dataBaseService = new DataBaseService();
+            dataBaseService.createAllTable();
             consoleThread.start();
         }
         if (platform == BotPlatform.TELEGRAM || platform == BotPlatform.BOTH) {
@@ -77,8 +78,8 @@ public class Main {
                     System.out.println("Error with TelegramApi: " + e.getMessage());
                 }
             });
-            DataBaseConfig dataBaseConfig = new DataBaseConfig();
-            dataBaseConfig.createAllTable();
+            DataBaseService dataBaseService = new DataBaseService();
+            dataBaseService.createAllTable();
             telegramThread.start();
 
         }

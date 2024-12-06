@@ -31,12 +31,24 @@ public class UserSQL {
     """;
 
     public static final String UPDATE_USER = """
-        UPDATE Users SET name = ?, height = ?, weight = ?, age = ?, 
-                          calories = ?, water_goal_quantity = ?, water_goal_units = ?, 
+        UPDATE Users SET name = ?, height = ?, weight = ?, age = ?,
+                          calories = ?, water_goal_quantity = ?, water_goal_units = ?,
                           sleep_goal_quantity = ?, deleted = ? WHERE chat_id = ?;
     """;
 
     public static final String EXISTS_BY_ID = """
         SELECT COUNT(*) FROM Users WHERE chat_id = ? AND deleted = FALSE;
+    """;
+
+    public static final String UPDATE_WATER_GOAL = """
+        UPDATE Users
+        SET water_goal_quantity = ?
+        WHERE chat_id = ?;
+    """;
+
+    public static final String UPDATE_SLEEP_GOAL = """
+        UPDATE Users
+        SET sleep_goal_quantity = ?
+        WHERE chat_id = ?;
     """;
 }

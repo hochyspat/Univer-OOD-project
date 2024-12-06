@@ -1,6 +1,9 @@
 package fitnesbot.repositories;
 
+import fitnesbot.models.SleepGoal;
 import fitnesbot.models.User;
+import fitnesbot.models.WaterGoal;
+import fitnesbot.services.NutrientUnits;
 import fitnesbot.services.UserRepository;
 
 import java.util.HashMap;
@@ -38,5 +41,19 @@ public class InMemoryUserRepository implements UserRepository {
         return (user != null && user.isDeleted());
     }
 
+    @Override
+    public void updateWaterGoal(long chatId, double quantity) {
+        User user = users.get(chatId);
+        if (user != null) {
+            user.setWaterGoal(new WaterGoal(quantity, NutrientUnits.ML));
+        }
+    }
+    @Override
+    public void updateSleepGoal(long chatId, double quantity) {
+        User user = users.get(chatId);
+        if (user != null) {
+            user.setSleepGoal(new SleepGoal(quantity));
+        }
+    }
 
 }
