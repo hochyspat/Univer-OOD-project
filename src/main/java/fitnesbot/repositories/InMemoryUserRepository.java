@@ -43,16 +43,15 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public void updateWaterGoal(long chatId, double quantity) {
-        User user = users.get(chatId);
-        if (user != null) {
-            user.setWaterGoal(new WaterGoal(quantity, NutrientUnits.ML));
+        if (users.containsKey(chatId)) {
+            users.get(chatId).setWaterGoal(new WaterGoal(quantity, NutrientUnits.ML));
         }
     }
+
     @Override
     public void updateSleepGoal(long chatId, double quantity) {
-        User user = users.get(chatId);
-        if (user != null) {
-            user.setSleepGoal(new SleepGoal(quantity));
+        if (users.containsKey(chatId)) {
+            users.get(chatId).setSleepGoal(new SleepGoal(quantity));
         }
     }
 

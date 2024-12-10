@@ -3,13 +3,15 @@ package fitnesbot;
 
 import fitnesbot.bot.CommandHandler;
 import fitnesbot.bot.TelegramBot;
+import fitnesbot.repositories.DataBaseMealsInTakeRepository;
+import fitnesbot.repositories.DataBaseTrainingRepository;
+import fitnesbot.repositories.InMemoryMealsInTakeRepository;
 import fitnesbot.repositories.InMemoryUserRepository;
 import fitnesbot.services.DataBaseService;
 import fitnesbot.out.ConsoleOutputService;
 import fitnesbot.bot.ConsoleBot;
 import fitnesbot.in.ConsoleInputService;
 import fitnesbot.repositories.DataBaseUserRepository;
-import fitnesbot.repositories.InMemoryMealsInTakeRepository;
 import fitnesbot.repositories.InMemorySleepRepository;
 import fitnesbot.repositories.InMemoryTrainingRepository;
 import fitnesbot.repositories.InMemoryWaterRepository;
@@ -31,6 +33,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class Main {
     public static void main(String[] args) throws TelegramApiException {
         BotPlatform platform = BotPlatform.CONSOLE;
@@ -42,47 +47,52 @@ public class Main {
                 return;
             }
         }
+        
         Help help = new Help();
         Menu menu = new Menu();
         CalorieCountingService calorieCountingService = new CalorieCountingService();
-        UserRepository userRepository = new DataBaseUserRepository();
+        MealsInTakeRepository mealsInTakeRepositoryforConsole = new InMemoryMealsInTakeRepository();
         UserRepository userRepositoryforConsole = new InMemoryUserRepository();
-        MealsInTakeRepository mealsIntakeRepository = new InMemoryMealsInTakeRepository();
         SleepInTakeRepository sleepInTakeRepository = new InMemorySleepRepository();
         WaterInTakeRepository waterInTakeRepository = new InMemoryWaterRepository();
-        TrainingRepository trainingRepository = new InMemoryTrainingRepository();
-        if (platform == BotPlatform.CONSOLE || platform == BotPlatform.BOTH) {
-            Thread consoleThread = new Thread(() -> {
-                ConsoleBot consoleBot = getConsoleBot(
-                        help, menu, calorieCountingService,
-                        userRepositoryforConsole, mealsIntakeRepository, sleepInTakeRepository,
-                        waterInTakeRepository, trainingRepository
-                );
-                consoleBot.start();
-            });
-            DataBaseService dataBaseService = new DataBaseService();
-            dataBaseService.createAllTable();
-            consoleThread.start();
-        }
-        if (platform == BotPlatform.TELEGRAM || platform == BotPlatform.BOTH) {
-            Thread telegramThread = new Thread(() -> {
-                try {
-                    TelegramBot telegramBot = getTelegramBot(
+        TrainingRepository trainingRepositoryforConsole = new InMemoryTrainingRepository();
+        DataBaseService dataBaseService = new DataBaseService();
+        dataBaseService.createAllTables();
+        try (Connection connection = DataBaseService.connect()) {
+            TrainingRepository trainingRepository = new DataBaseTrainingRepository(connection);
+            UserRepository userRepository = new DataBaseUserRepository();
+            MealsInTakeRepository mealsInTakeRepository = new DataBaseMealsInTakeRepository();
+            if (platform == BotPlatform.CONSOLE || platform == BotPlatform.BOTH) {
+                Thread consoleThread = new Thread(() -> {
+                    ConsoleBot consoleBot = getConsoleBot(
                             help, menu, calorieCountingService,
-                            userRepository, mealsIntakeRepository, sleepInTakeRepository,
-                            waterInTakeRepository, trainingRepository);
-                    TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-                    telegramBotsApi.registerBot(telegramBot);
+                            userRepositoryforConsole, mealsInTakeRepositoryforConsole, sleepInTakeRepository,
+                            waterInTakeRepository, trainingRepositoryforConsole
+                    );
+                    consoleBot.start();
+                });
+                consoleThread.start();
+            }
+            if (platform == BotPlatform.TELEGRAM || platform == BotPlatform.BOTH) {
+                Thread telegramThread = new Thread(() -> {
+                    try {
+                        TelegramBot telegramBot = getTelegramBot(
+                                help, menu, calorieCountingService,
+                                userRepository, mealsInTakeRepository, sleepInTakeRepository,
+                                waterInTakeRepository, trainingRepository);
+                        TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+                        telegramBotsApi.registerBot(telegramBot);
 
-                } catch (TelegramApiException e) {
-                    System.out.println("Error with TelegramApi: " + e.getMessage());
-                }
-            });
-            DataBaseService dataBaseService = new DataBaseService();
-            dataBaseService.createAllTable();
-            telegramThread.start();
-
+                    } catch (TelegramApiException e) {
+                        System.out.println("Error with TelegramApi: " + e.getMessage());
+                    }
+                });
+                telegramThread.start();
+            }
+        } catch (SQLException e) {
+            System.err.println("Ошибка соединения с базой данных: " + e.getMessage());
         }
+        
     }
 
     @NotNull

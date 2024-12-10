@@ -22,6 +22,8 @@ import fitnesbot.services.TrainingService;
 import fitnesbot.services.UserService;
 import fitnesbot.services.Help;
 
+import java.util.Arrays;
+
 
 public class CommandHandler {
     private final CalorieCountingService calorieService;
@@ -82,7 +84,8 @@ public class CommandHandler {
                             "[название] [ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
                 }
                 try {
-                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe("intake meal", args);
+                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe("intake meal",
+                            Arrays.copyOfRange(args, 1, args.length));
                     if (analyseMeal == null) {
                         return new MessageOutputData(
                                 new InputIngredientsError().getErrorMessage(), chatId);
@@ -113,13 +116,15 @@ public class CommandHandler {
                             "[название] [ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
                 }
                 try {
-                    String mealTypeFromArgs = command.parseArgsInfo();
+                    String mealTypeFromArgs = args[0];
                     MealType mealTypeAddMeal = MealType.fromString(mealTypeFromArgs);
                     if (mealTypeAddMeal == null) {
                         return new MessageOutputData("Неверный тип приема пищи."
                                 + "Возможные названия: Завтрак,Обед,Ужин,Перекус", chatId);
                     }
-                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe(mealTypeFromArgs, args);
+                    System.out.println(args[1]);
+                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe(mealTypeFromArgs, Arrays.copyOfRange(args, 1, args.length));
+                    System.out.println(analyseMeal.toString());
                     if (analyseMeal == null) {
                         return new MessageOutputData(
                                 new InputIngredientsError().getErrorMessage(), chatId);

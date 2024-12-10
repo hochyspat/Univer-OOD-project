@@ -52,34 +52,6 @@ public class InMemoryMealsInTakeRepository implements MealsInTakeRepository {
         return null;
     }
 
-    @Override
-    public Map<String, Map<MealType, MealsInTake>> findDiaryByChatId(long chatId) {
-        Map<String, Map<MealType, MealsInTake>> userMealsData = usersDiary.get(chatId);
-        if (userMealsData != null) {
-            return userMealsData;
-        } else {
-            System.out.println(new UserDiaryNotFoundError(chatId).getErrorMessage());
-            return null;
-        }
-    }
-
-    @Override
-    public Map<MealType, MealsInTake> findByDate(long chatId, String data) {
-        Map<String, Map<MealType, MealsInTake>> userMealsData = usersDiary.get(chatId);
-        if (userMealsData != null) {
-            Map<MealType, MealsInTake> mealsByDate = userMealsData.get(data);
-            if (mealsByDate != null) {
-                return mealsByDate;
-            } else {
-                System.out.println("Meals by date not found");
-                return null;
-            }
-        } else {
-            System.out.println(new UserDiaryNotFoundError(chatId).getErrorMessage());
-            return null;
-        }
-    }
-
 
     @Override
     public void deleteMealType(MealType mealType, String date, long chatId) {

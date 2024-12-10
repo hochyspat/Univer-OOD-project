@@ -60,7 +60,7 @@ public class User {
     }
 
     public WaterGoal getWaterGoal() {
-        if (this.sleepGoal == null) {
+        if (this.waterGoal == null) {
             waterGoal = new WaterGoal(0, NutrientUnits.ML);
         }
         return this.waterGoal;

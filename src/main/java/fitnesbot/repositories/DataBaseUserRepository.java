@@ -16,19 +16,24 @@ import java.util.Objects;
 
 public class DataBaseUserRepository implements UserRepository {
 
+
     @Override
     public void save(User user) {
         try (Connection connection = DataBaseService.connect();
-             PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(UserSQL.INSERT_USER)) {
+             PreparedStatement statement = Objects.requireNonNull(
+                     connection).prepareStatement(UserSQL.INSERT_USER)) {
             statement.setLong(1, user.getChatId());
             statement.setString(2, user.getName());
             statement.setInt(3, user.getHeight());
             statement.setInt(4, user.getWeight());
             statement.setInt(5, user.getAge());
             statement.setDouble(6, user.getCalories());
-            statement.setObject(7, user.getWaterGoal() != null ? user.getWaterGoal().quantity() : null);
-            statement.setString(8, user.getWaterGoal() != null ? user.getWaterGoal().units().name() : null);
-            statement.setObject(9, user.getSleepGoal() != null ? user.getSleepGoal().quantity() : null);
+            statement.setObject(7, user.getWaterGoal() != null ?
+                    user.getWaterGoal().quantity() : null);
+            statement.setString(8, user.getWaterGoal() != null ?
+                    user.getWaterGoal().units().name() : null);
+            statement.setObject(9, user.getSleepGoal() != null ?
+                    user.getSleepGoal().quantity() : null);
             statement.setBoolean(10, user.isDeleted());
             statement.executeUpdate();
             System.out.println("Пользователь успешно сохранен: " + user.getName());
@@ -40,7 +45,8 @@ public class DataBaseUserRepository implements UserRepository {
     @Override
     public User findById(long chatId) {
         try (Connection connection = DataBaseService.connect();
-             PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(UserSQL.SELECT_USER_BY_ID)) {
+             PreparedStatement statement = Objects.requireNonNull(
+                     connection).prepareStatement(UserSQL.SELECT_USER_BY_ID)) {
             statement.setLong(1, chatId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -70,7 +76,8 @@ public class DataBaseUserRepository implements UserRepository {
     @Override
     public void delete(long chatId) {
         try (Connection connection = DataBaseService.connect();
-             PreparedStatement preparedStatement = Objects.requireNonNull(connection).prepareStatement(UserSQL.DELETE_USER)) {
+             PreparedStatement preparedStatement = Objects.requireNonNull(
+                     connection).prepareStatement(UserSQL.DELETE_USER)) {
             preparedStatement.setLong(1, chatId);
             preparedStatement.executeUpdate();
             System.out.println("Пользователь с ID " + chatId + " помечен как удаленный.");
@@ -78,9 +85,11 @@ public class DataBaseUserRepository implements UserRepository {
             System.err.println("Ошибка удаления пользователя: " + e.getMessage());
         }
     }
+
     public boolean existsById(long chatId) {
         try (Connection connection = DataBaseService.connect();
-             PreparedStatement preparedStatement = Objects.requireNonNull(connection).prepareStatement(UserSQL.EXISTS_BY_ID)) {
+             PreparedStatement preparedStatement = Objects.requireNonNull(
+                     connection).prepareStatement(UserSQL.EXISTS_BY_ID)) {
             preparedStatement.setLong(1, chatId);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
@@ -94,8 +103,9 @@ public class DataBaseUserRepository implements UserRepository {
 
     @Override
     public void updateWaterGoal(long chatId, double quantity) {
-        try (Connection conn = DataBaseService.connect();
-             PreparedStatement stmt = Objects.requireNonNull(conn).prepareStatement(UserSQL.UPDATE_WATER_GOAL)) {
+        try (Connection connenction = DataBaseService.connect();
+             PreparedStatement stmt = Objects.requireNonNull(
+                     connenction).prepareStatement(UserSQL.UPDATE_WATER_GOAL)) {
             stmt.setDouble(1, quantity);
             stmt.setLong(2, chatId);
             stmt.executeUpdate();
@@ -104,10 +114,11 @@ public class DataBaseUserRepository implements UserRepository {
                     err.println("Ошибка обновления цели по воде: " + e.getMessage());
         }
     }
+
     @Override
     public void updateSleepGoal(long chatId, double quantity) {
-        try (Connection conn = DataBaseService.connect();
-             PreparedStatement stmt = Objects.requireNonNull(conn).prepareStatement(UserSQL.UPDATE_SLEEP_GOAL)) {
+        try (Connection connection = DataBaseService.connect();
+             PreparedStatement stmt = Objects.requireNonNull(connection).prepareStatement(UserSQL.UPDATE_SLEEP_GOAL)) {
             stmt.setDouble(1, quantity);
             stmt.setLong(2, chatId);
             stmt.executeUpdate();
@@ -116,7 +127,6 @@ public class DataBaseUserRepository implements UserRepository {
                     err.println("Ошибка обновления цели по сну: " + e.getMessage());
         }
     }
-
 
 
 }

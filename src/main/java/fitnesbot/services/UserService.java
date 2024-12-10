@@ -4,9 +4,7 @@ import fitnesbot.bot.MessageOutputData;
 import fitnesbot.exeptions.usererrors.InvalidParameterError;
 import fitnesbot.exeptions.usererrors.NonExistenceUserError;
 import fitnesbot.exeptions.usererrors.UserAlreadyExistsError;
-import fitnesbot.models.SleepGoal;
 import fitnesbot.models.User;
-import fitnesbot.models.WaterGoal;
 
 public class UserService {
     private final UserRepository userRepository;
@@ -73,6 +71,7 @@ public class UserService {
             NutrientUnits nutrientUnit = NutrientUnits.fromString(inputUnit);
             if (nutrientUnit != null) {
                 quantity = nutrientUnit.equals(NutrientUnits.L) ? quantity * 1000 : quantity;
+                System.out.println(quantity);
                 userRepository.updateWaterGoal(chatId,quantity);
                 return new MessageOutputData(
                         "Цель по потреблению воды успешно установлена!", chatId);

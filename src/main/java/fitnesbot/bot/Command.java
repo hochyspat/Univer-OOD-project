@@ -27,11 +27,6 @@ public record Command(String command, String[] args) {
             "deleteTraining"
     );
 
-    public String parseArgsInfo() {
-        int firstSpaceIndex = args[0].indexOf(" ");
-        return args[0].substring(0, firstSpaceIndex);
-    }
-
     public boolean isValid() {
         return validCommands.contains(command);
     }
@@ -43,8 +38,13 @@ public record Command(String command, String[] args) {
 
     private static String[] parserArguments(String commandData) {
         if (commandData.contains(",")) {
-            return commandData.substring(commandData.indexOf(' ') + 1).trim().split(
-                    ",\\s*");
+            String[] parts = commandData.substring(
+                    commandData.indexOf(' ') + 1).split(" ", 2);
+            String[] argsMeal = parts[1].split(",\\s*");
+            String[] result = new String[1 + argsMeal.length];
+            result[0] = parts[0];
+            System.arraycopy(argsMeal, 0, result, 1, argsMeal.length);
+            return result;
         } else if (commandData.contains(" ")) {
             return commandData.substring(commandData.indexOf(' ') + 1).trim().split(
                     "\\s+");

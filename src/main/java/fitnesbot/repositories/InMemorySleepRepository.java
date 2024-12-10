@@ -27,6 +27,7 @@ public class InMemorySleepRepository implements SleepInTakeRepository {
         calendar.setTime(today);
         calendar.add(Calendar.DAY_OF_YEAR, -7);
         Date weekAgo = calendar.getTime();
+        System.out.println(weekAgo);
         double totalSleep = 0;
         int count = 0;
         for (Map.Entry<String, Double> entry : userSleepMap.entrySet()) {
