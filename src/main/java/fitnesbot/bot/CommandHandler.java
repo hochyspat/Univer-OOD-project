@@ -122,9 +122,7 @@ public class CommandHandler {
                         return new MessageOutputData("Неверный тип приема пищи."
                                 + "Возможные названия: Завтрак,Обед,Ужин,Перекус", chatId);
                     }
-                    System.out.println(args[1]);
                     MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe(mealTypeFromArgs, Arrays.copyOfRange(args, 1, args.length));
-                    System.out.println(analyseMeal.toString());
                     if (analyseMeal == null) {
                         return new MessageOutputData(
                                 new InputIngredientsError().getErrorMessage(), chatId);

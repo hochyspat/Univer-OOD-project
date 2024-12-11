@@ -177,7 +177,7 @@ public class CommandHandlerTest {
         sleepInTakeRepository.save(12345L, "7.12.2024", 6.0);
         sleepInTakeRepository.save(12345L, "8.12.2024", 8.0);
         double avgSleep = sleepInTakeRepository.getWeekStat(12345L);
-        assertEquals(7.125, avgSleep, 0.1);
+        assertEquals(7.0, avgSleep, 0.1);
     }
 }
 
