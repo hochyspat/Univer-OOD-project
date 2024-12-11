@@ -72,7 +72,7 @@ public class UserService {
             if (nutrientUnit != null) {
                 quantity = nutrientUnit.equals(NutrientUnits.L) ? quantity * 1000 : quantity;
                 System.out.println(quantity);
-                userRepository.updateWaterGoal(chatId,quantity);
+                userRepository.updateWaterGoal(chatId, quantity);
                 return new MessageOutputData(
                         "Цель по потреблению воды успешно установлена!", chatId);
             }
@@ -94,7 +94,7 @@ public class UserService {
         }
         if (isNumber(inputQuantity)) {
             double quantity = Double.parseDouble(inputQuantity);
-            userRepository.updateSleepGoal(chatId,quantity);
+            userRepository.updateSleepGoal(chatId, quantity);
             return new MessageOutputData(
                     "Цель по количеству сна успешно установлена!", chatId);
         } else {
@@ -128,5 +128,4 @@ public class UserService {
         }
         return false;
     }
-
 }

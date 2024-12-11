@@ -21,6 +21,11 @@ public class UserSQL {
                                    water_goal_quantity, water_goal_units, sleep_goal_quantity, deleted)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """;
+    public static final String UPDATE_USER_FIELD = """
+                UPDATE Users
+                SET %s = ?
+                WHERE chat_id = ?;
+            """;
 
     public static final String SELECT_USER_BY_ID = """
                 SELECT * FROM Users WHERE chat_id = ? AND deleted = FALSE;
@@ -28,12 +33,6 @@ public class UserSQL {
 
     public static final String DELETE_USER = """
                 UPDATE Users SET deleted = TRUE WHERE chat_id = ?;
-            """;
-
-    public static final String UPDATE_USER = """
-                UPDATE Users SET name = ?, height = ?, weight = ?, age = ?,
-                                  calories = ?, water_goal_quantity = ?, water_goal_units = ?,
-                                  sleep_goal_quantity = ?, deleted = ? WHERE chat_id = ?;
             """;
 
     public static final String EXISTS_BY_ID = """

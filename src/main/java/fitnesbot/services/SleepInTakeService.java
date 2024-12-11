@@ -22,8 +22,12 @@ public class SleepInTakeService {
 
     public MessageOutputData getWeekSleepStat(long chatId) {
         double result = sleepInTakeRepository.getWeekStat(chatId);
-        return (new MessageOutputData("Среднее количество сна за неделю: "
-                + result, chatId));
+        if (result > 0) {
+            return (new MessageOutputData("Среднее количество сна за неделю: "
+                    + result, chatId));
+        }
+        System.out.println("Не удалось найти информацию о  сне за неделю");
+        return new MessageOutputData("К сожалению у вас нет записей за эту неделю", chatId);
     }
 
     public MessageOutputData getDaySleepStat(long chatId, String day) {

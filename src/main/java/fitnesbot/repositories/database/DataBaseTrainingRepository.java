@@ -1,7 +1,8 @@
-package fitnesbot.repositories;
+package fitnesbot.repositories.database;
 
 import fitnesbot.models.TrainingSQL;
 import fitnesbot.models.TrainingSession;
+import fitnesbot.services.DataBaseService;
 import fitnesbot.services.TrainingRepository;
 
 import java.sql.Connection;
@@ -9,17 +10,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DataBaseTrainingRepository implements TrainingRepository {
-    private final Connection connection;
-
-    public DataBaseTrainingRepository(Connection connection) {
-        this.connection = connection;
-    }
 
     @Override
     public void save(long chatId, String date, TrainingSession trainingSession) {
-        try (PreparedStatement statement = connection.prepareStatement(TrainingSQL.INSERT_TRAINING)) {
+        try (Connection connection = DataBaseService.connect();
+             PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
+                     TrainingSQL.INSERT_TRAINING)) {
             statement.setLong(1, chatId);
             statement.setString(2, date);
             statement.setString(3, trainingSession.getName());
@@ -34,7 +33,8 @@ public class DataBaseTrainingRepository implements TrainingRepository {
     @Override
     public List<TrainingSession> findByChatId(long chatId) {
         List<TrainingSession> sessions = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(TrainingSQL.SELECT_TRAININGS_BY_CHAT_ID)) {
+         try (Connection connection = DataBaseService.connect();
+             PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(TrainingSQL.SELECT_TRAININGS_BY_CHAT_ID)) {
             statement.setLong(1, chatId);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
@@ -53,7 +53,8 @@ public class DataBaseTrainingRepository implements TrainingRepository {
     @Override
     public List<TrainingSession> findByDate(long chatId, String date) {
         List<TrainingSession> sessions = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(TrainingSQL.SELECT_TRAININGS_BY_DATE)) {
+         try (Connection connection = DataBaseService.connect();
+             PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(TrainingSQL.SELECT_TRAININGS_BY_DATE)) {
             statement.setLong(1, chatId);
             statement.setString(2, date);
             ResultSet rs = statement.executeQuery();
@@ -72,7 +73,8 @@ public class DataBaseTrainingRepository implements TrainingRepository {
 
     @Override
     public void deleteSession(long chatId, String date, String sessionName) {
-        try (PreparedStatement statement = connection.prepareStatement(TrainingSQL.DELETE_TRAINING)) {
+         try (Connection connection = DataBaseService.connect();
+             PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(TrainingSQL.DELETE_TRAINING)) {
             statement.setLong(1, chatId);
             statement.setString(2, date);
             statement.setString(3, sessionName);

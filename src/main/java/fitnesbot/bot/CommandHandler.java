@@ -224,6 +224,7 @@ public class CommandHandler {
                 return showUserById(chatId);
             case "/exit":
                 return new MessageOutputData("Finish bot", chatId);
+
             default:
                 return new MessageOutputData(new InvalidCommandError().getErrorMessage(), chatId);
         }

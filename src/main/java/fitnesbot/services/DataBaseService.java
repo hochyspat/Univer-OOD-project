@@ -2,8 +2,10 @@ package fitnesbot.services;
 
 import fitnesbot.config.DataBaseConfig;
 import fitnesbot.models.MealSQL;
+import fitnesbot.models.SleepSQL;
 import fitnesbot.models.TrainingSQL;
 import fitnesbot.models.UserSQL;
+import fitnesbot.models.WaterInTakeSql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -43,6 +45,8 @@ public class DataBaseService {
                 statement.executeUpdate(UserSQL.CREATE_TABLE);
                 statement.executeUpdate(MealSQL.CREATE_MEALINTAKES_TABLE);
                 statement.executeUpdate(TrainingSQL.CREATE_TRAININGS_TABLE);
+                statement.executeUpdate(WaterInTakeSql.CREATE_WATER_INTAKES_TABLE);
+                statement.executeUpdate(SleepSQL.CREATE_SLEEP_RECORDS);
                 System.out.println("Таблицы успешно созданы.");
             } else {
                 System.err.println("Не удалось создать таблицы: соединение с базой данных не установлено.");

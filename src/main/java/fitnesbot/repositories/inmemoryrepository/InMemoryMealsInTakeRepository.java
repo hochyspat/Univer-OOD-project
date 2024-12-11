@@ -1,4 +1,4 @@
-package fitnesbot.repositories;
+package fitnesbot.repositories.inmemoryrepository;
 
 import fitnesbot.exeptions.mealsintakeerrors.MealsInTakeAlreadyDeletedError;
 import fitnesbot.exeptions.mealsintakeerrors.MealsInTakeNotFoundError;

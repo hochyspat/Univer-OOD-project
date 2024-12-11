@@ -1,4 +1,4 @@
-package fitnesbot.repositories;
+package fitnesbot.repositories.inmemoryrepository;
 
 import fitnesbot.services.SleepInTakeRepository;
 
@@ -38,8 +38,8 @@ public class InMemorySleepRepository implements SleepInTakeRepository {
                     count++;
                 }
             } catch (ParseException e) {
-                System.out.println("Invalid date format: " + entry.getKey());
-                return -1;
+                System.out.println("Неверный формат данных: " + entry.getKey());
+                count = -1;
             }
         }
 

@@ -1,4 +1,4 @@
-package fitnesbot.repositories;
+package fitnesbot.repositories.database;
 
 import fitnesbot.bot.apiparser.JsonSimpleParser;
 import fitnesbot.models.MealSQL;

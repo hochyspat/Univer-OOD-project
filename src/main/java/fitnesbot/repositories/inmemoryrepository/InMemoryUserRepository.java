@@ -1,4 +1,4 @@
-package fitnesbot.repositories;
+package fitnesbot.repositories.inmemoryrepository;
 
 import fitnesbot.models.SleepGoal;
 import fitnesbot.models.User;

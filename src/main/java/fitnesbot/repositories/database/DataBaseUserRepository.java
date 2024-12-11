@@ -1,4 +1,4 @@
-package fitnesbot.repositories;
+package fitnesbot.repositories.database;
 
 import fitnesbot.models.SleepGoal;
 import fitnesbot.models.WaterGoal;
@@ -103,9 +103,9 @@ public class DataBaseUserRepository implements UserRepository {
 
     @Override
     public void updateWaterGoal(long chatId, double quantity) {
-        try (Connection connenction = DataBaseService.connect();
+        try (Connection connection = DataBaseService.connect();
              PreparedStatement stmt = Objects.requireNonNull(
-                     connenction).prepareStatement(UserSQL.UPDATE_WATER_GOAL)) {
+                     connection).prepareStatement(UserSQL.UPDATE_WATER_GOAL)) {
             stmt.setDouble(1, quantity);
             stmt.setLong(2, chatId);
             stmt.executeUpdate();
@@ -127,6 +127,5 @@ public class DataBaseUserRepository implements UserRepository {
                     err.println("Ошибка обновления цели по сну: " + e.getMessage());
         }
     }
-
 
 }
