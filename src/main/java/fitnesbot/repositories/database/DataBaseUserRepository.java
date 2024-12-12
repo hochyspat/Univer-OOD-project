@@ -28,12 +28,12 @@ public class DataBaseUserRepository implements UserRepository {
             statement.setInt(4, user.getWeight());
             statement.setInt(5, user.getAge());
             statement.setDouble(6, user.getCalories());
-            statement.setObject(7, user.getWaterGoal() != null ?
-                    user.getWaterGoal().quantity() : null);
-            statement.setString(8, user.getWaterGoal() != null ?
-                    user.getWaterGoal().units().name() : null);
-            statement.setObject(9, user.getSleepGoal() != null ?
-                    user.getSleepGoal().quantity() : null);
+            statement.setObject(7, user.getWaterGoal() != null
+                    ? user.getWaterGoal().quantity() : null);
+            statement.setString(8, user.getWaterGoal() != null
+                    ? user.getWaterGoal().units().name() : null);
+            statement.setObject(9, user.getSleepGoal() != null
+                    ? user.getSleepGoal().quantity() : null);
             statement.setBoolean(10, user.isDeleted());
             statement.executeUpdate();
             System.out.println("Пользователь успешно сохранен: " + user.getName());
@@ -110,8 +110,7 @@ public class DataBaseUserRepository implements UserRepository {
             stmt.setLong(2, chatId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            System.
-                    err.println("Ошибка обновления цели по воде: " + e.getMessage());
+            System.err.println("Ошибка обновления цели по воде: " + e.getMessage());
         }
     }
 
