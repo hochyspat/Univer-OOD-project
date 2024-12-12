@@ -1,4 +1,4 @@
-package fitnesbot.models;
+package fitnesbot.models.sql;
 
 public class SleepSQL {
     public static final String CREATE_SLEEP_RECORDS = """

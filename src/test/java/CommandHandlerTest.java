@@ -3,12 +3,12 @@ import fitnesbot.bot.CommandHandler;
 import fitnesbot.bot.MessageCommandData;
 import fitnesbot.bot.MessageOutputData;
 import fitnesbot.models.User;
-import fitnesbot.repositories.inmemoryrepository.InMemoryMealsInTakeRepository;
-import fitnesbot.repositories.inmemoryrepository.InMemorySleepRepository;
-import fitnesbot.repositories.inmemoryrepository.InMemoryTrainingRepository;
-import fitnesbot.repositories.inmemoryrepository.InMemoryUserRepository;
+import fitnesbot.repositories.inmemory.InMemoryMealsInTakeRepository;
+import fitnesbot.repositories.inmemory.InMemorySleepRepository;
+import fitnesbot.repositories.inmemory.InMemoryTrainingRepository;
+import fitnesbot.repositories.inmemory.InMemoryUserRepository;
 
-import fitnesbot.repositories.inmemoryrepository.InMemoryWaterRepository;
+import fitnesbot.repositories.inmemory.InMemoryWaterRepository;
 import fitnesbot.services.CalorieCountingService;
 import fitnesbot.services.Help;
 import fitnesbot.services.MealsInTakeService;

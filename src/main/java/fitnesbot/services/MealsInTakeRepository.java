@@ -1,6 +1,7 @@
 package fitnesbot.services;
 
 import fitnesbot.models.MealsInTake;
+import fitnesbot.services.enums.MealType;
 
 
 public interface MealsInTakeRepository {

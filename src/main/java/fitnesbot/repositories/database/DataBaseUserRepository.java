@@ -4,8 +4,8 @@ import fitnesbot.models.SleepGoal;
 import fitnesbot.models.WaterGoal;
 import fitnesbot.services.DataBaseService;
 import fitnesbot.models.User;
-import fitnesbot.models.UserSQL;
-import fitnesbot.services.NutrientUnits;
+import fitnesbot.models.sql.UserSQL;
+import fitnesbot.services.enums.NutrientUnits;
 import fitnesbot.services.UserRepository;
 
 import java.sql.Connection;
@@ -15,11 +15,15 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 public class DataBaseUserRepository implements UserRepository {
+    private final DataBaseService dataBaseService;
 
+    public DataBaseUserRepository(DataBaseService dataBaseService) {
+        this.dataBaseService = dataBaseService;
+    }
 
     @Override
     public void save(User user) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(
                      connection).prepareStatement(UserSQL.INSERT_USER)) {
             statement.setLong(1, user.getChatId());
@@ -44,7 +48,7 @@ public class DataBaseUserRepository implements UserRepository {
 
     @Override
     public User findById(long chatId) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(
                      connection).prepareStatement(UserSQL.SELECT_USER_BY_ID)) {
             statement.setLong(1, chatId);
@@ -75,7 +79,7 @@ public class DataBaseUserRepository implements UserRepository {
 
     @Override
     public void delete(long chatId) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement preparedStatement = Objects.requireNonNull(
                      connection).prepareStatement(UserSQL.DELETE_USER)) {
             preparedStatement.setLong(1, chatId);
@@ -87,7 +91,7 @@ public class DataBaseUserRepository implements UserRepository {
     }
 
     public boolean existsById(long chatId) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement preparedStatement = Objects.requireNonNull(
                      connection).prepareStatement(UserSQL.EXISTS_BY_ID)) {
             preparedStatement.setLong(1, chatId);
@@ -103,7 +107,7 @@ public class DataBaseUserRepository implements UserRepository {
 
     @Override
     public void updateWaterGoal(long chatId, double quantity) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement stmt = Objects.requireNonNull(
                      connection).prepareStatement(UserSQL.UPDATE_WATER_GOAL)) {
             stmt.setDouble(1, quantity);
@@ -116,7 +120,7 @@ public class DataBaseUserRepository implements UserRepository {
 
     @Override
     public void updateSleepGoal(long chatId, double quantity) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement stmt = Objects.requireNonNull(connection).prepareStatement(UserSQL.UPDATE_SLEEP_GOAL)) {
             stmt.setDouble(1, quantity);
             stmt.setLong(2, chatId);

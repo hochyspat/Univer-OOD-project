@@ -1,7 +1,7 @@
 
 package fitnesbot.models;
 
-import fitnesbot.services.NutrientUnits;
+import fitnesbot.services.enums.NutrientUnits;
 
 public class User {
     private final long chatId;

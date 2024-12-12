@@ -1,10 +1,10 @@
 package fitnesbot.repositories.database;
 
 import fitnesbot.bot.apiparser.JsonSimpleParser;
-import fitnesbot.models.MealSQL;
+import fitnesbot.models.sql.MealSQL;
 import fitnesbot.models.MealsInTake;
 import fitnesbot.services.DataBaseService;
-import fitnesbot.services.MealType;
+import fitnesbot.services.enums.MealType;
 import fitnesbot.services.MealsInTakeRepository;
 
 import java.sql.Connection;
@@ -15,9 +15,15 @@ import java.util.Objects;
 
 public class DataBaseMealsInTakeRepository implements MealsInTakeRepository {
 
+    private final DataBaseService dataBaseService;
+
+    public DataBaseMealsInTakeRepository(DataBaseService dataBaseService) {
+        this.dataBaseService = dataBaseService;
+    }
+
     @Override
     public void save(MealsInTake mealInTake, long chatId, String date, MealType mealType) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      MealSQL.INSERT_OR_UPDATE_MEALINTAKE)) {
             statement.setLong(1, chatId);
@@ -38,7 +44,7 @@ public class DataBaseMealsInTakeRepository implements MealsInTakeRepository {
 
     @Override
     public MealsInTake findByMealsInTakeType(MealType mealType, String date, long chatId) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      MealSQL.SELECT_MEALS_BY_DATE)) {
             statement.setLong(1, chatId);
@@ -59,7 +65,7 @@ public class DataBaseMealsInTakeRepository implements MealsInTakeRepository {
 
     @Override
     public void deleteMealType(MealType mealType, String date, long chatId) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      MealSQL.DELETE_MEAL)) {
             statement.setLong(1, chatId);

@@ -1,4 +1,4 @@
-package fitnesbot.repositories.inmemoryrepository;
+package fitnesbot.repositories.inmemory;
 
 import fitnesbot.models.TrainingSession;
 import fitnesbot.services.TrainingRepository;

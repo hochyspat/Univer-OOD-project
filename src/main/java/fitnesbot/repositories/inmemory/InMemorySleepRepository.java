@@ -1,4 +1,4 @@
-package fitnesbot.repositories.inmemoryrepository;
+package fitnesbot.repositories.inmemory;
 
 import fitnesbot.services.SleepInTakeRepository;
 

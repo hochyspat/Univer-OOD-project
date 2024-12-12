@@ -1,4 +1,4 @@
-package fitnesbot.models;
+package fitnesbot.models.sql;
 
 public class TrainingSQL {
     public static final String CREATE_TRAININGS_TABLE = """

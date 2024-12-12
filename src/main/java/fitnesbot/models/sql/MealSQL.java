@@ -1,4 +1,4 @@
-package fitnesbot.models;
+package fitnesbot.models.sql;
 
 public class MealSQL {
     public static final String CREATE_MEALINTAKES_TABLE = """

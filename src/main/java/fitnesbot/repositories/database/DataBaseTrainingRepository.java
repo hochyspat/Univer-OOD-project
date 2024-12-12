@@ -1,6 +1,6 @@
 package fitnesbot.repositories.database;
 
-import fitnesbot.models.TrainingSQL;
+import fitnesbot.models.sql.TrainingSQL;
 import fitnesbot.models.TrainingSession;
 import fitnesbot.services.DataBaseService;
 import fitnesbot.services.TrainingRepository;
@@ -14,9 +14,15 @@ import java.util.Objects;
 
 public class DataBaseTrainingRepository implements TrainingRepository {
 
+    private final DataBaseService dataBaseService;
+
+    public DataBaseTrainingRepository(DataBaseService dataBaseService) {
+        this.dataBaseService = dataBaseService;
+    }
+
     @Override
     public void save(long chatId, String date, TrainingSession trainingSession) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      TrainingSQL.INSERT_TRAINING)) {
             statement.setLong(1, chatId);
@@ -33,7 +39,7 @@ public class DataBaseTrainingRepository implements TrainingRepository {
     @Override
     public List<TrainingSession> findByChatId(long chatId) {
         List<TrainingSession> sessions = new ArrayList<>();
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      TrainingSQL.SELECT_TRAININGS_BY_CHAT_ID)) {
             statement.setLong(1, chatId);
@@ -54,7 +60,7 @@ public class DataBaseTrainingRepository implements TrainingRepository {
     @Override
     public List<TrainingSession> findByDate(long chatId, String date) {
         List<TrainingSession> sessions = new ArrayList<>();
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      TrainingSQL.SELECT_TRAININGS_BY_DATE)) {
             statement.setLong(1, chatId);
@@ -75,7 +81,7 @@ public class DataBaseTrainingRepository implements TrainingRepository {
 
     @Override
     public void deleteSession(long chatId, String date, String sessionName) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      TrainingSQL.DELETE_TRAINING)) {
             statement.setLong(1, chatId);

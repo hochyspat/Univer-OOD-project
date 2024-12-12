@@ -1,6 +1,6 @@
 package fitnesbot.repositories.database;
 
-import fitnesbot.models.SleepSQL;
+import fitnesbot.models.sql.SleepSQL;
 import fitnesbot.services.DataBaseService;
 import fitnesbot.services.SleepInTakeRepository;
 
@@ -16,9 +16,15 @@ import java.util.Objects;
 public class DataBaseSleepRepository implements SleepInTakeRepository {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
+    private final DataBaseService dataBaseService;
+
+    public DataBaseSleepRepository(DataBaseService dataBaseService) {
+        this.dataBaseService = dataBaseService;
+    }
+
     @Override
     public void save(long chatId, String datetime, double sleepQuantity) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      SleepSQL.INSERT_SLEEP)) {
             statement.setLong(1, chatId);
@@ -32,7 +38,7 @@ public class DataBaseSleepRepository implements SleepInTakeRepository {
 
     @Override
     public double getWeekStat(long chatId) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      SleepSQL.SELECT_WEEK_SLEEP)) {
             Date today = new Date();
@@ -61,7 +67,7 @@ public class DataBaseSleepRepository implements SleepInTakeRepository {
 
     @Override
     public double getDayStat(long chatId, String datetime) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      SleepSQL.SELECT_SLEEP_BY_DATE)) {
             statement.setLong(1, chatId);

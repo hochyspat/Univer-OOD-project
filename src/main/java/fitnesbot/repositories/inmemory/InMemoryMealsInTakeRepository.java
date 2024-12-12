@@ -1,10 +1,10 @@
-package fitnesbot.repositories.inmemoryrepository;
+package fitnesbot.repositories.inmemory;
 
 import fitnesbot.exeptions.mealsintakeerrors.MealsInTakeAlreadyDeletedError;
 import fitnesbot.exeptions.mealsintakeerrors.MealsInTakeNotFoundError;
 import fitnesbot.exeptions.mealsintakeerrors.UserDiaryNotFoundError;
 import fitnesbot.models.MealsInTake;
-import fitnesbot.services.MealType;
+import fitnesbot.services.enums.MealType;
 import fitnesbot.services.MealsInTakeRepository;
 
 import java.util.HashMap;

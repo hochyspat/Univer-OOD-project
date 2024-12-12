@@ -1,9 +1,12 @@
-package fitnesbot.services;
+package fitnesbot.services.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum NutrientUnits {
-    G("g"),
+
+    @JsonProperty("g")
+    GRAM("g"),
     IU("iu"),
     MG("mg"),
     UG("ug"),

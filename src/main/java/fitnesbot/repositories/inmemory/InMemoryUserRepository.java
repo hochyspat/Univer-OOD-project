@@ -1,9 +1,9 @@
-package fitnesbot.repositories.inmemoryrepository;
+package fitnesbot.repositories.inmemory;
 
 import fitnesbot.models.SleepGoal;
 import fitnesbot.models.User;
 import fitnesbot.models.WaterGoal;
-import fitnesbot.services.NutrientUnits;
+import fitnesbot.services.enums.NutrientUnits;
 import fitnesbot.services.UserRepository;
 
 import java.util.HashMap;

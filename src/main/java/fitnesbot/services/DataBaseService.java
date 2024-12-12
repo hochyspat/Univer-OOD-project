@@ -1,11 +1,12 @@
 package fitnesbot.services;
 
 import fitnesbot.config.DataBaseConfig;
-import fitnesbot.models.MealSQL;
-import fitnesbot.models.SleepSQL;
-import fitnesbot.models.TrainingSQL;
-import fitnesbot.models.UserSQL;
-import fitnesbot.models.WaterInTakeSql;
+import fitnesbot.exeptions.databaseerrors.DriverNotFoundException;
+import fitnesbot.models.sql.MealSQL;
+import fitnesbot.models.sql.SleepSQL;
+import fitnesbot.models.sql.TrainingSQL;
+import fitnesbot.models.sql.UserSQL;
+import fitnesbot.models.sql.WaterInTakeSql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,9 +15,11 @@ import java.sql.Statement;
 
 
 public class DataBaseService {
-    private static String URL = "";
-    private static String USER = "";
-    private static String PASSWORD = "";
+    private String URL = "";
+    private String USER = "";
+    private String PASSWORD = "";
+
+    private Connection connection;
 
     public DataBaseService() {
         DataBaseConfig dataBaseConfig = new DataBaseConfig();
@@ -25,21 +28,36 @@ public class DataBaseService {
         PASSWORD = dataBaseConfig.getDataBasePassword();
     }
 
-    public static Connection connect() {
+    {
         try {
-            Class.forName("org.postgresql.Driver");
-            System.out.println("Подключение к базе данных выполнено успешно!");
-            return DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (ClassNotFoundException e) {
-            System.out.println("Драйвер PostgreSQL не найден: " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("Ошибка подключения к базе данных: " + e.getMessage());
+            checkDriver();
+        } catch (DriverNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
+    private void checkDriver() throws DriverNotFoundException {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new DriverNotFoundException();
+        }
+    }
+
+    public Connection getConnection() {
+        try {
+            if (connection == null || connection.isClosed()) {
+                connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            }
+        } catch (SQLException e) {
+            System.err.println("Ошибка получения соединения: " + e.getMessage());
+        }
+        return connection;
+    }
+
+
     public void createAllTables() {
-        try (Connection conn = connect();
+        try (Connection conn = getConnection();
              Statement statement = conn != null ? conn.createStatement() : null) {
             if (statement != null) {
                 statement.executeUpdate(UserSQL.CREATE_TABLE);

@@ -2,6 +2,7 @@ package fitnesbot.services;
 
 import fitnesbot.bot.MessageOutputData;
 import fitnesbot.models.MealsInTake;
+import fitnesbot.services.enums.MealType;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

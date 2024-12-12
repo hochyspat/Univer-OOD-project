@@ -1,4 +1,4 @@
-package fitnesbot.services;
+package fitnesbot.services.enums;
 
 public enum BotPlatform {
     CONSOLE,

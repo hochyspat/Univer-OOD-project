@@ -13,7 +13,7 @@ import fitnesbot.models.ParsedMeal;
 import fitnesbot.models.User;
 import fitnesbot.models.WaterGoal;
 import fitnesbot.services.CalorieCountingService;
-import fitnesbot.services.MealType;
+import fitnesbot.services.enums.MealType;
 import fitnesbot.services.MealsInTakeApiService;
 import fitnesbot.services.MealsInTakeService;
 import fitnesbot.services.Menu;

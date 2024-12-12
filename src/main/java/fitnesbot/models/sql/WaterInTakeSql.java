@@ -1,4 +1,4 @@
-package fitnesbot.models;
+package fitnesbot.models.sql;
 
 public class WaterInTakeSql {
     public static final String CREATE_WATER_INTAKES_TABLE = """

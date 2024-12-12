@@ -5,6 +5,7 @@ import fitnesbot.exeptions.usererrors.InvalidParameterError;
 import fitnesbot.exeptions.usererrors.NonExistenceUserError;
 import fitnesbot.exeptions.usererrors.UserAlreadyExistsError;
 import fitnesbot.models.User;
+import fitnesbot.services.enums.NutrientUnits;
 
 public class UserService {
     private final UserRepository userRepository;
@@ -69,7 +70,7 @@ public class UserService {
         if (isNumber(inputQuantity)) {
             double quantity = Double.parseDouble(inputQuantity);
             NutrientUnits nutrientUnit = NutrientUnits.fromString(inputUnit);
-            if (nutrientUnit != null) {
+            if (nutrientUnit != NutrientUnits.DEFUNIT) {
                 quantity = nutrientUnit.equals(NutrientUnits.L) ? quantity * 1000 : quantity;
                 System.out.println(quantity);
                 userRepository.updateWaterGoal(chatId, quantity);

@@ -1,6 +1,6 @@
 package fitnesbot.repositories.database;
 
-import fitnesbot.models.WaterInTakeSql;
+import fitnesbot.models.sql.WaterInTakeSql;
 import fitnesbot.services.DataBaseService;
 import fitnesbot.services.WaterInTakeRepository;
 
@@ -11,9 +11,15 @@ import java.util.Objects;
 
 public class DaterBaseWaterRepository implements WaterInTakeRepository {
 
+    private final DataBaseService dataBaseService;
+
+    public DaterBaseWaterRepository(DataBaseService dataBaseService) {
+        this.dataBaseService = dataBaseService;
+    }
+
     @Override
     public void save(long chatId, String datetime) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      WaterInTakeSql.INSERT_WATER_INTAKE)) {
             statement.setLong(1, chatId);
@@ -27,7 +33,7 @@ public class DaterBaseWaterRepository implements WaterInTakeRepository {
 
     @Override
     public int findWaterInTakeByDate(long chatId, String date) {
-        try (Connection connection = DataBaseService.connect();
+        try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                      WaterInTakeSql.SELECT_WATER_INTAKE)) {
             statement.setLong(1, chatId);

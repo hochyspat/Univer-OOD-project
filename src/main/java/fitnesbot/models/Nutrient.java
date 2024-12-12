@@ -1,7 +1,7 @@
 package fitnesbot.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fitnesbot.services.NutrientUnits;
+import fitnesbot.services.enums.NutrientUnits;
 
 
 public class Nutrient {
