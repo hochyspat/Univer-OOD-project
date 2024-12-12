@@ -15,9 +15,9 @@ import java.sql.Statement;
 
 
 public class DataBaseService {
-    private String URL = "";
-    private String USER = "";
-    private String PASSWORD = "";
+    private static String URL = "";
+    private static String USER = "";
+    private static String PASSWORD = "";
 
     private Connection connection;
 
