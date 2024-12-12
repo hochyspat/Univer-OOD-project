@@ -21,6 +21,7 @@ public class MealsInTakeService {
     public MessageOutputData saveMealIntake(MealsInTake mealInTake, long chatId, MealType mealType) {
         LocalDate currentDate = LocalDate.now();
         String date = currentDate.format(formatter);
+
         mealsIntakeRepository.save(mealInTake, chatId, date, mealType);
 
         return new MessageOutputData("Отлично! Запись в дневник осуществлена."

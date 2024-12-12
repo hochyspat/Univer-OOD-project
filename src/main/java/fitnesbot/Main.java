@@ -3,14 +3,20 @@ package fitnesbot;
 
 import fitnesbot.bot.CommandHandler;
 import fitnesbot.bot.TelegramBot;
+import fitnesbot.repositories.database.DataBaseMealsInTakeRepository;
+import fitnesbot.repositories.database.DataBaseSleepRepository;
+import fitnesbot.repositories.database.DataBaseTrainingRepository;
+import fitnesbot.repositories.database.DaterBaseWaterRepository;
+import fitnesbot.repositories.inmemoryrepository.InMemoryMealsInTakeRepository;
+import fitnesbot.repositories.inmemoryrepository.InMemoryUserRepository;
+import fitnesbot.services.DataBaseService;
 import fitnesbot.out.ConsoleOutputService;
 import fitnesbot.bot.ConsoleBot;
 import fitnesbot.in.ConsoleInputService;
-import fitnesbot.repositories.InMemoryMealsInTakeRepository;
-import fitnesbot.repositories.InMemorySleepRepository;
-import fitnesbot.repositories.InMemoryTrainingRepository;
-import fitnesbot.repositories.InMemoryUserRepository;
-import fitnesbot.repositories.InMemoryWaterRepository;
+import fitnesbot.repositories.database.DataBaseUserRepository;
+import fitnesbot.repositories.inmemoryrepository.InMemorySleepRepository;
+import fitnesbot.repositories.inmemoryrepository.InMemoryTrainingRepository;
+import fitnesbot.repositories.inmemoryrepository.InMemoryWaterRepository;
 import fitnesbot.services.BotPlatform;
 import fitnesbot.services.CalorieCountingService;
 import fitnesbot.services.Help;
@@ -40,20 +46,28 @@ public class Main {
                 return;
             }
         }
+
         Help help = new Help();
         Menu menu = new Menu();
         CalorieCountingService calorieCountingService = new CalorieCountingService();
-        UserRepository userRepository = new InMemoryUserRepository();
-        MealsInTakeRepository mealsIntakeRepository = new InMemoryMealsInTakeRepository();
-        SleepInTakeRepository sleepInTakeRepository = new InMemorySleepRepository();
-        WaterInTakeRepository waterInTakeRepository = new InMemoryWaterRepository();
-        TrainingRepository trainingRepository = new InMemoryTrainingRepository();
+        MealsInTakeRepository mealsInTakeRepositoryforConsole = new InMemoryMealsInTakeRepository();
+        UserRepository userRepositoryforConsole = new InMemoryUserRepository();
+        SleepInTakeRepository sleepInTakeRepository = new DataBaseSleepRepository();
+        WaterInTakeRepository waterInTakeRepositoryforConsole = new InMemoryWaterRepository();
+        WaterInTakeRepository waterInTakeRepository = new DaterBaseWaterRepository();
+        TrainingRepository trainingRepositoryforConsole = new InMemoryTrainingRepository();
+        SleepInTakeRepository sleepInTakeRepositoryforConsole = new InMemorySleepRepository();
+        DataBaseService dataBaseService = new DataBaseService();
+        dataBaseService.createAllTables();
+        TrainingRepository trainingRepository = new DataBaseTrainingRepository();
+        UserRepository userRepository = new DataBaseUserRepository();
+        MealsInTakeRepository mealsInTakeRepository = new DataBaseMealsInTakeRepository();
         if (platform == BotPlatform.CONSOLE || platform == BotPlatform.BOTH) {
             Thread consoleThread = new Thread(() -> {
                 ConsoleBot consoleBot = getConsoleBot(
                         help, menu, calorieCountingService,
-                        userRepository, mealsIntakeRepository, sleepInTakeRepository,
-                        waterInTakeRepository, trainingRepository
+                        userRepositoryforConsole, mealsInTakeRepositoryforConsole, sleepInTakeRepositoryforConsole,
+                        waterInTakeRepositoryforConsole, trainingRepositoryforConsole
                 );
                 consoleBot.start();
             });
@@ -64,7 +78,7 @@ public class Main {
                 try {
                     TelegramBot telegramBot = getTelegramBot(
                             help, menu, calorieCountingService,
-                            userRepository, mealsIntakeRepository, sleepInTakeRepository,
+                            userRepository, mealsInTakeRepository, sleepInTakeRepository,
                             waterInTakeRepository, trainingRepository);
                     TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
                     telegramBotsApi.registerBot(telegramBot);
@@ -74,8 +88,8 @@ public class Main {
                 }
             });
             telegramThread.start();
-
         }
+
     }
 
     @NotNull
