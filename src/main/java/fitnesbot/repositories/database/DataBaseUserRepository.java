@@ -122,8 +122,7 @@ public class DataBaseUserRepository implements UserRepository {
             stmt.setLong(2, chatId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            System.
-                    err.println("Ошибка обновления цели по сну: " + e.getMessage());
+            System.err.println("Ошибка обновления цели по сну: " + e.getMessage());
         }
     }
 
