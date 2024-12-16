@@ -1,6 +1,6 @@
 package fitnesbot.exeptions.mealsintakeerrors;
 
-import fitnesbot.services.MealType;
+import fitnesbot.services.enums.MealType;
 
 public class MealsInTakeAlreadyDeletedError extends MealInTakeErrors {
     public MealsInTakeAlreadyDeletedError(MealType mealType, String date, long chatId) {

@@ -13,7 +13,7 @@ import fitnesbot.models.ParsedMeal;
 import fitnesbot.models.User;
 import fitnesbot.models.WaterGoal;
 import fitnesbot.services.CalorieCountingService;
-import fitnesbot.services.MealType;
+import fitnesbot.services.enums.MealType;
 import fitnesbot.services.MealsInTakeApiService;
 import fitnesbot.services.MealsInTakeService;
 import fitnesbot.services.Menu;
@@ -21,6 +21,8 @@ import fitnesbot.services.SleepInTakeService;
 import fitnesbot.services.TrainingService;
 import fitnesbot.services.UserService;
 import fitnesbot.services.Help;
+
+import java.util.Arrays;
 
 
 public class CommandHandler {
@@ -63,7 +65,10 @@ public class CommandHandler {
             case "/help":
                 return showHelp(chatId);
             case "/start":
-                return firstAcquaintance(chatId);
+                if (!userService.isExistence(chatId)) {
+                    return firstAcquaintance(chatId);
+                }
+                return showHelp(chatId);
             case "/menu":
                 return showMenu(chatId);
             case "addUser":
@@ -79,7 +84,8 @@ public class CommandHandler {
                             "[название] [ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
                 }
                 try {
-                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe("intake meal", args);
+                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe("intake meal",
+                            Arrays.copyOfRange(args, 1, args.length));
                     if (analyseMeal == null) {
                         return new MessageOutputData(
                                 new InputIngredientsError().getErrorMessage(), chatId);
@@ -110,13 +116,14 @@ public class CommandHandler {
                             "[название] [ингридиент1], ...", "[ингридиент n],").getErrorMessage(), chatId);
                 }
                 try {
-                    String mealTypeFromArgs = command.parseArgsInfo();
+                    String mealTypeFromArgs = args[0];
                     MealType mealTypeAddMeal = MealType.fromString(mealTypeFromArgs);
                     if (mealTypeAddMeal == null) {
                         return new MessageOutputData("Неверный тип приема пищи."
                                 + "Возможные названия: Завтрак,Обед,Ужин,Перекус", chatId);
                     }
-                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe(mealTypeFromArgs, args);
+                    MealsInTake analyseMeal = mealsIntakeApiService.analyzeRecipe(
+                            mealTypeFromArgs, Arrays.copyOfRange(args, 1, args.length));
                     if (analyseMeal == null) {
                         return new MessageOutputData(
                                 new InputIngredientsError().getErrorMessage(), chatId);
@@ -216,6 +223,7 @@ public class CommandHandler {
                 return showUserById(chatId);
             case "/exit":
                 return new MessageOutputData("Finish bot", chatId);
+
             default:
                 return new MessageOutputData(new InvalidCommandError().getErrorMessage(), chatId);
         }

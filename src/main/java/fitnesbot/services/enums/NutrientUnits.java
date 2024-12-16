@@ -1,8 +1,11 @@
-package fitnesbot.services;
+package fitnesbot.services.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum NutrientUnits {
+
+    @JsonProperty("g")
     GRAM("g"),
     IU("iu"),
     MG("mg"),
@@ -11,7 +14,8 @@ public enum NutrientUnits {
     ML("ml"),
     CUP("cup"),
     KCAL("kcal"),
-    PRESENT("%");
+    PRESENT("%"),
+    DEFUNIT("default");
 
     private final String unit;
 
@@ -32,6 +36,6 @@ public enum NutrientUnits {
             }
         }
         System.out.println("Incorrect NutrientUnit");
-        return null;
+        return DEFUNIT;
     }
 }

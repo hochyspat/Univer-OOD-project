@@ -1,6 +1,8 @@
 
 package fitnesbot.models;
 
+import fitnesbot.services.enums.NutrientUnits;
+
 public class User {
     private final long chatId;
     private final String name;
@@ -58,6 +60,9 @@ public class User {
     }
 
     public WaterGoal getWaterGoal() {
+        if (this.waterGoal == null) {
+            waterGoal = new WaterGoal(0, NutrientUnits.ML);
+        }
         return this.waterGoal;
     }
 
@@ -67,6 +72,13 @@ public class User {
 
     public void setSleepGoal(SleepGoal sleepGoal) {
         this.sleepGoal = sleepGoal;
+    }
+
+    public SleepGoal getSleepGoal() {
+        if (this.sleepGoal == null) {
+            this.sleepGoal = new SleepGoal(0);
+        }
+        return this.sleepGoal;
     }
 
     public String getInfo() {

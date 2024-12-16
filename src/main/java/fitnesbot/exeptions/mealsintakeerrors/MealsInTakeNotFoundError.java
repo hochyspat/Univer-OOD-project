@@ -1,6 +1,6 @@
 package fitnesbot.exeptions.mealsintakeerrors;
 
-import fitnesbot.services.MealType;
+import fitnesbot.services.enums.MealType;
 
 public class MealsInTakeNotFoundError extends MealInTakeErrors {
     public MealsInTakeNotFoundError(MealType mealType, String date, long chatId) {

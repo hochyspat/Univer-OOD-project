@@ -1,4 +1,4 @@
-package fitnesbot.repositories;
+package fitnesbot.repositories.inmemory;
 
 import fitnesbot.services.SleepInTakeRepository;
 
@@ -21,14 +21,15 @@ public class InMemorySleepRepository implements SleepInTakeRepository {
 
     @Override
     public double getWeekStat(long chatId) {
-        Map<String, Double> userSleepMap = sleepInTakes.get(chatId);
         Date today = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(today);
         calendar.add(Calendar.DAY_OF_YEAR, -7);
         Date weekAgo = calendar.getTime();
+        System.out.println(weekAgo);
         double totalSleep = 0;
         int count = 0;
+        Map<String, Double> userSleepMap = sleepInTakes.get(chatId);
         for (Map.Entry<String, Double> entry : userSleepMap.entrySet()) {
             try {
                 Date date = DATE_FORMAT.parse(entry.getKey());
@@ -37,8 +38,8 @@ public class InMemorySleepRepository implements SleepInTakeRepository {
                     count++;
                 }
             } catch (ParseException e) {
-                System.out.println("Invalid date format: " + entry.getKey());
-                return -1;
+                System.out.println("Неверный формат данных: " + entry.getKey());
+                count = -1;
             }
         }
 

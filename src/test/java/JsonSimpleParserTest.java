@@ -107,7 +107,7 @@ public class JsonSimpleParserTest {
                           "label" : "Vitamin B-6"
                         },
                         "FE" : {
-                          "unit" : "GRAM",
+                          "unit" : "G",
                           "quantity" : 0.8,
                           "label" : "Iron, Fe"
                         }

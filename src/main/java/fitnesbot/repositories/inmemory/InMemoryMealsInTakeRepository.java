@@ -1,10 +1,10 @@
-package fitnesbot.repositories;
+package fitnesbot.repositories.inmemory;
 
 import fitnesbot.exeptions.mealsintakeerrors.MealsInTakeAlreadyDeletedError;
 import fitnesbot.exeptions.mealsintakeerrors.MealsInTakeNotFoundError;
 import fitnesbot.exeptions.mealsintakeerrors.UserDiaryNotFoundError;
 import fitnesbot.models.MealsInTake;
-import fitnesbot.services.MealType;
+import fitnesbot.services.enums.MealType;
 import fitnesbot.services.MealsInTakeRepository;
 
 import java.util.HashMap;
@@ -50,34 +50,6 @@ public class InMemoryMealsInTakeRepository implements MealsInTakeRepository {
             return null;
         }
         return null;
-    }
-
-    @Override
-    public Map<String, Map<MealType, MealsInTake>> findDiaryByChatId(long chatId) {
-        Map<String, Map<MealType, MealsInTake>> userMealsData = usersDiary.get(chatId);
-        if (userMealsData != null) {
-            return userMealsData;
-        } else {
-            System.out.println(new UserDiaryNotFoundError(chatId).getErrorMessage());
-            return null;
-        }
-    }
-
-    @Override
-    public Map<MealType, MealsInTake> findByDate(long chatId, String data) {
-        Map<String, Map<MealType, MealsInTake>> userMealsData = usersDiary.get(chatId);
-        if (userMealsData != null) {
-            Map<MealType, MealsInTake> mealsByDate = userMealsData.get(data);
-            if (mealsByDate != null) {
-                return mealsByDate;
-            } else {
-                System.out.println("Meals by date not found");
-                return null;
-            }
-        } else {
-            System.out.println(new UserDiaryNotFoundError(chatId).getErrorMessage());
-            return null;
-        }
     }
 
 
