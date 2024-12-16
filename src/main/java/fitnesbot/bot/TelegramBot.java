@@ -1,12 +1,15 @@
 package fitnesbot.bot;
 
-
 import fitnesbot.config.BotConfig;
 import fitnesbot.out.OutputService;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.io.File;
 
 
 public class TelegramBot extends TelegramLongPollingBot implements OutputService {
@@ -46,12 +49,23 @@ public class TelegramBot extends TelegramLongPollingBot implements OutputService
 
     @Override
     public void sendMessage(MessageOutputData messageData) {
-        SendMessage sendMessage = new SendMessage(String.valueOf(messageData.chatId()),
-                messageData.messageData());
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            System.out.println("ERRor with send Message to telegram" + e.getMessage());
+        if (messageData.hasImage()) {
+            SendPhoto sendPhoto = new SendPhoto();
+            sendPhoto.setChatId(String.valueOf(messageData.chatId()));
+            sendPhoto.setPhoto(new InputFile(new File(messageData.image())));
+            try {
+                execute(sendPhoto);
+            } catch (TelegramApiException e) {
+                System.err.println("Ошибка при отправке изображения: " + e.getMessage());
+            }
+        } else {
+            SendMessage sendMessage = new SendMessage(
+                    String.valueOf(messageData.chatId()), messageData.messageData());
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                System.err.println("Ошибка при отправке текстового сообщения: " + e.getMessage());
+            }
         }
     }
 }

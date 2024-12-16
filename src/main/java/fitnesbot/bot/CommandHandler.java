@@ -177,7 +177,14 @@ public class CommandHandler {
                 return sleepService.saveSleepInTake(chatId, Double.parseDouble(args[0]));
             case "getWeekSleepStat":
                 return sleepService.getWeekSleepStat(chatId);
-
+            case "getSleepChart":
+                String imagePath = sleepService.getSleepChart(chatId);
+                if (imagePath!=null) {
+                    return new MessageOutputData("Вот статистика по сну",chatId,imagePath);
+                }
+                else {
+                    return new MessageOutputData("К сожалению произошла ошибка",chatId);
+                }
             case "getDaySleepStat":
                 if (args.length != 1) {
                     return new MessageOutputData(new InvalidNumberOfArgumentsError("getDayStat",

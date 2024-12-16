@@ -22,11 +22,15 @@ public class SleepSQL {
             FROM sleep_records
             WHERE chat_id = ? AND sleep_date = ?;
             """;
-    public static final String SELECT_WEEK_SLEEP = """
+    public static final String SELECT_PERIOD_SLEEP = """
                 SELECT sleep_quantity
                 FROM sleep_records
                 WHERE chat_id = ? AND sleep_date >= ? AND sleep_date <= ?;
             """;
-
+    public static final String SELECT_ALL_SLEEP = """
+                SELECT sleep_date, sleep_quantity
+                FROM sleep_records
+                WHERE chat_id = ?;
+            """;
 
 }

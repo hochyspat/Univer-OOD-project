@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class DataBaseSleepRepository implements SleepInTakeRepository {
@@ -40,7 +42,7 @@ public class DataBaseSleepRepository implements SleepInTakeRepository {
     public double getWeekStat(long chatId) {
         try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
-                     SleepSQL.SELECT_WEEK_SLEEP)) {
+                     SleepSQL.SELECT_PERIOD_SLEEP)) {
             Date today = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(today);
@@ -63,6 +65,24 @@ public class DataBaseSleepRepository implements SleepInTakeRepository {
             System.err.println("Ошибка получения недельной статистики сна: " + e.getMessage());
             return -1;
         }
+    }
+
+    public Map<String,Double> getDataByChatId(long chatId) {
+        Map<String, Double> sleepData = new HashMap<>();
+        try (Connection connection = dataBaseService.getConnection();
+             PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
+                     SleepSQL.SELECT_ALL_SLEEP)) {
+            statement.setLong(1, chatId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String date = resultSet.getString("sleep_date");
+                double sleepQuantity = resultSet.getDouble("sleep_quantity");
+                sleepData.put(date, sleepQuantity);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return sleepData;
     }
 
     @Override
