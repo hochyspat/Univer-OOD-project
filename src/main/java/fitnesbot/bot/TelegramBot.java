@@ -49,18 +49,19 @@ public class TelegramBot extends TelegramLongPollingBot implements OutputService
 
     @Override
     public void sendMessage(MessageOutputData messageData) {
+        SendMessage sendMessage = new SendMessage(
+                String.valueOf(messageData.chatId()), messageData.messageData());
         if (messageData.hasImage()) {
             SendPhoto sendPhoto = new SendPhoto();
             sendPhoto.setChatId(String.valueOf(messageData.chatId()));
             sendPhoto.setPhoto(new InputFile(new File(messageData.image())));
             try {
                 execute(sendPhoto);
+                execute(sendMessage);
             } catch (TelegramApiException e) {
                 System.err.println("Ошибка при отправке изображения: " + e.getMessage());
             }
         } else {
-            SendMessage sendMessage = new SendMessage(
-                    String.valueOf(messageData.chatId()), messageData.messageData());
             try {
                 execute(sendMessage);
             } catch (TelegramApiException e) {

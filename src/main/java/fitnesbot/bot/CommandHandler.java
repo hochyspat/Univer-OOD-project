@@ -133,6 +133,20 @@ public class CommandHandler {
                     System.out.println("Невозможно записать в дневник" + e.getMessage());
                     return new MessageOutputData("Произошла ощибка при записи в дневник", chatId);
                 }
+            case "getMealChartPFC":
+                String imagePath = mealService.getMealPFC(chatId);
+                if (imagePath != null) {
+                    return new MessageOutputData("Вот статистика по еде", chatId, imagePath);
+                } else {
+                    return new MessageOutputData("К сожалению произошла ошибка", chatId);
+                }
+            case "getTrainingCaloriesChart":
+                String trainingImagePath = trainingService.getTrainingCaloriesChart(chatId);
+                if (trainingImagePath != null) {
+                    return new MessageOutputData("Вот статистика по тренировкам", chatId, trainingImagePath);
+                } else {
+                    return new MessageOutputData("К сожалению произошла ошибка", chatId);
+                }
 
             case "addWaterGoal": //например addWaterGoal 2 l
                 if (args.length != 2) {
@@ -178,12 +192,19 @@ public class CommandHandler {
             case "getWeekSleepStat":
                 return sleepService.getWeekSleepStat(chatId);
             case "getSleepChart":
-                String imagePath = sleepService.getSleepChart(chatId);
-                if (imagePath!=null) {
-                    return new MessageOutputData("Вот статистика по сну",chatId,imagePath);
+
+                String sleepChartPath = sleepService.getSleepChart(chatId, userService.getUser(chatId).getSleepGoal().quantity());
+                if (sleepChartPath != null) {
+                    return new MessageOutputData("Вот статистика по сну", chatId, sleepChartPath);
+                } else {
+                    return new MessageOutputData("К сожалению произошла ошибка", chatId);
                 }
-                else {
-                    return new MessageOutputData("К сожалению произошла ошибка",chatId);
+            case "getWaterChart":
+                String waterImagePath = mealService.getWaterChart(chatId, userService.getUser(chatId).getWaterGoal().quantity());
+                if (waterImagePath != null) {
+                    return new MessageOutputData("Вот статистика приёма воды", chatId, waterImagePath);
+                } else {
+                    return new MessageOutputData("К сожалению произошла ошибка", chatId);
                 }
             case "getDaySleepStat":
                 if (args.length != 1) {

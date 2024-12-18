@@ -67,7 +67,7 @@ public class DataBaseSleepRepository implements SleepInTakeRepository {
         }
     }
 
-    public Map<String,Double> getDataByChatId(long chatId) {
+    public Map<String, Double> getDataByChatId(long chatId) {
         Map<String, Double> sleepData = new HashMap<>();
         try (Connection connection = dataBaseService.getConnection();
              PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(

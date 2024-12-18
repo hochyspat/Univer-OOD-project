@@ -5,11 +5,12 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.File;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -52,13 +53,13 @@ public class SleepInTakeService {
         return new MessageOutputData("Нет статистики за  этот день", chatId);
     }
 
-    public String getSleepChart(long chatId) {
+    public String getSleepChart(long chatId, double sleepGoal) {
         Map<String, Double> sleepData = sleepInTakeRepository.getDataByChatId(chatId);
         if (sleepData.isEmpty()) {
             return null;
         }
         try {
-            JFreeChart sleepChart = createSleepChart(sleepData, "", "");
+            JFreeChart sleepChart = createSleepChart(sleepData, "", "",sleepGoal);
             String imagePath = "C:\\Users\\USVER\\IdeaProjects\\Univer-OOD-project\\src\\main\\charts/SLeepImage_" + chatId + ".jpeg";
             File lineChart = new File(imagePath);
             ChartUtils.saveChartAsJPEG(lineChart, sleepChart, 480, 640);
@@ -69,8 +70,9 @@ public class SleepInTakeService {
         }
     }
 
-    private JFreeChart createSleepChart(Map<String, Double> sleepData, String start, String end) {
+    private JFreeChart createSleepChart(Map<String, Double> sleepData, String start, String end,double sleepGoal) {
         TimeSeries series = new TimeSeries("Сон");
+        TimeSeries seriesGoal = new TimeSeries("Цель");
         for (Map.Entry<String, Double> entry : sleepData.entrySet()) {
             try {
                 LocalDate localDate = LocalDate.parse(entry.getKey(), formatter);
@@ -78,12 +80,15 @@ public class SleepInTakeService {
                 Date date = java.sql.Date.valueOf(localDate);
                 System.out.println(new Day(date));
                 series.add(new Day(date), entry.getValue());
+                seriesGoal.add(new Day(date), sleepGoal);
             } catch (DateTimeParseException e) {
                 System.err.println("Ошибка парсинга даты: " + entry.getKey());
             }
         }
+
         TimeSeriesCollection dataset = new TimeSeriesCollection();
         dataset.addSeries(series);
+        dataset.addSeries(seriesGoal);
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
                 "Статистика сна",
                 "Дата",
@@ -93,12 +98,16 @@ public class SleepInTakeService {
                 true,
                 false
         );
-        chart.setBackgroundPaint(Color.white);
+        chart.setBackgroundPaint(Color.WHITE);
         XYPlot plot = chart.getXYPlot();
         plot.setDomainPannable(true);
         plot.setRangePannable(true);
         plot.setDomainGridlinePaint(Color.YELLOW);
         plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        renderer.setSeriesStroke(0, new BasicStroke(3.0f));
+        renderer.setSeriesStroke(1, new BasicStroke(3.0f));
+        plot.setRenderer(renderer);
         return chart;
     }
 }
