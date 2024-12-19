@@ -184,6 +184,10 @@ public class CommandHandlerTest {
 
     @Test
     void testSleepStat() {
+        userService.registerUser("Alice", "19", "171", "58", 12345L);
+        Command commandAddUser = new Command("addWaterGoal 2 l");
+        MessageOutputData outputDataAddUser = commandHandler.handleMessage(
+                new MessageCommandData(commandAddUser, 12345L));
         sleepInTakeRepository.save(12345L, "10.12.2024", 7.0);
         sleepInTakeRepository.save(12345L, "11.12.2024", 8.0);
         sleepInTakeRepository.save(12345L, "12.12.2024", 6.5);
@@ -197,7 +201,7 @@ public class CommandHandlerTest {
         );
         System.out.println(response);
         assertNotNull(response.image());
-        long chatId = 12345;
+        long chatId = 12345L;
         String expectedImagePath = "C:\\Users\\USVER\\IdeaProjects\\"
                 + "Univer-OOD-project\\src\\main\\charts/SLeepImage_" + chatId + ".jpeg";
         File chartFile = new File(expectedImagePath);
