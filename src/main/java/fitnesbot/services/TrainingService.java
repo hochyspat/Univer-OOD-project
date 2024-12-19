@@ -12,7 +12,8 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.BasicStroke;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -87,7 +88,8 @@ public class TrainingService {
         }
         try {
             JFreeChart trainingCaloriesChart = createTrainingCaloriesChart(trainingData, "", "");
-            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\Univer-OOD-project\\src\\main\\charts/TrainingCaloriesImage_" + chatId + ".jpeg";
+            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\" +
+                    "Univer-OOD-project\\src\\main\\charts/TrainingCaloriesImage_" + chatId + ".jpeg";
             File lineChart = new File(imagePath);
             ChartUtils.saveChartAsJPEG(lineChart, trainingCaloriesChart, 480, 640);
             return imagePath;

@@ -21,7 +21,9 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.BasicStroke;
+import java.awt.Font;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -83,7 +85,8 @@ public class MealsInTakeService {
         }
         try {
             JFreeChart sleepChart = createMealPFCChart(mealPFCdata, "", "");
-            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\Univer-OOD-project\\src\\main\\charts/MealImage_" + chatId + ".jpeg";
+            String imagePath = "C:\\Users\\USVER\\IdeaProjects"
+                    + "\\Univer-OOD-project\\src\\main\\charts/MealImage_" + chatId + ".jpeg";
             File lineChart = new File(imagePath);
             ChartUtils.saveChartAsJPEG(lineChart, sleepChart, 480, 640);
             return imagePath;
@@ -94,7 +97,6 @@ public class MealsInTakeService {
     }
 
     private JFreeChart createMealPFCChart(Map<String, List<MealsInTake>> mealPDCdata, String start, String end) {
-        DefaultPieDataset dataset = new DefaultPieDataset();
         double proteins = 0;
         double fat = 0;
         double carbs = 0;
@@ -116,7 +118,7 @@ public class MealsInTakeService {
         proteins = Math.round(proteins * 100.0) / 100.0;
         fat = Math.round(fat * 100.0) / 100.0;
         carbs = Math.round(carbs * 100.0) / 100.0;
-
+        DefaultPieDataset dataset = new DefaultPieDataset();
         dataset.setValue("БЕЛКИ", proteins);
         dataset.setValue("ЖИРЫ", fat);
         dataset.setValue("УГЛЕВОДЫ", carbs);
@@ -152,7 +154,8 @@ public class MealsInTakeService {
         }
         try {
             JFreeChart sleepChart = createWaterChart(waterData, "", "", waterGoal);
-            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\Univer-OOD-project\\src\\main\\charts/WaterImage_" + chatId + ".jpeg";
+            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\"
+                    + "Univer-OOD-project\\src\\main\\charts/WaterImage_" + chatId + ".jpeg";
             File lineChart = new File(imagePath);
             ChartUtils.saveChartAsJPEG(lineChart, sleepChart, 480, 640);
             return imagePath;

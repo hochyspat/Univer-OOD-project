@@ -10,7 +10,8 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.BasicStroke;
 import java.io.File;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -59,8 +60,9 @@ public class SleepInTakeService {
             return null;
         }
         try {
-            JFreeChart sleepChart = createSleepChart(sleepData, "", "",sleepGoal);
-            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\Univer-OOD-project\\src\\main\\charts/SLeepImage_" + chatId + ".jpeg";
+            JFreeChart sleepChart = createSleepChart(sleepData, "", "", sleepGoal);
+            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\"
+                    + "Univer-OOD-project\\src\\main\\charts/SLeepImage_" + chatId + ".jpeg";
             File lineChart = new File(imagePath);
             ChartUtils.saveChartAsJPEG(lineChart, sleepChart, 480, 640);
             return imagePath;
@@ -70,7 +72,7 @@ public class SleepInTakeService {
         }
     }
 
-    private JFreeChart createSleepChart(Map<String, Double> sleepData, String start, String end,double sleepGoal) {
+    private JFreeChart createSleepChart(Map<String, Double> sleepData, String start, String end, double sleepGoal) {
         TimeSeries series = new TimeSeries("Сон");
         TimeSeries seriesGoal = new TimeSeries("Цель");
         for (Map.Entry<String, Double> entry : sleepData.entrySet()) {
