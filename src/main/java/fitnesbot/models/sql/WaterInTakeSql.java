@@ -21,4 +21,10 @@ public class WaterInTakeSql {
             FROM WaterIntake
             WHERE chat_id = ? AND water_date = ?;
             """;
+
+    public static final String SELECT_ALL_WATER = """
+            SELECT water_date, intake_count
+            FROM WaterIntake
+            WHERE chat_id = ?;
+            """;
 }

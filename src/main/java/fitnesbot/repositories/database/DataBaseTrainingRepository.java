@@ -9,7 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class DataBaseTrainingRepository implements TrainingRepository {
@@ -97,5 +99,29 @@ public class DataBaseTrainingRepository implements TrainingRepository {
         } catch (Exception e) {
             System.err.println("Ошибка при удалении тренировки: " + e.getMessage());
         }
+    }
+
+    public Map<String, List<TrainingSession>> getTrainingByChatId(long chatId) {
+        Map<String, List<TrainingSession>> trainingData = new HashMap<>();
+        List<TrainingSession> sessions = new ArrayList<>();
+        try (Connection connection = dataBaseService.getConnection();
+             PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
+                     TrainingSQL.SELECT_TRAININGS_BY_CHAT_ID)) {
+            statement.setLong(1, chatId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                String date = rs.getString("training_date");
+                sessions = trainingData.getOrDefault(date, new ArrayList<>());
+                sessions.add(new TrainingSession(
+                        rs.getString("name"),
+                        rs.getDouble("training_time"),
+                        rs.getDouble("calories_burned")
+                ));
+                trainingData.put(date, sessions);
+            }
+        } catch (Exception e) {
+            System.err.println("Error finding trainings by chatId: " + e.getMessage());
+        }
+        return trainingData;
     }
 }

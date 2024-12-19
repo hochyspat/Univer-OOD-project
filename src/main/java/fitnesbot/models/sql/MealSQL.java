@@ -34,8 +34,9 @@ public class MealSQL {
             """;
 
 
-    public static final String SELECT_MEALS_BY_USER = """
-                SELECT * FROM Meals_intakes
-                WHERE chat_id = ?;
+    public static final String SELECT_ALL_MEALS = """
+            SELECT meal_date, ingredients
+            FROM Meals_intakes
+            WHERE chat_id = ?;
             """;
 }

@@ -1,5 +1,6 @@
 package fitnesbot.repositories.inmemory;
 
+import fitnesbot.models.MealsInTake;
 import fitnesbot.models.TrainingSession;
 import fitnesbot.services.TrainingRepository;
 
@@ -41,6 +42,12 @@ public class InMemoryTrainingRepository implements TrainingRepository {
         }
         return userSessions.getOrDefault(date, new ArrayList<>());
     }
+
+    @Override
+    public Map<String, List<TrainingSession>> getTrainingByChatId(long chatId) {
+        return userTrainingDiary.get(chatId);
+    }
+
 
     @Override
     public void deleteSession(long chatId, String date, String sessionName) {

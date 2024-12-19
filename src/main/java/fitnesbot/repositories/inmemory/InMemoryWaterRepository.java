@@ -25,4 +25,9 @@ public class InMemoryWaterRepository implements WaterInTakeRepository {
         System.out.println("Not found waterInTake by date: " + date);
         return -1;
     }
+
+    @Override
+    public Map<String, Integer> getWaterByChatId(long chatId) {
+        return waterInTakes.get(chatId);
+    }
 }

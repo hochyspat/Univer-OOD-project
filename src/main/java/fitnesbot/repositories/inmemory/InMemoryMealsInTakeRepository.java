@@ -7,7 +7,9 @@ import fitnesbot.models.MealsInTake;
 import fitnesbot.services.enums.MealType;
 import fitnesbot.services.MealsInTakeRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class InMemoryMealsInTakeRepository implements MealsInTakeRepository {
@@ -50,6 +52,23 @@ public class InMemoryMealsInTakeRepository implements MealsInTakeRepository {
             return null;
         }
         return null;
+    }
+
+    @Override
+    public Map<String, List<MealsInTake>> getDataById(long chatId) {
+        Map<String, List<MealsInTake>> dataMeal = new HashMap<>();
+
+        Map<String, Map<MealType, MealsInTake>> userMap = usersDiary.get(chatId);
+        if (userMap != null) {
+            for (Map.Entry<String, Map<MealType, MealsInTake>> entry : userMap.entrySet()) {
+                String date = entry.getKey();
+                Map<MealType, MealsInTake> mealsMap = entry.getValue();
+                List<MealsInTake> mealsInTakes = new ArrayList<>(mealsMap.values());
+                dataMeal.put(date, mealsInTakes);
+            }
+        }
+
+        return dataMeal;
     }
 
 

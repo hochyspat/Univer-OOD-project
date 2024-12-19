@@ -24,7 +24,11 @@ public record Command(String command, String[] args) {
             "addTraining",
             "getTrainings",
             "getTrainingsByDate",
-            "deleteTraining"
+            "deleteTraining",
+            "getSleepChart",
+            "getWaterChart",
+            "getMealChartPFC",
+            "getTrainingCaloriesChart"
     );
 
     public boolean isValid() {

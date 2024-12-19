@@ -11,6 +11,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class DataBaseMealsInTakeRepository implements MealsInTakeRepository {
@@ -52,7 +56,6 @@ public class DataBaseMealsInTakeRepository implements MealsInTakeRepository {
             statement.setString(3, mealType.getMealType());
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                System.out.println(resultSet.getString("meal_type"));
                 String ingredients = resultSet.getString("ingredients");
                 JsonSimpleParser parser = new JsonSimpleParser();
                 return parser.parseToIntake(ingredients);
@@ -62,6 +65,30 @@ public class DataBaseMealsInTakeRepository implements MealsInTakeRepository {
         }
         return null;
     }
+
+    @Override
+    public Map<String, List<MealsInTake>> getDataById(long chatId) {
+        Map<String, List<MealsInTake>> dataMeal = new HashMap<>();
+        try (Connection connection = dataBaseService.getConnection();
+             PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
+                     MealSQL.SELECT_ALL_MEALS)) {
+            statement.setLong(1, chatId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String date = resultSet.getString("meal_date");
+                String ingredients = resultSet.getString("ingredients");
+                JsonSimpleParser parser = new JsonSimpleParser();
+                MealsInTake mealsInTake = parser.parseToIntake(ingredients);
+                List<MealsInTake> mealsInTakes = dataMeal.getOrDefault(date, new ArrayList<>());
+                mealsInTakes.add(mealsInTake);
+                dataMeal.put(date, mealsInTakes);
+            }
+        } catch (SQLException e) {
+            System.out.println("ERRor");
+        }
+        return dataMeal;
+    }
+
 
     @Override
     public void deleteMealType(MealType mealType, String date, long chatId) {
