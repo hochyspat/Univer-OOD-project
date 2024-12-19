@@ -88,8 +88,8 @@ public class TrainingService {
         }
         try {
             JFreeChart trainingCaloriesChart = createTrainingCaloriesChart(trainingData, "", "");
-            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\" +
-                    "Univer-OOD-project\\src\\main\\charts/TrainingCaloriesImage_" + chatId + ".jpeg";
+            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\"
+                    + "Univer-OOD-project\\src\\main\\charts/TrainingCaloriesImage_" + chatId + ".jpeg";
             File lineChart = new File(imagePath);
             ChartUtils.saveChartAsJPEG(lineChart, trainingCaloriesChart, 480, 640);
             return imagePath;
@@ -99,7 +99,8 @@ public class TrainingService {
         }
     }
 
-    public JFreeChart createTrainingCaloriesChart(Map<String, List<TrainingSession>> trainingData, String start, String end) {
+    public JFreeChart createTrainingCaloriesChart(Map<String, List<TrainingSession>> trainingData,
+                                                  String start, String end) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         double sumCalories = 0;
         for (Map.Entry<String, List<TrainingSession>> entry : trainingData.entrySet()) {

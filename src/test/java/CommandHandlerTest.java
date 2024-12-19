@@ -197,8 +197,9 @@ public class CommandHandlerTest {
         );
         System.out.println(response);
         assertNotNull(response.image());
-        long chat_id = 12345;
-        String expectedImagePath = "C:\\Users\\USVER\\IdeaProjects\\Univer-OOD-project\\src\\main\\charts/SLeepImage_" + chat_id + ".jpeg";
+        long chatId = 12345;
+        String expectedImagePath = "C:\\Users\\USVER\\IdeaProjects\\"
+                + "Univer-OOD-project\\src\\main\\charts/SLeepImage_" + chatId + ".jpeg";
         File chartFile = new File(expectedImagePath);
         assertTrue(chartFile.exists(), "График сна не был сгенерирован.");
     }

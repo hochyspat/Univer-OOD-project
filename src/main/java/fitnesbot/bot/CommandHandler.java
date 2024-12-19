@@ -193,14 +193,16 @@ public class CommandHandler {
                 return sleepService.getWeekSleepStat(chatId);
             case "getSleepChart":
 
-                String sleepChartPath = sleepService.getSleepChart(chatId, userService.getUser(chatId).getSleepGoal().quantity());
+                String sleepChartPath = sleepService.getSleepChart(chatId,
+                        userService.getUser(chatId).getSleepGoal().quantity());
                 if (sleepChartPath != null) {
                     return new MessageOutputData("Вот статистика по сну", chatId, sleepChartPath);
                 } else {
                     return new MessageOutputData("К сожалению произошла ошибка", chatId);
                 }
             case "getWaterChart":
-                String waterImagePath = mealService.getWaterChart(chatId, userService.getUser(chatId).getWaterGoal().quantity());
+                String waterImagePath = mealService.getWaterChart(
+                        chatId, userService.getUser(chatId).getWaterGoal().quantity());
                 if (waterImagePath != null) {
                     return new MessageOutputData("Вот статистика приёма воды", chatId, waterImagePath);
                 } else {
