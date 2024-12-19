@@ -120,7 +120,7 @@ public class TrainingService {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-                "Сожженные калории за текцщий период",
+                "Сожженные калории за текущий период",
                 null,
                 "Калории",
                 dataset);
