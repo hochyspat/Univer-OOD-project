@@ -8,6 +8,7 @@ target/
 *.iws
 *.iml
 *.ipr
+/src/main/charts/
 src/main/resources/application.properties
 
 ### Eclipse ###
@@ -34,3 +35,4 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/src/main/charts/

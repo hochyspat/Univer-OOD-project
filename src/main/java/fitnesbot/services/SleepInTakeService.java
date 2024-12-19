@@ -61,8 +61,7 @@ public class SleepInTakeService {
         }
         try {
             JFreeChart sleepChart = createSleepChart(sleepData, "", "", sleepGoal);
-            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\"
-                    + "Univer-OOD-project\\src\\main\\charts/SLeepImage_" + chatId + ".jpeg";
+            String imagePath = DirectoryService.createFile("SLeepImage_" + chatId + ".jpeg","src/main/charts");
             File lineChart = new File(imagePath);
             ChartUtils.saveChartAsJPEG(lineChart, sleepChart, 480, 640);
             return imagePath;

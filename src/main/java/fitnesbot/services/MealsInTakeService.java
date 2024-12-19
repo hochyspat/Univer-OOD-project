@@ -85,8 +85,8 @@ public class MealsInTakeService {
         }
         try {
             JFreeChart sleepChart = createMealPFCChart(mealPFCdata, "", "");
-            String imagePath = "C:\\Users\\USVER\\IdeaProjects"
-                    + "\\Univer-OOD-project\\src\\main\\charts/MealImage_" + chatId + ".jpeg";
+            String imagePath = DirectoryService.createFile("MealsPFCImage_" + chatId + ".jpeg",
+                    "src/main/charts");
             File lineChart = new File(imagePath);
             ChartUtils.saveChartAsJPEG(lineChart, sleepChart, 480, 640);
             return imagePath;
@@ -154,8 +154,8 @@ public class MealsInTakeService {
         }
         try {
             JFreeChart sleepChart = createWaterChart(waterData, "", "", waterGoal);
-            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\"
-                    + "Univer-OOD-project\\src\\main\\charts/WaterImage_" + chatId + ".jpeg";
+            String imagePath = DirectoryService.createFile("WaterImage_" + chatId + ".jpeg",
+                    "src/main/charts");
             File lineChart = new File(imagePath);
             ChartUtils.saveChartAsJPEG(lineChart, sleepChart, 480, 640);
             return imagePath;

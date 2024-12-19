@@ -88,8 +88,8 @@ public class TrainingService {
         }
         try {
             JFreeChart trainingCaloriesChart = createTrainingCaloriesChart(trainingData, "", "");
-            String imagePath = "C:\\Users\\USVER\\IdeaProjects\\"
-                    + "Univer-OOD-project\\src\\main\\charts/TrainingCaloriesImage_" + chatId + ".jpeg";
+            String imagePath = DirectoryService.createFile("TrainingCalories_" + chatId + ".jpeg",
+                    "src/main/charts");
             File lineChart = new File(imagePath);
             ChartUtils.saveChartAsJPEG(lineChart, trainingCaloriesChart, 480, 640);
             return imagePath;
