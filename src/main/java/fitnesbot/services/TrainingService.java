@@ -2,10 +2,25 @@ package fitnesbot.services;
 
 import fitnesbot.bot.MessageOutputData;
 import fitnesbot.models.TrainingSession;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 
+import java.awt.Color;
+import java.awt.BasicStroke;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class TrainingService {
     private final TrainingRepository trainingRepository;
@@ -64,5 +79,52 @@ public class TrainingService {
         trainingRepository.deleteSession(chatId, date, sessionName);
         return new MessageOutputData("Тренировка \""
                 + sessionName + "\" успешно удалена.", chatId);
+    }
+
+    public String getTrainingCaloriesChart(long chatId) {
+        Map<String, List<TrainingSession>> trainingData = trainingRepository.getTrainingByChatId(chatId);
+        if (trainingData.isEmpty()) {
+            return null;
+        }
+        try {
+            JFreeChart trainingCaloriesChart = createTrainingCaloriesChart(trainingData, "", "");
+            String imagePath = DirectoryService.createFile("TrainingCalories_" + chatId + ".jpeg",
+                    "src/main/charts");
+            File lineChart = new File(imagePath);
+            ChartUtils.saveChartAsJPEG(lineChart, trainingCaloriesChart, 480, 640);
+            return imagePath;
+        } catch (Exception e) {
+            System.out.println("Не удалось сохранить изоражение TrainingCaloriesImage");
+            return null;
+        }
+    }
+
+    public JFreeChart createTrainingCaloriesChart(Map<String, List<TrainingSession>> trainingData,
+                                                  String start, String end) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        double sumCalories = 0;
+        for (Map.Entry<String, List<TrainingSession>> entry : trainingData.entrySet()) {
+            try {
+                LocalDate localDate = LocalDate.parse(entry.getKey(), formatter);
+                System.out.println(localDate);
+                Date date = java.sql.Date.valueOf(localDate);
+                System.out.println(new Day(date));
+                sumCalories = 0;
+                for (TrainingSession training : entry.getValue()) {
+                    sumCalories += training.getCaloriesBurned();
+                }
+                dataset.addValue(sumCalories, "Калории", entry.getKey());
+            } catch (DateTimeParseException e) {
+                System.err.println("Ошибка парсинга даты: " + entry.getKey());
+            }
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Сожженные калории за текущий период",
+                null,
+                "Калории",
+                dataset);
+        chart.setBackgroundPaint(new Color(181, 146, 221, 210));
+        return chart;
     }
 }

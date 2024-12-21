@@ -51,4 +51,9 @@ public class InMemorySleepRepository implements SleepInTakeRepository {
         Map<String, Double> userSleepMap = sleepInTakes.get(chatId);
         return userSleepMap.getOrDefault(datetime, 0.0);
     }
+
+    @Override
+    public Map<String, Double> getDataByChatId(long chatId) {
+        return sleepInTakes.get(chatId);
+    }
 }

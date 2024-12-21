@@ -7,6 +7,9 @@ import fitnesbot.services.WaterInTakeRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class DaterBaseWaterRepository implements WaterInTakeRepository {
@@ -50,6 +53,25 @@ public class DaterBaseWaterRepository implements WaterInTakeRepository {
             System.err.println("Ошибка получения данных о приеме воды: " + e.getMessage());
             return -1;
         }
+    }
+
+    @Override
+    public Map<String, Integer> getWaterByChatId(long chatId) {
+        Map<String, Integer> waterData = new HashMap<>();
+        try (Connection connection = dataBaseService.getConnection();
+             PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
+                     WaterInTakeSql.SELECT_ALL_WATER)) {
+            statement.setLong(1, chatId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String date = resultSet.getString("water_date");
+                int waterQuantity = resultSet.getInt("intake_count");
+                waterData.put(date, waterQuantity);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return waterData;
     }
 
 

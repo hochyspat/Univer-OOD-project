@@ -22,12 +22,14 @@ import fitnesbot.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommandHandlerTest {
 
@@ -178,6 +180,31 @@ public class CommandHandlerTest {
         sleepInTakeRepository.save(12345L, "8.12.2024", 8.0);
         double avgSleep = sleepInTakeRepository.getWeekStat(12345L);
         assertEquals(7.0, avgSleep, 0.1);
+    }
+
+    @Test
+    void testSleepStat() {
+        userService.registerUser("Alice", "19", "171", "58", 12345L);
+        Command commandAddUser = new Command("addWaterGoal 2 l");
+        MessageOutputData outputDataAddUser = commandHandler.handleMessage(
+                new MessageCommandData(commandAddUser, 12345L));
+        sleepInTakeRepository.save(12345L, "10.12.2024", 7.0);
+        sleepInTakeRepository.save(12345L, "11.12.2024", 8.0);
+        sleepInTakeRepository.save(12345L, "12.12.2024", 6.5);
+        sleepInTakeRepository.save(12345L, "13.12.2024", 7.5);
+        sleepInTakeRepository.save(12345L, "14.12.2024", 7.0);
+        sleepInTakeRepository.save(12345L, "15.12.2024", 6.0);
+        sleepInTakeRepository.save(12345L, "16.12.2024", 8.0);
+        Command command = new Command("getSleepChart");
+        MessageOutputData response = commandHandler.handleMessage(
+                new MessageCommandData(command, 12345L)
+        );
+        System.out.println(response);
+        assertNotNull(response.image());
+        long chatId = 12345L;
+        String expectedImagePath = response.image();
+        File chartFile = new File(expectedImagePath);
+        assertTrue(chartFile.exists(), "График сна не был сгенерирован.");
     }
 }
 

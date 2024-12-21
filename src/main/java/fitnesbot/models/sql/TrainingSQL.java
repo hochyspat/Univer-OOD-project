@@ -33,6 +33,8 @@ public class TrainingSQL {
     public static final String DELETE_TRAINING = """
                 DELETE FROM Trainings WHERE chat_id = ? AND training_date = ? AND name = ?;
             """;
+
+
 }
 
 
